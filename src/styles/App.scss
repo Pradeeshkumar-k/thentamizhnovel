@@ -14,7 +14,7 @@ $primary-blue: #0a2a43;
 
   overflow-y: auto;
   overflow-x: hidden;
-
+  
   .app-content {
     margin: 0;
     padding: 0;
@@ -23,16 +23,16 @@ $primary-blue: #0a2a43;
     z-index: 10;
     width: 100%;
   }
-
+  
   // Disable 3D effects on mobile for stability
   @media (max-width: 768px) {
     // Mobile scroll fix - no overflow restrictions
   }
-
+  
   @media (max-width: 480px) {
     // Mobile scroll fix - no overflow restrictions
   }
-
+  
   // Low-end device optimizations
   @media (max-width: 320px) {
     font-size: 14px;
@@ -54,7 +54,11 @@ $primary-blue: #0a2a43;
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 50%);
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 215, 0, 0.03) 0%,
+        transparent 50%
+      );
       pointer-events: none;
       z-index: 5;
       animation: ambientRotate 60s linear infinite; // Slower animation
@@ -97,7 +101,7 @@ $primary-blue: #0a2a43;
   @media (min-width: 1025px) {
     transform-style: preserve-3d;
     transform: translateZ(0);
-
+    
     &::after {
       content: '';
       position: absolute;
@@ -132,7 +136,7 @@ $primary-blue: #0a2a43;
     padding-right: 0;
     transform: none;
   }
-
+  
   @media (max-width: 320px) {
     padding-top: 55px;
     min-height: calc(100vh - 55px);
@@ -249,9 +253,9 @@ button:focus {
 
 // Function to generate random star fields
 @function generate-stars($n) {
-  $value: '#{Math.random(2000)}px #{Math.random(2000)}px #FFF';
+  $value: '#{math.random(2000)}px #{math.random(2000)}px #FFF';
   @for $i from 2 through $n {
-    $value: '#{$value}, #{Math.random(2000)}px #{Math.random(2000)}px #FFF';
+    $value: '#{$value}, #{math.random(2000)}px #{math.random(2000)}px #FFF';
   }
   @return unquote($value);
 }
@@ -276,7 +280,7 @@ $stars-large: generate-stars(100);
     left: 0;
     width: 100%;
     height: 100%;
-    background:
+    background: 
       radial-gradient(circle at 50% 120%, rgba(27, 39, 53, 0.8) 10%, transparent 60%),
       radial-gradient(circle at 80% 20%, rgba(125, 60, 255, 0.05) 0%, transparent 40%),
       radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
@@ -334,7 +338,7 @@ $stars-large: generate-stars(100);
 // Parallax Animation
 @keyframes animStar {
   from {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) rotate(0deg); 
   }
   to {
     transform: translateY(-2000px) rotate(5deg); // Slight rotation for dynamism
