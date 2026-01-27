@@ -22,8 +22,7 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           // Split animation libraries
           'animation-vendor': ['framer-motion'],
-          // Split Swiper library
-          'swiper-vendor': ['swiper']
+
         }
       }
     }
