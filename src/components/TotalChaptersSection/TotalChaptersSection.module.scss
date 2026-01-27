@@ -1,0 +1,256 @@
+// ==============================================
+// Total Chapters Section - Exact Match to Reference Image
+// ==============================================
+
+.totalChaptersSection {
+  width: 100%;
+  padding: clamp(30px, 5vw, 60px) clamp(20px, 4vw, 80px);
+  background: var(--color-bg-primary);
+  transition: background-color var(--transition-normal);
+}
+
+// ==============================================
+// Section Header
+// ==============================================
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(20px, 3vw, 30px);
+  padding-bottom: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(10px, 2vw, 15px);
+  }
+}
+
+.sectionTitle {
+  font-size: clamp(20px, 3.5vw, 32px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--font-family-primary);
+  letter-spacing: 0.3px;
+  transition: color var(--transition-normal);
+
+  @media (max-width: 768px) {
+    font-size: clamp(18px, 4.5vw, 24px);
+  }
+}
+
+.totalCount {
+  font-size: clamp(13px, 2.2vw, 16px);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-primary);
+  transition: color var(--transition-normal);
+
+  @media (max-width: 768px) {
+    font-size: clamp(12px, 2.8vw, 14px);
+  }
+}
+
+// ==============================================
+// Chapters Grid - One card per row
+// ==============================================
+
+.chaptersGrid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+  width: 100%;
+  max-width: 100%;
+}
+
+// ==============================================
+// Chapter Card - Exact Match to Reference
+// ==============================================
+
+.chapterCard {
+  display: flex;
+  gap: clamp(12px, 2vw, 16px);
+  background: var(--color-bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: clamp(6px, 1.2vw, 10px);
+  padding: clamp(10px, 1.5vw, 14px);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background: var(--color-surface);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    gap: clamp(10px, 2.5vw, 14px);
+    padding: clamp(8px, 2vw, 12px);
+  }
+}
+
+// ==============================================
+// Chapter Image Wrapper with Number Badge
+// ==============================================
+
+.chapterImageWrapper {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(80px, 12vw, 120px);
+  height: clamp(110px, 16vw, 160px);
+  border-radius: clamp(5px, 0.8vw, 7px);
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+
+  @media (max-width: 768px) {
+    width: clamp(70px, 20vw, 100px);
+    height: clamp(95px, 28vw, 140px);
+  }
+}
+
+.chapterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-normal);
+
+  .chapterCard:hover & {
+    transform: scale(1.03);
+  }
+}
+
+// ==============================================
+// Chapter Number Badge
+// ==============================================
+
+.chapterNumber {
+  position: absolute;
+  bottom: clamp(6px, 1vw, 8px);
+  left: clamp(6px, 1vw, 8px);
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  padding: clamp(3px, 0.6vw, 5px) clamp(8px, 1.2vw, 12px);
+  border-radius: clamp(3px, 0.6vw, 5px);
+  font-size: clamp(11px, 1.8vw, 14px);
+  font-weight: 700;
+  font-family: var(--font-family-primary);
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 2;
+
+  @media (max-width: 768px) {
+    font-size: clamp(10px, 2.2vw, 12px);
+    padding: clamp(2px, 0.8vw, 4px) clamp(6px, 1.2vw, 10px);
+  }
+}
+
+// ==============================================
+// Chapter Info Section
+// ==============================================
+
+.chapterInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(5px, 1vw, 8px);
+  min-width: 0;
+}
+
+.chapterTitle {
+  font-size: clamp(14px, 2.2vw, 17px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: var(--font-family-primary);
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  transition: color var(--transition-normal);
+
+  // Limit to 2 lines with ellipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .chapterCard:hover & {
+    color: var(--color-accent-primary);
+  }
+
+  @media (max-width: 768px) {
+    font-size: clamp(13px, 3.2vw, 16px);
+  }
+}
+
+// ==============================================
+// Chapter Meta (Date, Read Time, Views)
+// ==============================================
+
+.chapterMeta {
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 0.8vw, 7px);
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  font-size: clamp(11px, 1.8vw, 13px);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-family: var(--font-family-primary);
+  white-space: nowrap;
+  transition: color var(--transition-normal);
+
+  @media (max-width: 768px) {
+    font-size: clamp(10px, 2vw, 12px);
+  }
+}
+
+.metaSeparator {
+  font-size: clamp(9px, 1.5vw, 11px);
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+// ==============================================
+// Theme Support
+// ==============================================
+
+// Light mode
+[data-theme='light'] {
+  .chapterNumber {
+    background: rgba(10, 42, 67, 0.9);
+    border-color: rgba(10, 42, 67, 0.3);
+  }
+}
+
+// ==============================================
+// Accessibility
+// ==============================================
+
+@media (prefers-reduced-motion: reduce) {
+  .chapterCard,
+  .chapterImage {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .chapterCard {
+    border-width: 2px;
+  }
+
+  .chapterNumber {
+    border-width: 2px;
+  }
+}

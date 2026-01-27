@@ -1,0 +1,168 @@
+// ==============================================
+// THEANTAMIL - AMUTHU NOVELS
+// Scrollbar Utilities
+// Professional cross-browser scrollbar management
+// ==============================================
+
+// ==============================================
+// Scrollbar Hiding Utilities
+// ==============================================
+
+// Hide scrollbar completely (for custom scroll areas)
+.scrollbar-hide {
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers (Chrome, Safari, newer Edge)
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Hide horizontal scrollbar only
+.scrollbar-hide-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+// Hide vertical scrollbar only
+.scrollbar-hide-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+// ==============================================
+// Custom Scrollbar Styling
+// ==============================================
+
+// Custom scrollbar for better UX
+.scrollbar-custom {
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(255, 215, 0, 0.5);
+    }
+
+    &:active {
+      background: rgba(255, 215, 0, 0.7);
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+// ==============================================
+// Smooth Scrolling
+// ==============================================
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+
+  // iOS momentum scrolling
+  -webkit-overflow-scrolling: touch;
+}
+
+// ==============================================
+// Scroll Container Utilities
+// ==============================================
+
+// Horizontal scroll container with hidden scrollbar
+.scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Vertical scroll container with hidden scrollbar
+.scroll-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Both directions scroll container with hidden scrollbar
+.scroll-both {
+  overflow: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  // Firefox
+  scrollbar-width: none;
+
+  // Internet Explorer and Edge
+  -ms-overflow-style: none;
+
+  // WebKit browsers
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

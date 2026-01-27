@@ -1,0 +1,375 @@
+// Footer Responsive Styles
+@use '../../../styles/abstracts/variables' as *;
+
+.footer {
+  background: #0B1A2D;
+  color: #b0b0b0;
+  padding: 20px 60px;
+  margin-top: 0;
+  width: 100%;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+  }
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.footerTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.footerLeft {
+  flex: 0 0 auto;
+}
+
+.footerLogo {
+  height: 60px;
+  width: 90px;
+
+  @media (min-width: 1440px) {
+    height: 100px;
+    width: 150px;
+  }
+
+  @media (min-width: 1920px) {
+    height: 120px;
+    width: 180px;
+  }
+}
+
+.followSection {
+  flex: 1;
+  text-align: center;
+}
+
+.followTitle {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  transition: color var(--transition-normal);
+
+  @media (min-width: 1440px) {
+    font-size: 20px;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 22px;
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    gap: 15px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 12px;
+  }
+}
+
+.socialIcon {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 15px;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  img {
+    width: 28px;
+    height: 28px;
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 480px) {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (min-width: 1440px) {
+      width: 35px;
+      height: 35px;
+    }
+
+    @media (min-width: 1920px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+.copyright {
+  font-size: 13px;
+  text-align: center;
+  margin: 15px auto 0;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-surface);
+  width: 100%;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-normal), color var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 5px;
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+}
+
+.footerLink {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color var(--transition-fast);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent-primary);
+    text-decoration: underline;
+  }
+}
+
+.separator {
+  color: var(--color-surface);
+}
+
+.copyrightText {
+  font-size: 13px;
+}
+
+.serviceCode {
+  margin-top: 10px;
+  font-size: 11px;
+  text-align: right;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+    transition: color var(--transition-normal);
+  }
+}
+
+
+// YouTube Modal Styles
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: backdrop-filter var(--transition-normal);
+}
+
+.modalContent {
+  background-color: var(--color-bg-secondary);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+
+  @media (max-width: 480px) {
+    padding: 20px;
+    max-width: 95%;
+    border-radius: 8px;
+  }
+
+  @media (min-width: 1440px) {
+    max-width: 600px;
+    padding: 40px;
+  }
+
+  @media (min-width: 1920px) {
+    max-width: 700px;
+    padding: 50px;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    margin-bottom: 15px;
+  }
+}
+
+.modalTitle {
+  color: var(--color-text-primary);
+  margin: 0;
+  font-size: 24px;
+  transition: color var(--transition-normal);
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 28px;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 36px;
+  }
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+    width: 25px;
+    height: 25px;
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 32px;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+
+  @media (min-width: 1440px) {
+    gap: 20px;
+  }
+}
+
+.channelLink {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: var(--color-bg-tertiary);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: var(--color-surface);
+    border-color: var(--color-accent-primary);
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  @media (min-width: 1440px) {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  @media (min-width: 1920px) {
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+.channelIcon {
+  width: 40px;
+  height: 40px;
+
+  @media (max-width: 480px) {
+    width: 32px;
+    height: 32px;
+  }
+
+  @media (min-width: 1440px) {
+    width: 48px;
+    height: 48px;
+  }
+
+  @media (min-width: 1920px) {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.channelName {
+  font-size: 16px;
+  font-weight: 500;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 18px;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 22px;
+  }
+}

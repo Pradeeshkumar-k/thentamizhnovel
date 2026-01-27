@@ -1,0 +1,99 @@
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Glow pulse animation */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(255, 20, 147, 0.8))
+            drop-shadow(0 0 15px rgba(255, 20, 147, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 20, 147, 1))
+            drop-shadow(0 0 25px rgba(255, 20, 147, 0.8));
+  }
+}
+
+/* 3D rotation animation */
+@keyframes rotate-3d {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+}
+
+/* Neon border animation */
+@keyframes neon-border {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan),
+                inset 0 0 20px rgba(0, 240, 255, 0.1);
+  }
+  33% {
+    box-shadow: 0 0 20px var(--neon-magenta),
+                0 0 40px var(--neon-magenta),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+  }
+  66% {
+    box-shadow: 0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-pink),
+                inset 0 0 20px rgba(255, 20, 147, 0.1);
+  }
+}
+
+/* Pink glow animation for avatars */
+@keyframes glow-pink {
+  0%, 100% {
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4),
+                0 0 20px rgba(255, 20, 147, 0.3);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(255, 20, 147, 0.6),
+                0 0 30px rgba(255, 20, 147, 0.5);
+  }
+}
+
+/* Animation utility classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-rotate-3d {
+  animation: rotate-3d 10s linear infinite;
+}
+
+.animate-neon-border {
+  animation: neon-border 4s ease-in-out infinite;
+}
+
+/* 3D transform utilities */
+.transform-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateZ(30px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0, 240, 255, 0.4),
+              0 0 80px rgba(255, 20, 147, 0.3);
+}

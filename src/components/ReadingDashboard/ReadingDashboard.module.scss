@@ -1,0 +1,313 @@
+.dashboard {
+  padding: 2rem;
+  background: linear-gradient(135deg, #0B1A2D 0%, #1a2e4a 100%);
+  min-height: 100vh;
+  color: #e0e0e0;
+
+  .statsSection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+
+    .statCard {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+      }
+
+      .statNumber {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4CAF50;
+        margin-bottom: 0.5rem;
+      }
+
+      .statLabel {
+        font-size: 0.9rem;
+        color: #b0b0b0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+  }
+
+  .section {
+    margin-bottom: 3rem;
+
+    .sectionTitle {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #4CAF50;
+    }
+
+    .novelsGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+  }
+
+  .novelCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .imageContainer {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+
+      .novelImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover .novelImage {
+        transform: scale(1.05);
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        .continueBtn,
+        .rereadBtn {
+          background: #4CAF50;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: #45a049;
+            transform: scale(1.05);
+          }
+        }
+
+        .rereadBtn {
+          background: #2196F3;
+
+          &:hover {
+            background: #0b7dda;
+          }
+        }
+      }
+
+      .completedBadge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #4CAF50;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+      }
+    }
+
+    .cardContent {
+      padding: 1.2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .novelTitle {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+      }
+
+      .author {
+        font-size: 0.85rem;
+        color: #b0b0b0;
+        margin-bottom: 1rem;
+      }
+
+      .progressSection {
+        margin-bottom: 1rem;
+
+        .progressBar {
+          width: 100%;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
+          overflow: hidden;
+          margin-bottom: 0.5rem;
+
+          .progressFill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #81C784);
+            transition: width 0.3s ease;
+          }
+        }
+
+        .progressText {
+          font-size: 0.8rem;
+          color: #4CAF50;
+          font-weight: bold;
+        }
+      }
+
+      .date {
+        font-size: 0.8rem;
+        color: #80a8b8;
+        margin: 0.3rem 0;
+      }
+
+      .completionDates {
+        margin-bottom: 1rem;
+      }
+
+      .stats {
+        font-size: 0.9rem;
+        color: #4CAF50;
+        font-weight: bold;
+        margin-top: auto;
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: #b0b0b0;
+  }
+
+  .emptyState {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #b0b0b0;
+    }
+
+    .browseBtn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #45a049;
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+// Mobile Responsive
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+
+    .statsSection {
+      grid-template-columns: 1fr;
+      margin-bottom: 2rem;
+    }
+
+    .section {
+      .novelsGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+    }
+
+    .novelCard {
+      .cardContent {
+        padding: 0.8rem;
+
+        .novelTitle {
+          font-size: 0.95rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 0.75rem;
+
+    .statsSection {
+      gap: 1rem;
+
+      .statCard {
+        padding: 1rem;
+
+        .statNumber {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    .section {
+      .sectionTitle {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .novelsGrid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.8rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,509 @@
+/* ============================================
+   SWIPER CAROUSEL OVERRIDES
+   ============================================ */
+
+/* Swiper base styles */
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  background: transparent;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.4;
+  filter: blur(2px);
+}
+
+.swiper-slide-active {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Neon pagination dots */
+.swiper-pagination-bullet {
+  background: var(--neon-cyan) !important;
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan) !important;
+}
+
+/* Neon navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--neon-cyan) !important;
+  filter: drop-shadow(0 0 10px var(--neon-cyan));
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  filter: drop-shadow(0 0 20px var(--neon-cyan)) drop-shadow(0 0 30px var(--neon-magenta));
+}
+
+/* Enhanced swiper 3D effects */
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right {
+  background-image: linear-gradient(
+    to left,
+    rgba(0, 240, 255, 0.5),
+    rgba(0, 0, 0, 0)
+  ) !important;
+}
+
+/* ============================================
+   BANNER CAROUSEL STYLES
+   ============================================ */
+
+.banner-carousel-wrapper {
+  width: 100%;
+  background: var(--color-bg-primary);
+  padding: 40px 0;
+  position: relative;
+  transition: background-color var(--transition-normal);
+}
+
+.banner-swiper {
+  width: 100%;
+  max-width: 1400px;
+  height: 350px;
+  margin: 0 auto;
+}
+
+.banner-slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 80px;
+}
+
+.banner-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.banner-text-section {
+  flex: 1;
+  color: var(--color-text-primary);
+  text-align: left;
+  transition: color var(--transition-normal);
+}
+
+.banner-subtitle {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: color var(--transition-normal);
+}
+
+.banner-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: 'Noto Sans Tamil', sans-serif;
+  transition: color var(--transition-normal);
+}
+
+.banner-tagline {
+  font-size: 32px;
+  font-style: italic;
+  margin-bottom: 15px;
+  color: var(--color-text-secondary);
+  font-family: 'Georgia', serif;
+  transition: color var(--transition-normal);
+}
+
+.banner-description {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--color-text-primary);
+  font-family: 'Noto Sans Tamil', sans-serif;
+  transition: color var(--transition-normal);
+}
+
+.banner-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.banner-link {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  transition: color var(--transition-normal);
+}
+
+.banner-link-separator {
+  color: var(--color-text-muted);
+  transition: color var(--transition-normal);
+}
+
+.banner-welcome-text {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin-top: 10px;
+  transition: color var(--transition-normal);
+}
+
+/* Phone Mockups Section */
+.banner-images-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-phone-mockups {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.phone-mockup {
+  width: 200px;
+  height: 360px;
+  background: linear-gradient(145deg, #3d6a8f, #2a4d6e);
+  border-radius: 30px;
+  padding: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.phone-mockup:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.phone-mockup.phone-center {
+  transform: scale(1.15) translateY(-10px);
+  z-index: 3;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.phone-mockup.phone-center:hover {
+  transform: scale(1.15) translateY(-15px);
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #4a9fd8 0%, #2d7bb8 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-emoji {
+  font-size: 80px;
+}
+
+/* Authors Section for Banner */
+.banner-authors-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Social Section for Banner */
+.banner-social-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Banner Navigation Buttons */
+.banner-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.banner-nav-button:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.banner-nav-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.banner-nav-prev {
+  left: 30px;
+}
+
+.banner-nav-next {
+  right: 30px;
+}
+
+.banner-nav-button svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Banner Pagination Dots */
+.banner-pagination {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.banner-bullet {
+  width: 50px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-bullet:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.banner-bullet-active {
+  background: white !important;
+  width: 70px !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Centered Content for Slide 2 */
+.banner-content-centered {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.banner-text-section-center {
+  text-align: center;
+  color: var(--color-text-primary);
+  transition: color var(--transition-normal);
+}
+
+.banner-text-section-center .banner-subtitle {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: 'Noto Sans Tamil', sans-serif;
+  transition: color var(--transition-normal);
+}
+
+.banner-text-section-center .banner-title {
+  font-size: 52px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--color-accent-primary);
+  text-shadow: 0 3px 10px rgba(0, 217, 255, 0.4);
+  transition: color var(--transition-normal);
+}
+
+.banner-text-section-center .banner-tagline {
+  font-size: 36px;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  font-family: 'Georgia', serif;
+  transition: color var(--transition-normal);
+}
+
+/* YouTube Authors Section */
+.youtube-authors-section {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+}
+
+.youtube-author-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.youtube-author-box:hover {
+  transform: translateY(-8px);
+}
+
+.author-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff1493, #ff69b4, #ff1493);
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
+  transition: all 0.3s ease;
+  animation: glow-pink 3s ease-in-out infinite;
+}
+
+.youtube-author-box:hover .author-avatar {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(255, 20, 147, 0.6);
+}
+
+.author-emoji {
+  font-size: 70px;
+}
+
+.author-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: color var(--transition-normal);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .banner-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .banner-text-section {
+    text-align: center;
+  }
+
+  .banner-links {
+    margin: 0 auto 15px;
+  }
+
+  .banner-phone-mockups {
+    gap: 15px;
+  }
+
+  .phone-mockup {
+    width: 140px;
+    height: 260px;
+  }
+
+  .phone-emoji {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-slide {
+    padding: 30px 40px;
+  }
+
+  .banner-title {
+    font-size: 32px;
+  }
+
+  .banner-tagline {
+    font-size: 24px;
+  }
+
+  .banner-phone-mockups {
+    gap: 10px;
+  }
+
+  .phone-mockup {
+    width: 100px;
+    height: 180px;
+  }
+
+  .phone-emoji {
+    font-size: 40px;
+  }
+
+  .banner-authors-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .youtube-authors-section {
+    gap: 40px;
+  }
+
+  .author-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .author-emoji {
+    font-size: 50px;
+  }
+
+  .author-name {
+    font-size: 16px;
+  }
+
+  .banner-text-section-center .banner-subtitle {
+    font-size: 20px;
+  }
+
+  .banner-text-section-center .banner-title {
+    font-size: 36px;
+  }
+
+  .banner-text-section-center .banner-tagline {
+    font-size: 24px;
+  }
+}

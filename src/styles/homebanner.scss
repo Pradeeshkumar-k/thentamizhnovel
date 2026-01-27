@@ -1,0 +1,419 @@
+.home-banner {
+  position: relative;
+  height: 70vh;
+  width: 100%;
+  background: url("https://images.pexels.com/photos/1146709/pexels-photo-1146709.jpeg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: #fff;
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.6) 40%,
+        rgba(0, 0, 0, 0.2) 100%);
+    z-index: 1;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 2cm; // Adjusted for medium-sized banner
+  }
+
+  .title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #000000; // Black text for title
+    text-shadow:
+      0 2px 4px rgba(255, 255, 255, 0.3),
+      0 4px 8px rgba(255, 255, 255, 0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    position: relative;
+
+    .cursor {
+      color: #000000;
+      font-weight: 400;
+      opacity: 0;
+      animation: blink 1s infinite;
+
+      &.visible {
+        opacity: 1;
+      }
+    }
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #ffffff; // White text for subtitle
+    margin-bottom: 20px;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.5px;
+    position: relative;
+
+    .cursor {
+      color: #ffffff;
+      opacity: 0;
+      animation: blink 1s infinite;
+
+      &.visible {
+        opacity: 1;
+      }
+    }
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+
+    .badge {
+      background: #e50914;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .episodes,
+    .genre {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+
+    .btn {
+      padding: 14px 26px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .primary {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+
+      &:hover {
+        background: #e6e6e6;
+      }
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.35);
+      }
+    }
+  }
+
+  .follow-section {
+    text-align: center;
+    margin-top: 24px;
+
+    .follow-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 8px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Connecting Elements - Trees Touching Effect
+.connecting-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  .connect-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 20%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0.4) 80%,
+        transparent 100%);
+    animation: connectFlow 4s ease-in-out infinite;
+
+    &.left {
+      top: 30%;
+      left: 10%;
+      width: 25%;
+      animation-delay: 0s;
+    }
+
+    &.right {
+      top: 60%;
+      right: 10%;
+      width: 25%;
+      animation-delay: 2s;
+    }
+  }
+
+  .floating-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: floatDot 3s ease-in-out infinite;
+
+      &.dot1 {
+        top: 25%;
+        left: 20%;
+        animation-delay: 0s;
+      }
+
+      &.dot2 {
+        top: 45%;
+        right: 25%;
+        animation-delay: 1.5s;
+      }
+
+      &.dot3 {
+        top: 70%;
+        left: 15%;
+        animation-delay: 3s;
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-banner {
+    height: 55vh;
+    padding: 0 16px;
+
+    .content {
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+
+    .title {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+
+      .badge {
+        font-size: 0.75rem;
+        padding: 5px 12px;
+      }
+
+      .episodes,
+      .genre {
+        font-size: 0.85rem;
+      }
+    }
+
+    .buttons {
+      gap: 12px;
+      flex-wrap: wrap;
+
+      .btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+      }
+    }
+
+    .follow-section {
+      margin-top: 16px;
+
+      .follow-links {
+        gap: 12px;
+
+        a {
+          font-size: 0.85rem;
+          padding: 6px 12px;
+        }
+      }
+    }
+
+    .connecting-elements {
+      .connect-line {
+        height: 1px;
+
+        &.left,
+        &.right {
+          width: 20%;
+        }
+      }
+
+      .floating-dots .dot {
+        width: 4px;
+        height: 4px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .home-banner {
+    height: 50vh;
+    padding: 0 12px;
+
+    .content {
+      margin-top: 0.5rem;
+    }
+
+    .title {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .meta {
+      gap: 8px;
+      margin-bottom: 16px;
+      justify-content: center;
+
+      .badge {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+      }
+
+      .episodes,
+      .genre {
+        font-size: 0.75rem;
+      }
+    }
+
+    .buttons {
+      gap: 10px;
+      justify-content: center;
+
+      .btn {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+
+    .follow-section {
+      margin-top: 12px;
+
+      .follow-links {
+        gap: 8px;
+
+        a {
+          font-size: 0.75rem;
+          padding: 5px 10px;
+        }
+      }
+    }
+
+    .connecting-elements {
+      display: none; // Hide decorative elements on very small screens
+    }
+  }
+}
+
+// Animations
+@keyframes blink {
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes connectFlow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleX(0.7);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scaleX(1.2);
+  }
+}
+
+@keyframes floatDot {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-10px) scale(1.2);
+    opacity: 1;
+  }
+}

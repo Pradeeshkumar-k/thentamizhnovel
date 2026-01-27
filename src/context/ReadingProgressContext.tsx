@@ -1,0 +1,251 @@
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import readingProgressService from '../services/API/readingProgressService';
+import novelService from '../services/API/novelService';
+import { ReadingProgressContextType, OngoingNovel, CompletedNovel, Novel } from '../types';
+
+const ReadingProgressContext = createContext<ReadingProgressContextType | null>(null);
+
+export const useReadingProgress = () => {
+  const context = useContext(ReadingProgressContext);
+  if (!context) {
+    throw new Error('useReadingProgress must be used within a ReadingProgressProvider');
+  }
+  return context;
+};
+
+interface ReadingProgressProviderProps {
+  children: ReactNode;
+}
+
+export const ReadingProgressProvider = ({ children }: ReadingProgressProviderProps) => {
+  const [ongoingNovels, setOngoingNovels] = useState<OngoingNovel[]>([]);
+  const [completedNovels, setCompletedNovels] = useState<CompletedNovel[]>([]);
+  const [bookmarks, setBookmarks] = useState<Novel[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Check if user is logged in
+  const isUserLoggedIn = () => {
+    return !!localStorage.getItem('authToken');
+  };
+
+  // Load reading progress and library from backend or localStorage
+  useEffect(() => {
+    const loadProgress = async () => {
+      try {
+        if (isUserLoggedIn()) {
+          // User is logged in - fetch from backend
+          // Parallel fetch for speed
+          const [progressRes, libraryRes] = await Promise.all([
+             readingProgressService.getReadingProgress(),
+             novelService.getLibrary()
+          ]);
+
+          if (progressRes.success && progressRes.data) {
+            const { ongoing = [], completed = [] } = progressRes.data;
+            setOngoingNovels(ongoing);
+            setCompletedNovels(completed);
+
+            // Also save to localStorage as cache
+            localStorage.setItem('ongoingNovels', JSON.stringify(ongoing));
+            localStorage.setItem('completedNovels', JSON.stringify(completed));
+          }
+
+          if (libraryRes.success && libraryRes.data) {
+             setBookmarks(libraryRes.data);
+             // Save bookmarks to localStorage
+             localStorage.setItem('libraryBookmarks', JSON.stringify(libraryRes.data));
+          }
+
+        } else {
+          // Guest user - load from localStorage
+          const savedOngoing = localStorage.getItem('ongoingNovels');
+          const savedCompleted = localStorage.getItem('completedNovels');
+          const savedBookmarks = localStorage.getItem('libraryBookmarks');
+
+          if (savedOngoing) {
+            setOngoingNovels(JSON.parse(savedOngoing));
+          }
+          if (savedCompleted) {
+            setCompletedNovels(JSON.parse(savedCompleted));
+          }
+          if (savedBookmarks) {
+            setBookmarks(JSON.parse(savedBookmarks));
+          }
+        }
+      } catch (_error) {
+        // Fallback to localStorage
+        const savedOngoing = localStorage.getItem('ongoingNovels');
+        const savedCompleted = localStorage.getItem('completedNovels');
+        const savedBookmarks = localStorage.getItem('libraryBookmarks');
+
+        if (savedOngoing) {
+          setOngoingNovels(JSON.parse(savedOngoing));
+        }
+        if (savedCompleted) {
+          setCompletedNovels(JSON.parse(savedCompleted));
+        }
+        if (savedBookmarks) {
+          setBookmarks(JSON.parse(savedBookmarks));
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProgress();
+  }, []);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem('ongoingNovels', JSON.stringify(ongoingNovels));
+    }
+  }, [ongoingNovels, loading]);
+
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem('completedNovels', JSON.stringify(completedNovels));
+    }
+  }, [completedNovels, loading]);
+
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem('libraryBookmarks', JSON.stringify(bookmarks));
+    }
+  }, [bookmarks, loading]);
+
+  // Start reading a novel
+  const startReading = async (novelId: string, novelTitle: string, coverImage: string, author: string) => {
+    // Don't add if already completed
+    if (completedNovels.some(novel => novel.novelId === novelId)) {
+      return;
+    }
+
+    // Check if already in ongoing
+    const existingIndex = ongoingNovels.findIndex(novel => novel.novelId === novelId);
+
+    if (existingIndex === -1) {
+      const newNovel = {
+        novelId,
+        novelTitle,
+        coverImage,
+        author,
+        lastChapter: 1,
+        startedAt: new Date().toISOString()
+      };
+
+      // Update local state
+      setOngoingNovels(prev => [...prev, newNovel]);
+
+      // Sync with backend if user is logged in
+      if (isUserLoggedIn()) {
+        try {
+          await readingProgressService.startReading(novelId, novelTitle, coverImage, author);
+        } catch (_error) {
+          // Silent fail - local state already updated
+        }
+      }
+    }
+  };
+
+  // Update current chapter
+  const updateProgress = async (novelId: string, chapterId: number) => {
+    // Update local state
+    setOngoingNovels(prev =>
+      prev.map(novel =>
+        novel.novelId === novelId
+          ? { ...novel, lastChapter: chapterId, updatedAt: new Date().toISOString() }
+          : novel
+      )
+    );
+
+    // Sync with backend if user is logged in
+    if (isUserLoggedIn()) {
+      try {
+        await readingProgressService.updateChapter(novelId, chapterId);
+      } catch (error) {
+        // Silent fail - local state already updated
+      }
+    }
+  };
+
+  // Mark novel as completed
+  const completeNovel = async (novelId: string, novelTitle: string, coverImage: string, author: string) => {
+    // Remove from ongoing
+    setOngoingNovels(prev => prev.filter(novel => novel.novelId !== novelId));
+
+    // Add to completed if not already there
+    if (!completedNovels.some(novel => novel.novelId === novelId)) {
+      const completedNovel = {
+        novelId,
+        novelTitle,
+        coverImage,
+        author,
+        completedAt: new Date().toISOString()
+      };
+
+      setCompletedNovels(prev => [...prev, completedNovel]);
+
+      // Sync with backend if user is logged in
+      if (isUserLoggedIn()) {
+        try {
+          await readingProgressService.completeNovel(novelId, novelTitle, coverImage, author);
+        } catch (error) {
+          // Silent fail - local state already updated
+        }
+      }
+    }
+  };
+
+  // Manual refresh for library
+  const refreshLibrary = async () => {
+    if (!isUserLoggedIn()) return;
+    try {
+        console.log('Refreshing library...');
+        const response = await novelService.getLibrary();
+        console.log('Library refresh response:', response);
+        if (response.success && response.data) {
+            setBookmarks(response.data);
+            console.log('Bookmarks updated:', response.data.length);
+        }
+    } catch (error) {
+        console.error("Failed to refresh library", error);
+    }
+  };
+
+  // Check if a novel is ongoing
+  const isOngoing = (novelId: string): boolean => {
+    return ongoingNovels.some(novel => novel.novelId === novelId);
+  };
+
+  // Check if a novel is completed
+  const isCompleted = (novelId: string): boolean => {
+    return completedNovels.some(novel => novel.novelId === novelId);
+  };
+
+  // Get last chapter for a novel
+  const getLastChapter = (novelId: string): number => {
+    const novel = ongoingNovels.find(novel => novel.novelId === novelId);
+    return novel ? novel.lastChapter : 1;
+  };
+
+  const value = {
+    ongoingNovels,
+    completedNovels,
+    bookmarks,
+    isLoading: loading, // Expose loading state
+    startReading,
+    updateProgress,
+    completeNovel,
+    refreshLibrary,
+    isOngoing,
+    isCompleted,
+    getLastChapter
+  };
+
+  return (
+    <ReadingProgressContext.Provider value={value}>
+      {children}
+    </ReadingProgressContext.Provider>
+  );
+};

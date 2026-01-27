@@ -1,0 +1,205 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modalContent {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.modalTitle {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 36px;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+  }
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.channelLink {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.3);
+    transform: translateX(5px);
+  }
+}
+
+.channelIcon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.channelName {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .modalContent {
+    padding: 25px;
+    max-width: 450px;
+  }
+
+  .modalTitle {
+    font-size: 22px;
+  }
+
+  .channelIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .channelName {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 20px;
+    max-width: 400px;
+    width: 92%;
+  }
+
+  .modalTitle {
+    font-size: 20px;
+  }
+
+  .modalClose {
+    font-size: 32px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .channelLink {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .channelIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .channelName {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 16px;
+    width: 95%;
+    border-radius: 16px;
+  }
+
+  .modalTitle {
+    font-size: 18px;
+  }
+
+  .modalHeader {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+
+  .modalClose {
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .modalBody {
+    gap: 12px;
+  }
+
+  .channelLink {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .channelIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .channelName {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .modalContent {
+    padding: 14px;
+    width: 96%;
+  }
+
+  .modalTitle {
+    font-size: 16px;
+  }
+
+  .channelName {
+    font-size: 12px;
+  }
+}

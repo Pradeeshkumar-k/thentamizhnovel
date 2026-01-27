@@ -1,0 +1,12 @@
+.loading-fallback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #0B1A2D;
+  color: #fff;
+}
+
+.error-boundary {
+  @extend .loading-fallback;
+}

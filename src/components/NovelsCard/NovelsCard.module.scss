@@ -1,0 +1,241 @@
+// ==============================================
+// Continue Reading Section - Mobile Responsive Horizontal Slider
+// ==============================================
+
+.continueReadingSection {
+  width: 100%;
+  padding: clamp(30px, 5vw, 60px) clamp(15px, 4vw, 60px);
+  background: var(--color-bg-primary);
+  transition: background-color var(--transition-normal);
+}
+
+.sectionHeader {
+  margin-bottom: clamp(20px, 3vw, 30px);
+}
+
+.sectionTitle {
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-primary);
+  letter-spacing: 0.5px;
+  transition: color var(--transition-normal);
+}
+
+// ==============================================
+// Horizontal Slider Container
+// ==============================================
+
+.sliderContainer {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary);
+    border-radius: 10px;
+
+    &:hover {
+      background: var(--color-accent-hover);
+    }
+  }
+
+  // For Firefox
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-primary) var(--color-bg-secondary);
+
+  // Smooth scrolling
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sliderWrapper {
+  display: flex;
+  gap: clamp(15px, 3vw, 25px);
+  padding: clamp(5px, 1vw, 10px) 0;
+  width: max-content;
+}
+
+// ==============================================
+// Novel Card Styling - Exact Match to Reference
+// ==============================================
+
+.novelCard {
+  flex: 0 0 auto;
+  width: clamp(160px, 20vw, 220px);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+
+  &:hover {
+    transform: translateY(-8px);
+  }
+
+  // Mobile specific sizing
+  @media (max-width: 768px) {
+    width: clamp(140px, 40vw, 180px);
+  }
+
+  @media (max-width: 480px) {
+    width: clamp(120px, 45vw, 160px);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: clamp(220px, 30vw, 300px);
+  border-radius: clamp(12px, 2vw, 20px);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: box-shadow var(--transition-fast);
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  // Mobile specific height
+  @media (max-width: 768px) {
+    height: clamp(200px, 45vw, 260px);
+  }
+
+  @media (max-width: 480px) {
+    height: clamp(180px, 55vw, 240px);
+  }
+}
+
+.novelImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-normal);
+
+  .novelCard:hover & {
+    transform: scale(1.05);
+  }
+}
+
+// ==============================================
+// Dark Gradient Overlay - Exact Match to Reference
+// ==============================================
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.3) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+// ==============================================
+// Novel Info - Title & Author
+// ==============================================
+
+.novelInfo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(12px, 2.5vw, 20px);
+  z-index: 2;
+}
+
+.novelTitle {
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 clamp(4px, 1vw, 8px) 0;
+  font-family: var(--font-family-primary);
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.3px;
+
+  // Limit to 2 lines with ellipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  // Mobile adjustments
+  @media (max-width: 480px) {
+    font-size: clamp(14px, 3.5vw, 18px);
+  }
+}
+
+.novelAuthor {
+  font-size: clamp(12px, 2.2vw, 14px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  font-family: var(--font-family-primary);
+  line-height: 1.4;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.2px;
+
+  // Limit to 1 line with ellipsis
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  // Mobile adjustments
+  @media (max-width: 480px) {
+    font-size: clamp(11px, 2.5vw, 13px);
+  }
+}
+
+// ==============================================
+// Accessibility & Performance
+// ==============================================
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .novelCard,
+  .novelImage,
+  .overlay {
+    transition: none;
+  }
+
+  .sliderContainer {
+    scroll-behavior: auto;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .novelTitle,
+  .novelAuthor {
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+  }
+
+  .overlay {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.7) 40%,
+      rgba(0, 0, 0, 0.4) 70%,
+      transparent 100%
+    );
+  }
+}

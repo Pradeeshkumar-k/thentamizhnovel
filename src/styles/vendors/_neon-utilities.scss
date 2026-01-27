@@ -1,0 +1,65 @@
+/* ============================================
+   NEON UTILITIES & EFFECTS
+   ============================================ */
+
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00ff;
+  --neon-pink: #ff1493;
+  --dark-bg: #020617;
+}
+
+/* Neon text utilities */
+.neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 10px var(--neon-cyan),
+    0 0 20px var(--neon-cyan),
+    0 0 30px var(--neon-cyan),
+    0 0 40px var(--neon-cyan);
+}
+
+.neon-text-magenta {
+  color: var(--neon-magenta);
+  text-shadow:
+    0 0 10px var(--neon-magenta),
+    0 0 20px var(--neon-magenta),
+    0 0 30px var(--neon-magenta),
+    0 0 40px var(--neon-magenta);
+}
+
+.neon-text-pink {
+  color: var(--neon-pink);
+  text-shadow:
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink),
+    0 0 30px var(--neon-pink),
+    0 0 40px var(--neon-pink);
+}
+
+/* Carousel Section */
+.carousel-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--dark-bg);
+  overflow: hidden;
+}
+
+/* Custom scrollbar for carousel section */
+.carousel-section::-webkit-scrollbar {
+  width: 10px;
+}
+
+.carousel-section::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+.carousel-section::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-magenta));
+  border-radius: 10px;
+}
+
+.carousel-section::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon-magenta), var(--neon-cyan));
+}

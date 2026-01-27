@@ -1,0 +1,225 @@
+// ==============================================
+// THEANTAMIL - AMUTHU NOVELS
+// Global SCSS Variables & Theme System
+// ==============================================
+
+// ==============================================
+// CSS Custom Properties for Theming
+// ==============================================
+
+:root {
+  // --- Colors: Dark Theme (Default) ---
+  --color-bg-primary: #05070A;
+  --color-bg-secondary: #090C12;
+  --color-bg-tertiary: #0D111A;
+  --color-surface: #0F141F;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #A0AEC0;
+  --color-text-muted: #718096;
+  --color-accent-primary: #ffd700;
+  --color-accent-hover: #ffe933;
+  --color-accent-active: #ffed4e;
+
+  // --- Search Specific Colors ---
+  --color-search-bg: #ffffff;
+  --color-search-text: #0a2a43;
+  --color-search-placeholder: #999999;
+  --color-search-icon: #666666;
+  --color-search-border: #e0e0e0;
+  --color-search-focus: #ffd700;
+
+  // --- Overlay & Shadow ---
+  --color-overlay: rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+  // --- Spacing ---
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+
+  // --- Typography ---
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-family-primary: 'Noto Sans Tamil', sans-serif;
+
+  // --- Border Radius ---
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  // --- Transitions ---
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+
+  // --- Z-Index Layers ---
+  --z-background: -1;
+  --z-content: 1;
+  --z-overlay: 99;
+  --z-header: 100;
+  --z-hamburger: 101;
+  --z-menu: 101;
+  --z-language-switcher: 102;
+  --z-search-dropdown: 103;
+  --z-modal-backdrop: 9998;
+  --z-modal: 9999;
+
+  // --- Header Dimensions ---
+  --header-height-mobile: 60px;
+  --header-height-tablet: 70px;
+  --header-height-desktop: 80px;
+  --header-height-wide: 90px;
+  --header-height-tv: 100px;
+  --header-padding-mobile: 10px 12px;
+  --header-padding-tablet: 12px 16px;
+  --header-padding-desktop: 12px 20px;
+  --header-padding-wide: 16px 24px;
+  --header-padding-tv: 20px 32px;
+
+  // --- Search Dimensions ---
+  --search-width-collapsed: 40px;
+  --search-width-expanded: 280px;  // Reduced for compact look
+  --search-width-mobile: 100%;
+  --search-height: 38px;
+  --search-icon-size: 18px;
+}
+
+// ==============================================
+// Light Theme Overrides
+// ==============================================
+
+html[data-theme="light"] {
+  --color-bg-primary: #F8FAFC; // Soft Slate 50
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #F1F5F9; // Slate 100
+  --color-surface: #ffffff;
+  --color-text-primary: #0F172A; // Slate 900
+  --color-text-secondary: #475569; // Slate 600
+  --color-text-muted: #94A3B8; // Slate 400
+  --color-accent-primary: #0A2A43;
+  --color-accent-hover: #051A2C;
+  --color-accent-active: #0D3A5C;
+
+  // Search maintains white in light mode
+  --color-search-bg: #ffffff;
+  --color-search-text: #0F172A;
+  --color-search-placeholder: #94A3B8;
+  --color-search-icon: #64748B;
+  --color-search-border: #E2E8F0;
+  --color-search-focus: #0A2A43;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  
+  // Custom Glass Effect for light mode
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+// Ensure dark mode also has the glass variables for consistency
+:root {
+  --glass-bg: rgba(15, 20, 31, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+// ==============================================
+// SCSS Variables (for computed values)
+// ==============================================
+
+$primary-blue: #0a2a43;
+$primary-blue-dark: #051a2c;
+$primary-gold: #ffd700;
+$white: #ffffff;
+$black: #000000;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-tablet-lg: 850px;  // 850x815 tablet size
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1440px;
+$breakpoint-ultra-wide: 1920px;
+$breakpoint-4k: 2560px;
+
+// ==============================================
+// Mixins
+// ==============================================
+
+// Responsive breakpoint mixin
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: #{$breakpoint-mobile}) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (min-width: #{$breakpoint-mobile + 1}) and (max-width: #{$breakpoint-tablet}) {
+      @content;
+    }
+  } @else if $breakpoint == tablet-lg {
+    @media (min-width: #{$breakpoint-tablet + 1}) and (max-width: #{$breakpoint-tablet-lg}) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: #{$breakpoint-desktop}) {
+      @content;
+    }
+  } @else if $breakpoint == wide {
+    @media (min-width: #{$breakpoint-wide}) {
+      @content;
+    }
+  } @else if $breakpoint == ultra-wide {
+    @media (min-width: #{$breakpoint-ultra-wide}) {
+      @content;
+    }
+  } @else if $breakpoint == 4k {
+    @media (min-width: #{$breakpoint-4k}) {
+      @content;
+    }
+  } @else if $breakpoint == tablet-and-below {
+    @media (max-width: #{$breakpoint-tablet}) {
+      @content;
+    }
+  } @else if $breakpoint == tablet-and-above {
+    @media (min-width: #{$breakpoint-mobile + 1}) {
+      @content;
+    }
+  }
+}
+
+// Focus state mixin (accessibility)
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Reduced motion support
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// Flexbox centering
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Truncate text with ellipsis
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,346 @@
+// App Stylesheet with 3D Effects
+$primary-blue: #0a2a43;
+
+.app {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-bg-primary);
+  position: relative;
+  transition: background-color 0.3s ease;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  .app-content {
+    margin: 0;
+    padding: 0;
+    flex: 1 0 auto;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+  }
+  
+  // Disable 3D effects on mobile for stability
+  @media (max-width: 768px) {
+    // Mobile scroll fix - no overflow restrictions
+  }
+  
+  @media (max-width: 480px) {
+    // Mobile scroll fix - no overflow restrictions
+  }
+  
+  // Low-end device optimizations
+  @media (max-width: 320px) {
+    font-size: 14px;
+  }
+
+  // Disable heavy 3D ambient lighting on mobile
+  @media (max-width: 1024px) {
+    &::before {
+      display: none;
+    }
+  }
+
+  // Keep subtle lighting effect only on desktop
+  @media (min-width: 1025px) {
+    &::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 215, 0, 0.03) 0%,
+        transparent 50%
+      );
+      pointer-events: none;
+      z-index: 5;
+      animation: ambientRotate 60s linear infinite; // Slower animation
+    }
+  }
+}
+
+@keyframes ambientRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.main-content {
+  width: 100%;
+  min-height: auto;
+  padding-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  position: relative;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+  padding-left: 0;
+  padding-right: 0;
+  flex: 1;
+
+  // Disable 3D effects on mobile
+  @media (max-width: 1024px) {
+    &::after {
+      display: none;
+    }
+  }
+
+  // Keep subtle 3D depth layers only on desktop
+  @media (min-width: 1025px) {
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+      pointer-events: none;
+      z-index: -1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 70px;
+    min-height: calc(100vh - 70px);
+    padding-left: 0;
+    padding-right: 0;
+    transform-style: flat;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 60px;
+    min-height: calc(100vh - 60px);
+    padding-left: 0;
+    padding-right: 0;
+    transform: none;
+  }
+  
+  @media (max-width: 320px) {
+    padding-top: 55px;
+    min-height: calc(100vh - 55px);
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+  }
+}
+
+// Global responsive typography
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+// Reset default button styles
+button {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+button:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
+
+// Responsive App Logo
+.app-logo {
+  position: fixed;
+  z-index: 9999;
+
+  // Mobile (up to 480px)
+  top: 15px;
+  left: 15px;
+  width: 120px;
+
+  img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7));
+    transition: filter 0.3s ease;
+  }
+
+  // Tablet (481px - 768px)
+  @media (min-width: 481px) and (max-width: 768px) {
+    top: 20px;
+    left: 20px;
+    width: 150px;
+  }
+
+  // Desktop (769px - 1439px)
+  @media (min-width: 769px) and (max-width: 1439px) {
+    top: 30px;
+    left: 30px;
+    width: 200px;
+  }
+
+  // Wide/TV screens (1440px - 1919px)
+  @media (min-width: 1440px) and (max-width: 1919px) {
+    top: 40px;
+    left: 40px;
+    width: 240px;
+
+    img {
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7));
+    }
+  }
+
+  // Ultra-wide/4K screens (1920px+)
+  @media (min-width: 1920px) {
+    top: 50px;
+    left: 50px;
+    width: 280px;
+
+    img {
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.8));
+    }
+  }
+
+  // Very small mobile devices (320px and below)
+  @media (max-width: 320px) {
+    top: 10px;
+    left: 10px;
+    width: 100px;
+
+    img {
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6));
+    }
+  }
+}
+
+// Galaxy Background Animation (for Carousel) - Forces Dark Theme aesthetic
+// Galaxy Background Animation - Improved
+
+// Function to generate random star fields
+@function generate-stars($n) {
+  $value: '#{random(2000)}px #{random(2000)}px #FFF';
+  @for $i from 2 through $n {
+    $value: '#{$value}, #{random(2000)}px #{random(2000)}px #FFF';
+  }
+  @return unquote($value);
+}
+
+// Generate static star maps
+$stars-small: generate-stars(700);
+$stars-medium: generate-stars(200);
+$stars-large: generate-stars(100);
+
+.galaxy-bg {
+  // Richer, deeper background
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 40%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px; // For potential 3D feel
+
+  // Nebula/Glow overlay
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 50% 120%, rgba(27, 39, 53, 0.8) 10%, transparent 60%),
+      radial-gradient(circle at 80% 20%, rgba(125, 60, 255, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  // Container for star layers
+  .star-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 0;
+  }
+
+  // Small Stars (Furthest/Slowest)
+  &::after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: $stars-small;
+    animation: animStar 150s linear infinite;
+    opacity: 0.8;
+  }
+
+  // Medium Stars
+  .stars-2 {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: $stars-medium;
+    animation: animStar 100s linear infinite;
+    opacity: 1;
+  }
+
+  // Large Stars (Closest/Fastest)
+  .stars-3 {
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: $stars-large;
+    animation: animStar 50s linear infinite;
+    border-radius: 50%; // Make large stars round
+    filter: blur(1px); // Soft glow
+  }
+}
+
+// Parallax Animation
+@keyframes animStar {
+  from {
+    transform: translateY(0px) rotate(0deg); 
+  }
+  to {
+    transform: translateY(-2000px) rotate(5deg); // Slight rotation for dynamism
+  }
+}
