@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:string";
 
 // App Stylesheet with 3D Effects
 $primary-blue: #0a2a43;
@@ -259,7 +260,7 @@ button:focus {
   @for $i from 2 through $n {
     $value: '#{$value}, #{math.random(2000)}px #{math.random(2000)}px #FFF';
   }
-  @return unquote($value);
+  @return string.unquote($value);
 }
 
 // Generate static star maps
