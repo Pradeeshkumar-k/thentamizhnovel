@@ -59,12 +59,14 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="w-full pt-4 md:pt-6 border-t border-white/10 dark:border-border flex flex-col items-center gap-2 md:gap-3 text-center">
-          <div className="flex items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-400 dark:text-muted">
+          <div className="flex items-center justify-center gap-3 md:gap-4 text-xs md:text-sm text-gray-400 dark:text-muted">
               <Link to="/about" className="hover:text-white dark:hover:text-primary hover:underline transition-colors">{_t.footer.aboutUs}</Link>
               <span className="text-white/20 dark:text-border">|</span>
               <Link to="/contact" className="hover:text-white dark:hover:text-primary hover:underline transition-colors">{_t.footer.contactUs}</Link>
               <span className="text-white/20 dark:text-border">|</span>
               <Link to="/terms" className="hover:text-white dark:hover:text-primary hover:underline transition-colors">{_t.footer.terms}</Link>
+              <span className="text-white/20 dark:text-border">|</span>
+              <span>© 2026</span>
           </div>
           <p className="text-[10px] md:text-xs text-gray-500 dark:text-muted/60">
               {_t.footer.rights}
