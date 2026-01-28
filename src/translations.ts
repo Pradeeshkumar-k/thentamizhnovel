@@ -152,7 +152,7 @@ export const translations = {
     },
     footer: {
       followUs: 'Follow Us',
-      rights: '2026 @ தேன்தமிழமுது. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.',
+      rights: '2026 @ Thentamizhamuthu. All rights reserved.',
       aboutUs: 'About Us',
       contactUs: 'Contact Us',
       terms: 'Terms & Conditions'

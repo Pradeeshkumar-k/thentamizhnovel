@@ -26,7 +26,7 @@ const AboutUsPage: React.FC = () => {
     <div className="min-h-screen bg-bg-primary text-primary transition-colors duration-300">
       <Header />
       
-      <main className="pt-36 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <main className="pt-48 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
          {/* Abstract Background Elements */}
          <div className="absolute top-20 right-10 w-96 h-96 bg-neon-gold/5 rounded-full blur-3xl -z-10"></div>
          <div className="absolute bottom-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
