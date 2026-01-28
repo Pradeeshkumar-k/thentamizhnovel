@@ -162,7 +162,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
                 <button 
                     type="button" 
-                    className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 p-2 bg-transparent border-none text-primary hover:text-neon-gold transition-colors"
+                    className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 p-2 bg-transparent border-none text-white dark:text-secondary hover:text-neon-gold transition-colors z-[1200]"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     {isMenuOpen ? <X size={24} /> : <MenuIcon size={24} />}
