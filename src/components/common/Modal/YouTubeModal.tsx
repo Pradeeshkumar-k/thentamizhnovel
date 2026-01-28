@@ -9,7 +9,7 @@ const YouTubeModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div 
-        className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300"
+        className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300"
         onClick={onClose}
     >
       <div 
