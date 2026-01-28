@@ -5,7 +5,7 @@ export const YOUTUBE_CHANNELS = [
     url: 'https://www.youtube.com/@thenthuzhinovels'
   },
   {
-    name: 'Mohaanamozhi',
+    name: 'Mohanaamozhi',
     url: 'https://www.youtube.com/@mohanaamozhi_novels'
   },
   {
