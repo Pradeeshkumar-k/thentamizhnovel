@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         <div className="w-full flex flex-col items-center gap-4 md:gap-6">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <img src={logo} alt="TTM Novels Logo" className="h-12 md:h-16 w-auto object-contain glow-sm" />
+            <img src={logo} alt="TTM Novels Logo" className="h-20 md:h-24 w-auto object-contain glow-sm" />
           </div>
 
           {/* Follow Us */}
