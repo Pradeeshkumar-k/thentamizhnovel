@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 // import { useNavigate } from 'react-router-dom'; // Using Header navigation now
 import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../translations';
@@ -9,7 +9,7 @@ const AboutUsPage: React.FC = () => {
   const { language } = useLanguage();
   const _t = translations[language as keyof typeof translations];
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
@@ -17,7 +17,7 @@ const AboutUsPage: React.FC = () => {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1 }
   };
