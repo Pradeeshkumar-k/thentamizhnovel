@@ -13,7 +13,7 @@ export const translations = {
     },
     footer: {
       followUs: 'எங்களைப் பின்தொடர',
-      rights: '2026 தேன்தமிழமுது. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.',
+      rights: '2026 @ தேன்தமிழமுது. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.',
       aboutUs: 'எங்களை பற்றி',
       contactUs: 'தொடர்புக்கு',
       terms: 'விதிமுறைகள் மற்றும் நிபந்தனைகள்'
@@ -152,7 +152,7 @@ export const translations = {
     },
     footer: {
       followUs: 'Follow Us',
-      rights: '2026 Thentamil Novels. All rights reserved.',
+      rights: '2026 @ Thentamil Novels. All rights reserved.',
       aboutUs: 'About Us',
       contactUs: 'Contact Us',
       terms: 'Terms & Conditions'

@@ -65,8 +65,6 @@ const Footer: React.FC = () => {
               <Link to="/contact" className="hover:text-white dark:hover:text-primary hover:underline transition-colors">{_t.footer.contactUs}</Link>
               <span className="text-white/20 dark:text-border">|</span>
               <Link to="/terms" className="hover:text-white dark:hover:text-primary hover:underline transition-colors">{_t.footer.terms}</Link>
-              <span className="text-white/20 dark:text-border">|</span>
-              <span>© 2026</span>
           </div>
           <p className="text-[10px] md:text-xs text-gray-500 dark:text-muted/60">
               {_t.footer.rights}
