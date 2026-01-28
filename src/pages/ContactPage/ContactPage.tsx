@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../translations';
 import Header from '../../components/layout/Header/Header';
 import { SOCIAL_LINKS } from '../../utils/constants';
+import YouTubeModal from '../../components/common/Modal/YouTubeModal';
 
 // Icons
 const MailIcon = () => (
@@ -37,6 +38,7 @@ const ContactPage: React.FC = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showYouTubeModal, setShowYouTubeModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +63,11 @@ const ContactPage: React.FC = () => {
         ...formData,
         [e.target.name]: e.target.value
     });
+  };
+
+  const handleYouTubeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setShowYouTubeModal(true);
   };
 
   const containerVariants = {
@@ -146,14 +153,14 @@ const ContactPage: React.FC = () => {
                         </a>
                         
                         {/* YouTube */}
-                        <a href="#" className="p-3 bg-white/5 rounded-full hover:bg-[#FF0000] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                        <a href="#" onClick={handleYouTubeClick} className="p-3 bg-white/5 rounded-full hover:bg-[#FF0000] hover:text-white text-gray-400 transition-all duration-300 group/icon">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fillRule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 01-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 01-1.768-1.768C2 15.255 2 12 2 12s0-3.255.418-4.814a2.507 2.507 0 011.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418zM15.194 12 10 15V9l5.194 3z" clipRule="evenodd" />
                             </svg>
                         </a>
 
                         {/* WhatsApp */}
-                        <a href="https://whatsapp.com/channel/your-channel-id" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-[#25D366] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                        <a href="https://whatsapp.com/channel/0029VbB0Wxt65yDK3ZTYCC1D" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-[#25D366] hover:text-white text-gray-400 transition-all duration-300 group/icon">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fillRule="evenodd" d="M18.403 5.633A8.919 8.919 0 0012.053 3c-4.948 0-8.976 4.027-8.978 8.977 0 1.582.413 3.126 1.198 4.488L3 21.116l4.759-1.249a8.981 8.981 0 004.29 1.093h.004c4.947 0 8.975-4.027 8.977-8.977a8.926 8.926 0 00-2.627-6.373zM12.053 19.644h-.004a7.468 7.468 0 01-3.811-1.044l-.273-.162-2.834.743.756-2.763-.178-.283a7.482 7.482 0 01-1.15-3.978c.002-4.12 3.356-7.474 7.48-7.474a7.447 7.447 0 015.304 2.193 7.447 7.447 0 012.193 5.304c-.002 4.12-3.356 7.474-7.484 7.474zm4.096-5.592c-.224-.112-1.325-.654-1.53-.728-.206-.075-.356-.112-.506.112-.15.224-.58.73-.711.878-.13.15-.262.168-.486.056-.224-.112-.947-.35-1.803-1.112-.667-.595-1.117-1.329-1.248-1.554-.131-.224-.014-.345.098-.456.1-.1.224-.261.336-.393.112-.13.15-.224.224-.374.075-.15.038-.28-.019-.393-.056-.112-.505-1.217-.692-1.666-.181-.435-.366-.374-.505-.38l-.431-.007c-.15 0-.393.056-.6.28-.206.224-.787.767-.787 1.871 0 1.104.805 2.17.917 2.32.112.15 1.584 2.417 3.837 3.39.536.231.954.369 1.279.473.536.171 1.023.146 1.41.108.43-.042 1.325-.542 1.512-1.065.187-.523.187-.971.131-1.065-.056-.094-.206-.15-.43-.262z" clipRule="evenodd" />
                             </svg>
@@ -293,6 +300,9 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
       </main>
+      
+      {/* YouTube Modal */}
+      <YouTubeModal isOpen={showYouTubeModal} onClose={() => setShowYouTubeModal(false)} />
     </div>
   );
 };
