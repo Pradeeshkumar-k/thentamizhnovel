@@ -99,10 +99,10 @@ const ContactPage: React.FC = () => {
             variants={containerVariants}
             className="text-center mb-16"
           >
-            <motion.h1 variants={itemVariants} className="text-3xl md:text-5xl font-bold mb-4 text-neon-gold">
+            <motion.h1 variants={itemVariants} className="text-2xl md:text-5xl font-bold mb-4 text-neon-gold">
               {_t.contact.title}
             </motion.h1>
-            <motion.p variants={itemVariants} className="text-lg text-secondary max-w-2xl mx-auto">
+            <motion.p variants={itemVariants} className="text-base md:text-lg text-secondary max-w-2xl mx-auto leading-relaxed">
               {_t.about.shareThoughtsText}
             </motion.p>
           </motion.div>

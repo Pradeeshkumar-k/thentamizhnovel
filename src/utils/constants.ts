@@ -10,7 +10,7 @@ export const YOUTUBE_CHANNELS = [
   },
   {
     name: 'Swetha swe',
-    url: 'https://youtube.com/@swethaa_swe?si=GqKD38Gj9YAa6mhw'
+    url: 'https://youtube.com/@swethaswe-audio_novels?si=GxHw2JgJpZI1LMDJ'
   }
 ];
 
