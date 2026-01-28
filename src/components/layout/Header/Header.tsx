@@ -297,10 +297,10 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
         {/* MOBILE MENU DROPDOWN */}
         {isMenuOpen && (
-           <div className="md:hidden absolute top-full left-0 w-full bg-[#ffffff] dark:bg-black border-t border-border shadow-xl p-4 flex flex-col gap-1.5 animate-in slide-in-from-top-2 duration-300 z-[1000]">
+           <div className="md:hidden absolute top-full left-0 w-full bg-[#ffffff] dark:bg-black border-t border-border shadow-xl p-4 flex flex-col gap-1 animate-in slide-in-from-top-2 duration-300 z-[1000]">
               <div 
                 onClick={() => { navigate('/'); setIsMenuOpen(false); }} 
-                className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
               >
                 <Home size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                 <span className="font-semibold tracking-tight">{_t.header.home}</span>
@@ -308,7 +308,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
               <div 
                 onClick={() => { navigate('/library'); setIsMenuOpen(false); }} 
-                className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
               >
                 <BookOpen size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                 <span className="font-semibold tracking-tight">{_t.header.library}</span>
@@ -316,7 +316,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
               <div 
                 onClick={() => { navigate('/about'); setIsMenuOpen(false); }} 
-                className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
               >
                 <Info size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                 <span className="font-semibold tracking-tight">{_t.header.about}</span>
@@ -324,13 +324,13 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
               <div 
                 onClick={() => { navigate('/contact'); setIsMenuOpen(false); }} 
-                className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
               >
                 <PhoneCall size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                 <span className="font-semibold tracking-tight">{_t.header.contact}</span>
               </div>
               
-              <div className="h-px bg-border/50 my-2 mx-2" />
+              <div className="h-px bg-border/50 my-1 mx-2" />
 
               {isAuthenticated ? (
                   <>
@@ -341,7 +341,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
                       <div 
                         onClick={() => { navigate('/profile'); setIsMenuOpen(false); }} 
-                        className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                        className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
                       >
                         <User size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                         <span className="font-semibold tracking-tight">{_t.header.profile}</span>
@@ -350,18 +350,18 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                       {user?.role === 'ADMIN' && (
                           <div 
                             onClick={() => { navigate('/admin/dashboard'); setIsMenuOpen(false); }} 
-                            className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                            className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
                           >
                             <LayoutDashboard size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                             <span className="font-semibold tracking-tight">{_t.header.adminDashboard}</span>
                           </div>
                       )}
                       
-                      <div className="h-px bg-border/50 my-2 mx-2" />
+                      <div className="h-px bg-border/50 my-1 mx-2" />
 
                       <div 
                         onClick={async () => { await handleLogout(); setIsMenuOpen(false); }} 
-                        className="flex items-center gap-4 p-3 rounded-xl text-red-500 hover:bg-red-500/10 cursor-pointer transition-all group"
+                        className="flex items-center gap-4 p-2.5 rounded-xl text-red-500 hover:bg-red-500/10 cursor-pointer transition-all group"
                       >
                         <LogOut size={20} className="opacity-70 group-hover:opacity-100" />
                         <span className="font-bold tracking-tight">{_t.header.logout}</span>
@@ -370,7 +370,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
               ) : (
                   <div 
                     onClick={() => { if (onLoginClick) onLoginClick(); else navigate('/login'); setIsMenuOpen(false); }} 
-                    className="flex items-center gap-4 p-3 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
+                    className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
                   >
                     <User size={20} className="text-black/60 dark:text-neon-gold/70 group-hover:text-neon-gold" />
                     <span className="font-bold tracking-tight">Login / Get Started</span>
