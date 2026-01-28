@@ -297,7 +297,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
         {/* MOBILE MENU DROPDOWN */}
         {isMenuOpen && (
-           <div className="md:hidden absolute top-full left-0 w-full bg-[#ffffff] dark:bg-black border-t border-border shadow-xl p-4 flex flex-col gap-1 animate-in slide-in-from-top-2 duration-300 z-[1000]">
+           <div className="md:hidden absolute top-full left-0 w-full bg-[#ffffff] dark:bg-black border-t border-border shadow-xl p-4 flex flex-col gap-0.5 animate-in slide-in-from-top-2 duration-300 z-[1000]">
               <div 
                 onClick={() => { navigate('/'); setIsMenuOpen(false); }} 
                 className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
@@ -330,7 +330,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                 <span className="font-semibold tracking-tight">{_t.header.contact}</span>
               </div>
               
-              <div className="h-px bg-border/50 my-1 mx-2" />
+              <div className="h-px bg-border/50 my-0 mx-2" />
 
               {isAuthenticated ? (
                   <>
@@ -357,7 +357,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                           </div>
                       )}
                       
-                      <div className="h-px bg-border/50 my-1 mx-2" />
+                      <div className="h-px bg-border/50 my-0 mx-2" />
 
                       <div 
                         onClick={async () => { await handleLogout(); setIsMenuOpen(false); }} 
