@@ -1,9 +1,18 @@
 // API Configuration
 const getBaseUrl = () => {
   let url = import.meta.env.VITE_API_BASE_URL || 'https://thentamizhbackend.vercel.app/api';
+  
+  // Ensure protocol
   if (url && !url.startsWith('http')) {
     url = `https://${url}`;
   }
+
+  // Ensure /api suffix
+  if (url && !url.endsWith('/api')) {
+    // Handling potential trailing slash before appending
+    url = url.replace(/\/$/, '') + '/api';
+  }
+
   return url;
 };
 
