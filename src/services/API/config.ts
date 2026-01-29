@@ -1,6 +1,6 @@
 // API Configuration
 const getBaseUrl = () => {
-  let url = import.meta.env.VITE_API_BASE_URL || 'https://thentamizhbackend-oy5dlvfag-pradeeshkumar-ks-projects.vercel.app/api';
+  let url = import.meta.env.VITE_API_BASE_URL || 'https://thentamizhbackend.vercel.app/api';
   if (url && !url.startsWith('http')) {
     url = `https://${url}`;
   }
