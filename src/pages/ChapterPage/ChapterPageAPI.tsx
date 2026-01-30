@@ -10,7 +10,7 @@ import novelService from '../../services/API/novelService';
 import readingProgressService from '../../services/API/readingProgressService';
 import { Chapter, Novel } from '../../types';
 import { motion } from 'framer-motion';
-import { commentService } from '../../services/API/commentService';
+import CommentsModal from '../../components/comments/CommentsModal';
 
 const ChapterPageAPI = () => {
   const { novelId, chapterId } = useParams();
@@ -23,6 +23,7 @@ const ChapterPageAPI = () => {
   const [allChapters, setAllChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Interaction State
@@ -312,7 +313,7 @@ const ChapterPageAPI = () => {
                 </button>
 
                 {/* Comments Button */}
-                <button onClick={() => navigate(`/novel/${novelId}/chapter/${chapterId}/comments`)} className="flex items-center gap-2 text-secondary hover:text-primary transition-colors">
+                <button onClick={() => setIsCommentsModalOpen(true)} className="flex items-center gap-2 text-secondary hover:text-primary transition-colors">
                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                      </svg>
@@ -324,7 +325,7 @@ const ChapterPageAPI = () => {
         {/* View Comments Link */}
         <div className="flex justify-center mb-16">
             <button
-                onClick={() => navigate(`/novel/${novelId}/chapter/${chapterId}/comments`)}
+                onClick={() => setIsCommentsModalOpen(true)}
                 className="flex items-center gap-3 px-8 py-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-md transition-all group w-full sm:w-auto justify-center"
             >
                 <div className="relative">
@@ -414,6 +415,13 @@ const ChapterPageAPI = () => {
         </section>
 
       </main>
+
+      <CommentsModal 
+        isOpen={isCommentsModalOpen} 
+        onClose={() => setIsCommentsModalOpen(false)}
+        novelId={novelId || ''}
+        chapterId={chapterId || ''}
+      />
 
       <UserLogin isOpen={isLoginModalOpen} onClose={handleCloseLogin} />
     </div>
