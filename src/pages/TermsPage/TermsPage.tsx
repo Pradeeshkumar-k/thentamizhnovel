@@ -27,7 +27,7 @@ const TermsPage: React.FC = () => {
     <div className="min-h-screen bg-bg-primary text-primary">
       <Header />
       
-      <main className="pt-36 pb-20 px-4">
+      <main className="pt-44 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial="hidden"
@@ -70,7 +70,7 @@ const TermsPage: React.FC = () => {
             {/* Privacy Policy Section */}
             <section className="pt-12 border-t border-border">
               <motion.div variants={itemVariants} className="mb-8">
-                <h2 className="text-3xl font-bold text-neon-magenta mb-4 border-l-4 border-neon-magenta pl-6">
+                <h2 className="text-3xl font-bold text-neon-gold mb-4 border-l-4 border-neon-gold pl-6">
                   {t.privacyTitle}
                 </h2>
                 <p className="text-secondary text-lg leading-relaxed italic">
@@ -83,7 +83,7 @@ const TermsPage: React.FC = () => {
                   <motion.div
                     key={index}
                     variants={itemVariants}
-                    className="bg-surface/30 backdrop-blur-sm border border-border rounded-2xl p-6 hover:border-neon-magenta/30 transition-all duration-300"
+                    className="bg-surface/30 backdrop-blur-sm border border-border rounded-2xl p-6 hover:border-neon-gold/30 transition-all duration-300"
                   >
                     <h3 className="text-lg font-bold text-primary mb-3">
                       {section.title}

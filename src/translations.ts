@@ -87,23 +87,23 @@ export const translations = {
       subtitle: 'எங்களின் இணையதளத்தைப் பயன்படுத்துவதற்கு முன்பு, தயவுசெய்து கீழே உள்ள விதிமுறைகளை கவனமாகப் படிக்கவும்.',
       sections: [
         {
-          title: '1. கணக்கு உருவாக்கம் (Account Creation)',
+          title: 'கணக்கு உருவாக்கம் (Account Creation)',
           content: 'எங்களின் தளத்தில் கதைகளைப் படித்து கருத்துக்களை பதிவேற்ற நீங்கள் ஒரு கணக்கை உருவாக்க வேண்டும். நாங்கள் உங்களிடமிருந்து உங்கள் மின்னஞ்சல் (Email) மற்றும் கடவுச்சொல் (Password) ஆகியவற்றை மட்டுமே சேகரிக்கிறோம். உங்கள் கணக்கின் பாதுகாப்பிற்கு நீங்களே முழுப் பொறுப்பு.'
         },
         {
-          title: '2. தரவு பாதுகாப்பு (Data Privacy)',
+          title: 'தரவு பாதுகாப்பு (Data Privacy)',
           content: 'நீங்கள் வழங்கும் மின்னஞ்சல் முகவரி உங்கள் கணக்கை அடையாளம் காணவும், கடவுச்சொல்லை மீட்டெடுக்கவும் மட்டுமே பயன்படுத்தப்படும். உங்கள் தகவல்களை நாங்கள் மூன்றாம் நபர்களுக்கு விற்கமாட்டோம். உங்கள் கடவுச்சொற்கள் குறியாக்கம் (Encrypted) செய்யப்பட்டு சேமிக்கப்படுகின்றன, எனவே அவை எங்களுக்குத் தெரியாது.'
         },
         {
-          title: '3. பதிப்புரிமை (Copyright Policy)',
+          title: 'பதிப்புரிமை (Copyright Policy)',
           content: 'இந்தத் தளத்தில் வெளியாகும் நாவல்கள் மற்றும் கதைகளின் முழு உரிமையும் அந்தந்த எழுத்தாளர்களுக்கே உரியது. எழுத்தாளரின் அனுமதியின்றி கதைகளை நகலெடுக்கவோ (Copy), வேறு தளங்களில் பகிரவோ கூடாது.'
         },
         {
-          title: '4. பயனர் நடத்தை (User Conduct)',
+          title: 'பயனர் நடத்தை (User Conduct)',
           content: 'கருத்துப் பெட்டியில் (Comments section) தரக்குறைவான வார்த்தைகளைப் பயன்படுத்துவதோ அல்லது மற்றவர்களைக் காயப்படுத்தும் வகையில் பேசுவதோ தடை செய்யப்பட்டுள்ளது. விதிமுறைகளை மீறும் கணக்குகளை முன்னறிவிப்பின்றி நீக்க நிர்வாகத்திற்கு முழு உரிமை உண்டு.'
         },
         {
-          title: '5. மாற்றங்கள் (Changes to Terms)',
+          title: 'மாற்றங்கள் (Changes to Terms)',
           content: 'இந்த விதிமுறைகளைத் தேவைப்படும்போது மாற்றியமைக்கும் உரிமை எங்களுக்கு உண்டு. மாற்றங்கள் தளத்தில் அறிவிக்கப்படும்.'
         }
       ],
@@ -111,27 +111,27 @@ export const translations = {
       privacySubtitle: 'எங்களின் நாவல் இணையதளம் உங்கள் தனியுரிமையை மதிக்கிறது. உங்களைப் பற்றிய தகவல்களை நாங்கள் எவ்வாறு சேகரிக்கிறோம் மற்றும் பயன்படுத்துகிறோம் என்பதை இங்கே விளக்குகிறோம்.',
       privacySections: [
         {
-          title: '1. நாங்கள் சேகரிக்கும் தகவல்கள்',
+          title: 'நாங்கள் சேகரிக்கும் தகவல்கள்',
           content: 'நாங்கள் உங்களிடமிருந்து மிகக்குறைந்த தகவல்களை மட்டுமே சேகரிக்கிறோம்: மின்னஞ்சல் முகவரி (Email Address): உங்கள் கணக்கை உருவாக்கவும், உங்களை அடையாளம் காணவும். கடவுச்சொல் (Password): உங்கள் கணக்கைப் பாதுகாப்பாக வைத்திருக்க (இது குறியாக்கம் செய்யப்பட்டு சேமிக்கப்படும்).'
         },
         {
-          title: '2. தகவல்களைப் பயன்படுத்தும் முறை',
+          title: 'தகவல்களைப் பயன்படுத்தும் முறை',
           content: 'நாங்கள் சேகரிக்கும் தகவல்களைக் கீழே உள்ள காரணங்களுக்காக மட்டுமே பயன்படுத்துகிறோம்: உங்களை லாக்-இன் (Login) செய்ய அனுமதிக்க. உங்கள் கணக்கு தொடர்பான முக்கியமான அறிவிப்புகளை அனுப்ப. நீங்கள் கடவுச்சொல்லை மறந்தால், அதை மீட்டெடுக்க உதவ.'
         },
         {
-          title: '3. தரவு பாதுகாப்பு (Security)',
+          title: 'தரவு பாதுகாப்பு (Security)',
           content: 'உங்கள் தரவுகளின் பாதுகாப்பை உறுதி செய்ய நாங்கள் தகுந்த தொழில்நுட்ப பாதுகாப்பு முறைகளைப் பின்பற்றுகிறோம். உங்கள் கடவுச்சொற்கள் எங்களுக்கே தெரியாத வகையில் பாதுகாப்பாகச் சேமிக்கப்படுகின்றன.'
         },
         {
-          title: '4. குக்கீகள் (Cookies)',
+          title: 'குக்கீகள் (Cookies)',
           content: "உங்கள் லாக்-இன் தகவல்களைத் தற்காலிகமாக நினைவில் வைத்துக்கொள்ளவும், தளம் விரைவாகச் செயல்படவும் நாங்கள் 'Cookies' தொழில்நுட்பத்தைப் பயன்படுத்தலாம்."
         },
         {
-          title: '5. மூன்றாவது தரப்பு பகிர்வு (Third-Party Sharing)',
+          title: 'மூன்றாவது தரப்பு பகிர்வு (Third-Party Sharing)',
           content: 'நாங்கள் உங்கள் மின்னஞ்சல் முகவரியையோ அல்லது பிற தகவல்களையோ விளம்பர நிறுவனங்களுக்கோ அல்லது வேறு எந்தத் தனி நபருக்கோ விற்கமாட்டோம் அல்லது பகிரமாட்டோம்.'
         },
         {
-          title: '6. உங்கள் உரிமைகள்',
+          title: 'உங்கள் உரிமைகள்',
           content: 'உங்கள் கணக்கை எப்போது வேண்டுமானாலும் நீக்கவோ அல்லது உங்கள் மின்னஞ்சல் தகவல்களை மாற்றவோ உங்களுக்கு உரிமை உண்டு. கணக்கை நீக்க விரும்பினால் எங்களைத் தொடர்பு கொள்ளலாம்.'
         }
       ],
@@ -224,23 +224,23 @@ export const translations = {
       subtitle: 'Before using our website, please read the following terms carefully.',
       sections: [
         {
-          title: '1. Account Creation',
+          title: 'Account Creation',
           content: 'You must create an account to read stories and post comments on our platform. We only collect your email and password. You are solely responsible for the security of your account.'
         },
         {
-          title: '2. Data Privacy',
+          title: 'Data Privacy',
           content: 'The email address you provide will only be used to identify your account and for password recovery. We will not sell your information to third parties. Your passwords are encrypted and stored, so they are not known to us.'
         },
         {
-          title: '3. Copyright Policy',
+          title: 'Copyright Policy',
           content: 'The full ownership of the novels and stories published on this site belongs to the respective authors. Stories should not be copied or shared on other platforms without the author\'s permission.'
         },
         {
-          title: '4. User Conduct',
+          title: 'User Conduct',
           content: 'The use of offensive language or talking in a way that hurts others in the comments section is prohibited. Management has the full right to delete accounts that violate rules without prior notice.'
         },
         {
-          title: '5. Changes to Terms',
+          title: 'Changes to Terms',
           content: 'We have the right to modify these terms as needed. Changes will be announced on the platform.'
         }
       ],
@@ -248,27 +248,27 @@ export const translations = {
       privacySubtitle: 'Our novel website respects your privacy. Here we explain how we collect and use your information.',
       privacySections: [
         {
-          title: '1. Information We Collect',
+          title: 'Information We Collect',
           content: 'We collect only minimal information from you: Email Address (to create your account and identify you), Password (to keep your account secure - stored encrypted).'
         },
         {
-          title: '2. How We Use Information',
+          title: 'How We Use Information',
           content: 'We use the collected information only for the following reasons: To allow you to login, to send important notifications related to your account, to help recover your password if you forget it.'
         },
         {
-          title: '3. Data Security',
+          title: 'Data Security',
           content: 'We follow appropriate technical security methods to ensure the safety of your data. Your passwords are stored securely in a way that even we do not know them.'
         },
         {
-          title: '4. Cookies',
+          title: 'Cookies',
           content: 'We may use \'Cookies\' technology to temporarily remember your login information and for the site to function quickly.'
         },
         {
-          title: '5. Third-Party Sharing',
+          title: 'Third-Party Sharing',
           content: 'We will not sell or share your email address or other information with advertising companies or any other individuals.'
         },
         {
-          title: '6. Your Rights',
+          title: 'Your Rights',
           content: 'You have the right to delete your account or change your email information at any time. You can contact us if you wish to delete your account.'
         }
       ],
