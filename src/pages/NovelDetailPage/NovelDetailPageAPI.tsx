@@ -391,9 +391,7 @@ const NovelDetailPageAPI = () => {
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                             </div>
-                            <div className="absolute bottom-1 right-1 bg-neon-gold text-black text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded shadow-sm">
-                                {chapter.chapterNumber}
-                            </div>
+
                         </div>
 
                         {/* Content */}
