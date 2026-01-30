@@ -65,6 +65,8 @@ const Footer: React.FC = () => {
               <Link to="/contact" className="hover:text-white dark:hover:text-primary hover:underline transition-colors whitespace-nowrap">{_t.footer.contactUs}</Link>
               <span className="text-white/20 dark:text-border hidden md:inline">|</span>
               <Link to="/terms" className="hover:text-white dark:hover:text-primary hover:underline transition-colors whitespace-nowrap">{_t.footer.terms}</Link>
+              <span className="text-white/20 dark:text-border hidden md:inline">|</span>
+              <Link to="/privacy-policy" className="hover:text-white dark:hover:text-primary hover:underline transition-colors whitespace-nowrap">{language === 'tamil' ? 'தனியுரிமைக் கொள்கை' : 'Privacy Policy'}</Link>
           </div>
           <p className="text-[10px] md:text-xs text-gray-500 dark:text-muted/60">
               {_t.footer.rights}

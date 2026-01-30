@@ -18,6 +18,7 @@ const ContactPage = lazy(() => import('../pages/ContactPage/ContactPage'));
 const ProfilePage = lazy(() => import('../pages/ProfilePage/ProfilePage'));
 const LibraryPage = lazy(() => import('../pages/LibraryPage/LibraryPage'));
 const TermsPage = lazy(() => import('../pages/TermsPage/TermsPage'));
+const PrivacyPolicyPage = lazy(() => import('../pages/PrivacyPolicyPage/PrivacyPolicyPage'));
 
 // Admin pages (lazy loaded)
 const AdminLayout = lazy(() => import('../components/admin/AdminLayout/AdminLayout'));
@@ -104,6 +105,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         {/* Specific routes first (for hardcoded novel pages) */}
         <Route path="/novel/1" element={<ThenmozhiNovelPage />} />
         <Route path="/novel/3" element={<MohanaNovelPage />} />
