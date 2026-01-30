@@ -22,7 +22,22 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const [isHovered, setIsHovered] = React.useState(false);
+  // Handle window resize
+  const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        // Ensure sidebar is closed when switching to desktop to reset state if needed, 
+        // or just let the layout handle it.
+        // For this design, we want to ensure desktop view looks right.
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Determine current width for desktop
   const sidebarWidth = isHovered ? 260 : 80;
@@ -51,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && (
+      {isOpen && isMobile && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998] md:hidden"
           onClick={onClose}
@@ -63,11 +78,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <motion.aside 
         initial={false}
         animate={{ 
-          width: isOpen ? 260 : (window.innerWidth >= 768 ? sidebarWidth : 260),
-          x: (isOpen || window.innerWidth >= 768) ? 0 : -260
+          width: isMobile ? 260 : sidebarWidth,
+          x: (isOpen || !isMobile) ? 0 : -260
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
         className={`
           fixed top-0 left-0 h-screen 
           bg-bg-secondary border-r border-glass-border

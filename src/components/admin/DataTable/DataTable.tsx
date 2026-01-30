@@ -37,7 +37,7 @@ const DataTable: React.FC<ExtendedDataTableProps> = ({
 
   return (
     <div className="w-full overflow-hidden border border-border rounded-xl shadow-sm bg-surface overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
+      <table className="w-full min-w-[800px] border-collapse text-sm">
         <thead className="bg-muted/5 border-b border-border">
           <tr>
             {columns.map((column) => (
