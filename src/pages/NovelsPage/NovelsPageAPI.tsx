@@ -11,9 +11,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { NovelGridSkeleton } from '../../components/common/NovelCardSkeleton/NovelCardSkeleton';
 
 // --- IN-MEMORY CACHE ---
-let cachedNovels: any[] = [];
-let lastFetchTime: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// --- SESSION CACHE KEYS ---
+const CACHE_KEY = 'novels_data_v1';
+const CACHE_TS_KEY = 'novels_data_ts';
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 
 // Import novel card images
 import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg';
@@ -33,23 +34,39 @@ const NovelsPageAPI = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [novels, setNovels] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Lazy Initialization of State from Cache
+  const [novels, setNovels] = useState<any[]>(() => {
+    try {
+      // Only use cache if no search query present
+      if (!window.location.search) {
+        const cached = sessionStorage.getItem(CACHE_KEY);
+        const timestamp = sessionStorage.getItem(CACHE_TS_KEY);
+        
+        if (cached && timestamp && (Date.now() - Number(timestamp) < CACHE_DURATION)) {
+          return JSON.parse(cached);
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load novels from session cache', e);
+    }
+    return [];
+  });
+
+  // Loading is false if we already have novels from cache
+  const [loading, setLoading] = useState(() => novels.length === 0);
   const [error, setError] = useState<string | null>(null);
   const t = translations[language as keyof typeof translations];
 
-  // Fetch novels from API with Caching
+  // Fetch Logic
   useEffect(() => {
     const fetchNovels = async () => {
       try {
         const searchParams = new URLSearchParams(location.search);
         const query = searchParams.get('search');
         
-        // Cache Logic: Only use cache if no search query
-        if (!query && cachedNovels.length > 0 && (Date.now() - lastFetchTime < CACHE_DURATION)) {
-          setNovels(cachedNovels);
-          setLoading(false);
-          return;
+        // CACHE HIT: If we have data and no query, skip fetch (Instant Load)
+        if (!query && novels.length > 0) {
+           return;
         }
 
         setLoading(true);
@@ -60,10 +77,10 @@ const NovelsPageAPI = () => {
         
         setNovels(fetchedNovels);
         
-        // Update Cache if not a search
+        // Update Session Cache (only if main list)
         if (!query) {
-          cachedNovels = fetchedNovels;
-          lastFetchTime = Date.now();
+           sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels));
+           sessionStorage.setItem(CACHE_TS_KEY, Date.now().toString());
         }
 
         setError(null);
