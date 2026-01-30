@@ -188,7 +188,7 @@ const ChapterPageAPI = () => {
     <div className="min-h-screen bg-bg-primary text-secondary transition-colors duration-300">
       <Header onLoginClick={handleLoginClick} />
 
-      <main className="container mx-auto px-4 pt-36 pb-20 max-w-4xl">
+      <main className="container mx-auto px-4 pt-52 md:pt-36 pb-20 max-w-4xl">
         {/* Back Button */}
         <button 
           onClick={handleBack}
