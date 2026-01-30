@@ -31,7 +31,7 @@ const TotalChaptersSection: React.FC<TotalChaptersSectionProps> = ({
   return (
     <section className={styles.totalChaptersSection}>
       <div className="mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white flex items-center">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center">
           <span className="border-l-[6px] border-neon-gold pl-4">
             அத்தியாயங்கள் [{totalChapters}]
           </span>

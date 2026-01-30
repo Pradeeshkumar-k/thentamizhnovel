@@ -111,7 +111,7 @@ const MohanaNovelPage = () => {
         </div>
 
         <div className={styles.chaptersSection}>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <span className="border-l-[6px] border-neon-gold pl-4">
               {language === 'tamil' ? 'அத்தியாயங்கள்' : 'Chapters'} [{novel.chapters.length}]
             </span>
