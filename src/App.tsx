@@ -7,15 +7,7 @@ import AppRoutes from './routes/routes';
 import { consoleHelper } from './utils/consoleHelper';
 import './styles/App.scss';
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
 
 function App() {
   useEffect(() => {
@@ -25,7 +17,7 @@ function App() {
   return (
     <AuthProvider>
       <ReadingProgressProvider>
-        <ScrollToTop />
+
         <div className="app">
           <div className="app-content">
             <AppRoutes />
