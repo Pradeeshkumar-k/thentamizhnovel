@@ -9,6 +9,7 @@ const NovelDetailPage = lazy(() => import('../pages/NovelDetailPage/NovelDetailP
 const ThenmozhiNovelPage = lazy(() => import('../pages/ThenmozhiNovelPage/ThenmozhiNovelPage'));
 const MohanaNovelPage = lazy(() => import('../pages/MohanaNovelPage/MohanaNovelPage'));
 const ChapterPage = lazy(() => import('../pages/ChapterPage/ChapterPageAPI'));
+const ChapterCommentsPage = lazy(() => import('../pages/ChapterPage/ChapterCommentsPage'));
 
 const LoginPage = lazy(() => import('../pages/LoginPage/LoginPage'));
 const SignupPage = lazy(() => import('../pages/SignupPage/SignupPage'));
@@ -99,6 +100,7 @@ const AppRoutes = () => {
         {/* Generic routes after specific ones */}
         <Route path="/novel/:id" element={<NovelDetailPage />} />
         <Route path="/novel/:novelId/chapter/:chapterId" element={<ChapterPage />} />
+        <Route path="/novel/:novelId/chapter/:chapterId/comments" element={<ChapterCommentsPage />} />
 
         {/* 403 Forbidden Page (no protection needed) */}
         <Route path="/403" element={<ForbiddenPage />} />
