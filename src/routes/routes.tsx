@@ -34,8 +34,18 @@ const ForbiddenPage = lazy(() => import('../pages/Admin/ForbiddenPage/ForbiddenP
 import RoleProtectedRoute from '../components/common/RoleProtectedRoute/RoleProtectedRoute';
 
 const LoadingFallback = memo(() => (
-  <div className="loading-fallback">
-    <div>Loading...</div>
+  <div className="min-h-screen bg-bg-primary">
+    {/* Header Skeleton */}
+    <div className="h-16 border-b border-border bg-surface animate-pulse mb-8"></div>
+    {/* Body Skeleton */}
+    <div className="container mx-auto px-4">
+      <div className="h-48 bg-surface rounded-2xl animate-pulse mb-12"></div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="aspect-[2/3] bg-surface rounded-xl animate-pulse"></div>
+        ))}
+      </div>
+    </div>
   </div>
 ));
 

@@ -8,6 +8,12 @@ import Carousel from '../../components/common/Carousel/Carousel';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NovelGridSkeleton } from '../../components/common/NovelCardSkeleton/NovelCardSkeleton';
+
+// --- IN-MEMORY CACHE ---
+let cachedNovels: any[] = [];
+let lastFetchTime: number = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Import novel card images
 import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg';
@@ -32,19 +38,34 @@ const NovelsPageAPI = () => {
   const [error, setError] = useState<string | null>(null);
   const t = translations[language as keyof typeof translations];
 
-  // Fetch novels from API
+  // Fetch novels from API with Caching
   useEffect(() => {
     const fetchNovels = async () => {
       try {
-        setLoading(true);
         const searchParams = new URLSearchParams(location.search);
         const query = searchParams.get('search');
         
-        // Pass limit: 100 to get enough novels for categorization
+        // Cache Logic: Only use cache if no search query
+        if (!query && cachedNovels.length > 0 && (Date.now() - lastFetchTime < CACHE_DURATION)) {
+          setNovels(cachedNovels);
+          setLoading(false);
+          return;
+        }
+
+        setLoading(true);
         const params = query ? { search: query, limit: 50 } : { limit: 50 };
         
         const response = await novelService.getAllNovels(params);
-        setNovels(response.novels || []);
+        const fetchedNovels = response.novels || [];
+        
+        setNovels(fetchedNovels);
+        
+        // Update Cache if not a search
+        if (!query) {
+          cachedNovels = fetchedNovels;
+          lastFetchTime = Date.now();
+        }
+
         setError(null);
       } catch (err: any) {
         console.error('Error fetching novels:', err);
@@ -79,8 +100,17 @@ const NovelsPageAPI = () => {
         {/* Main Content Container */}
         <div className="container mx-auto px-4 mt-8">
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-neon-gold"></div>
+            <div className="space-y-12">
+               <div>
+                  <div className="h-8 bg-gray-700/20 rounded w-48 mb-6 animate-pulse"></div>
+                  <div className="flex space-x-4 overflow-hidden">
+                    {[...Array(4)].map((_, i) => <div key={i} className="flex-shrink-0 w-40 md:w-48 aspect-[2/3] bg-gray-700/20 rounded-xl animate-pulse"></div>)}
+                  </div>
+               </div>
+               <div>
+                  <div className="h-8 bg-gray-700/20 rounded w-48 mb-6 animate-pulse"></div>
+                  <NovelGridSkeleton count={12} />
+               </div>
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center p-8 bg-red-900/20 border border-red-500/50 rounded-xl text-center">

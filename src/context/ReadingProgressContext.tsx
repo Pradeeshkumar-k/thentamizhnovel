@@ -28,62 +28,26 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
     return !!localStorage.getItem('authToken');
   };
 
-  // Load reading progress and library from backend or localStorage
+  // Load basic state from localStorage ONLY on init
   useEffect(() => {
-    const loadProgress = async () => {
-      try {
-        if (isUserLoggedIn()) {
-          // User is logged in - fetch from backend
-          // Parallel fetch for speed
-          const [libraryRes] = await Promise.all([
-             novelService.getLibrary()
-          ]);
+    const savedOngoing = localStorage.getItem('ongoingNovels');
+    const savedCompleted = localStorage.getItem('completedNovels');
+    const savedBookmarks = localStorage.getItem('libraryBookmarks');
 
-          // Only set bookmarks from backend
-          if (libraryRes.success && libraryRes.data) {
-             setBookmarks(libraryRes.data);
-             // Save bookmarks to localStorage
-             localStorage.setItem('libraryBookmarks', JSON.stringify(libraryRes.data));
-          }
-
-        } else {
-          // Guest user - load from localStorage
-          const savedOngoing = localStorage.getItem('ongoingNovels');
-          const savedCompleted = localStorage.getItem('completedNovels');
-          const savedBookmarks = localStorage.getItem('libraryBookmarks');
-
-          if (savedOngoing) {
-            setOngoingNovels(JSON.parse(savedOngoing));
-          }
-          if (savedCompleted) {
-            setCompletedNovels(JSON.parse(savedCompleted));
-          }
-          if (savedBookmarks) {
-            setBookmarks(JSON.parse(savedBookmarks));
-          }
-        }
-      } catch (_error) {
-        // Fallback to localStorage
-        const savedOngoing = localStorage.getItem('ongoingNovels');
-        const savedCompleted = localStorage.getItem('completedNovels');
-        const savedBookmarks = localStorage.getItem('libraryBookmarks');
-
-        if (savedOngoing) {
-          setOngoingNovels(JSON.parse(savedOngoing));
-        }
-        if (savedCompleted) {
-          setCompletedNovels(JSON.parse(savedCompleted));
-        }
-        if (savedBookmarks) {
-          setBookmarks(JSON.parse(savedBookmarks));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProgress();
+    if (savedOngoing) setOngoingNovels(JSON.parse(savedOngoing));
+    if (savedCompleted) setCompletedNovels(JSON.parse(savedCompleted));
+    if (savedBookmarks) setBookmarks(JSON.parse(savedBookmarks));
+    
+    setLoading(false);
   }, []);
+
+  // Sync Library with backend ON DEMAND or when login status changes
+  useEffect(() => {
+    if (isUserLoggedIn() && !loading) {
+       // We don't fetch on mount anymore to save 20s load time. 
+       // Only fetch if explicitly requested by pages (Rule #4)
+    }
+  }, [loading]);
 
   // Save to localStorage whenever state changes
   useEffect(() => {
