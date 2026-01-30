@@ -5,6 +5,7 @@ import { translations } from '../../translations';
 import Header from '../../components/layout/Header/Header';
 import { SOCIAL_LINKS } from '../../utils/constants';
 import YouTubeModal from '../../components/common/Modal/YouTubeModal';
+import UserLogin from '../../components/common/UserLogin/UserLogin';
 
 // Icons
 const MailIcon = () => (
@@ -39,6 +40,11 @@ const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showYouTubeModal, setShowYouTubeModal] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +91,7 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-bg-primary text-primary transition-colors duration-300">
-      <Header />
+      <Header onLoginClick={handleLoginClick} />
       
       <main className="pt-44 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Abstract Background Elements */}
@@ -303,6 +309,9 @@ const ContactPage: React.FC = () => {
       
       {/* YouTube Modal */}
       <YouTubeModal isOpen={showYouTubeModal} onClose={() => setShowYouTubeModal(false)} />
+      
+      {/* User Login Modal */}
+      <UserLogin isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </div>
   );
 };
