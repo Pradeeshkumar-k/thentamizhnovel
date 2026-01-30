@@ -10,7 +10,9 @@ import novelService from '../../services/API/novelService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NovelGridSkeleton } from '../../components/common/NovelCardSkeleton/NovelCardSkeleton';
 
-// --- IN-MEMORY CACHE ---
+// --- IN-MEMORY CACHE (Level 1) ---
+let globalNovelsCache: any[] | null = null;
+
 // --- SESSION CACHE KEYS ---
 const CACHE_KEY = 'novels_data_v1';
 const CACHE_TS_KEY = 'novels_data_ts';
@@ -39,11 +41,21 @@ const NovelsPageAPI = () => {
     try {
       // Only use cache if no search query present
       if (!window.location.search) {
+        // Level 1: In-Memory (Zero Latency)
+        if (globalNovelsCache && globalNovelsCache.length > 0) {
+            return globalNovelsCache;
+        }
+
+        // Level 2: Session Storage (Persists on Refresh)
         const cached = sessionStorage.getItem(CACHE_KEY);
         const timestamp = sessionStorage.getItem(CACHE_TS_KEY);
         
         if (cached && timestamp && (Date.now() - Number(timestamp) < CACHE_DURATION)) {
-          return JSON.parse(cached);
+          const parsed = JSON.parse(cached);
+          if (parsed.length > 0) {
+              globalNovelsCache = parsed; // Populate L1 from L2
+              return parsed;
+          }
         }
       }
     } catch (e) {
@@ -77,9 +89,10 @@ const NovelsPageAPI = () => {
         
         setNovels(fetchedNovels);
         
-        // Update Session Cache (only if main list)
+        // Update Caches (only if main list)
         if (!query) {
-           sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels));
+           globalNovelsCache = fetchedNovels; // Update L1
+           sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels)); // Update L2
            sessionStorage.setItem(CACHE_TS_KEY, Date.now().toString());
         }
 
