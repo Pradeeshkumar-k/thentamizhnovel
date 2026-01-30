@@ -41,7 +41,7 @@ const NovelsPageAPI = () => {
         const query = searchParams.get('search');
         
         // Pass limit: 100 to get enough novels for categorization
-        const params = query ? { search: query, limit: 100 } : { limit: 100 };
+        const params = query ? { search: query, limit: 50 } : { limit: 50 };
         
         const response = await novelService.getAllNovels(params);
         setNovels(response.novels || []);
