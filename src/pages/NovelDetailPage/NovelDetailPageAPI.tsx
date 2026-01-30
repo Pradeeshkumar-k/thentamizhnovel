@@ -365,11 +365,11 @@ const NovelDetailPageAPI = () => {
 
         {/* Chapters List - REFERENCE STYLE */}
         <div className="max-w-4xl">
-            <h2 className="text-2xl font-bold text-primary mb-6 flex items-center justify-between">
-                <span className="border-l-4 border-neon-gold pl-3">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                <span className="border-l-[6px] border-neon-gold pl-4 flex items-center gap-2">
                     {language === 'tamil' ? 'அத்தியாயங்கள்' : 'Chapters'}
-                    <span className="ml-3 text-sm font-normal text-muted bg-surface px-2 py-0.5 rounded-md">
-                        {chapters.length}
+                    <span className="text-gray-900 dark:text-white font-bold ml-1">
+                        [{chapters.length}]
                     </span>
                 </span>
             </h2>
