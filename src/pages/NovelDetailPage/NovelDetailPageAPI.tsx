@@ -312,14 +312,7 @@ const NovelDetailPageAPI = () => {
                     </div>
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
-                    {novel.tags?.slice(0, 3).map((tag, i) => (
-                        <span key={i} className="px-4 py-1.5 bg-surface/50 dark:bg-white/5 border border-border rounded-full text-xs font-medium text-secondary hover:border-neon-gold/30 hover:text-neon-gold transition-colors cursor-default">
-                            #{tag}
-                        </span>
-                    ))}
-                </div>
+
 
                 {/* Description Section - MOVED & RESTYLED */}
                 <div className="mb-8 w-full">
