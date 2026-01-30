@@ -7,6 +7,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useReadingProgress } from '../../context/ReadingProgressContext';
 import { translations } from '../../translations';
 import novelService from '../../services/API/novelService';
+import readingProgressService from '../../services/API/readingProgressService';
 import { Chapter, Novel } from '../../types';
 import { motion } from 'framer-motion';
 import { commentService } from '../../services/API/commentService';
@@ -93,9 +94,20 @@ const ChapterPageAPI = () => {
           setAllChapters(chaptersList.chapters || []);
         }
 
-        // Update reading progress
-        if (chapterData && chapterData.chapterNumber) {
-           updateProgress(novelId, chapterData.chapterNumber);
+        // Update reading progress - Rule #1: Only when IDs exist
+        if (novelId && chapterId && chapterData) {
+            updateProgress(novelId, Number(chapterId));
+            
+            // Rule #4: Call progress fetch only on Reader page
+            if (user) {
+                readingProgressService.getReadingProgress(novelId, chapterId)
+                    .then((res: any) => {
+                        if (res?.success && res.data) {
+                            console.log('Reading progress restored:', res.data.progress);
+                        }
+                    })
+                    .catch((err: any) => console.error('Error fetching progress:', err));
+            }
         }
         
         // Update interaction counts

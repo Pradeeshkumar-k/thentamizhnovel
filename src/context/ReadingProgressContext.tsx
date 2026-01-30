@@ -35,21 +35,11 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
         if (isUserLoggedIn()) {
           // User is logged in - fetch from backend
           // Parallel fetch for speed
-          const [progressRes, libraryRes] = await Promise.all([
-             readingProgressService.getReadingProgress(),
+          const [libraryRes] = await Promise.all([
              novelService.getLibrary()
           ]);
 
-          if (progressRes.success && progressRes.data) {
-            const { ongoing = [], completed = [] } = progressRes.data;
-            setOngoingNovels(ongoing);
-            setCompletedNovels(completed);
-
-            // Also save to localStorage as cache
-            localStorage.setItem('ongoingNovels', JSON.stringify(ongoing));
-            localStorage.setItem('completedNovels', JSON.stringify(completed));
-          }
-
+          // Only set bookmarks from backend
           if (libraryRes.success && libraryRes.data) {
              setBookmarks(libraryRes.data);
              // Save bookmarks to localStorage
@@ -149,7 +139,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   };
 
   // Update current chapter
-  const updateProgress = async (novelId: string, chapterId: number) => {
+  const updateProgress = async (novelId: string, chapterId: number, progress: number = 0) => {
     // Update local state
     setOngoingNovels(prev =>
       prev.map(novel =>
@@ -160,9 +150,9 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
     );
 
     // Sync with backend if user is logged in
-    if (isUserLoggedIn()) {
+    if (isUserLoggedIn() && novelId && chapterId) {
       try {
-        await readingProgressService.updateChapter(novelId, chapterId);
+        await readingProgressService.updateChapter(novelId, chapterId, progress);
       } catch (error) {
         // Silent fail - local state already updated
       }

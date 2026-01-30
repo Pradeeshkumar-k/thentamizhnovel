@@ -3,11 +3,14 @@ import { API_ENDPOINTS } from './config';
 
 const readingProgressService = {
   /**
-   * Get user's reading progress for all novels
+   * Get user's reading progress for a specific novel/chapter
+   * @param {string} novelId - Novel ID
+   * @param {string} chapterId - Chapter ID
    * @returns {Promise} - User's reading progress data
    */
-  async getReadingProgress() {
-    const response = await apiClient.get(API_ENDPOINTS.GET_READING_PROGRESS);
+  async getReadingProgress(novelId: string, chapterId: string) {
+    if (!novelId || !chapterId) return null;
+    const response = await apiClient.get(`${API_ENDPOINTS.GET_READING_PROGRESS}?novelId=${novelId}&chapterId=${chapterId}`);
     return response.data;
   },
 
@@ -54,13 +57,14 @@ const readingProgressService = {
   /**
    * Update current chapter for a novel
    * @param {number} novelId - Novel ID
-   * @param {number} chapterId - Chapter ID
+   * @param {number} progress - % Progress (optional)
    * @returns {Promise} - Updated progress data
    */
-  async updateChapter(novelId: number | string, chapterId: number | string) {
+  async updateChapter(novelId: number | string, chapterId: number | string, progress: number = 0) {
     return this.updateProgress({
       novelId,
       chapterId, // Send as chapterId to match backend
+      progress,
       isCompleted: false,
       updatedAt: new Date().toISOString()
     });
