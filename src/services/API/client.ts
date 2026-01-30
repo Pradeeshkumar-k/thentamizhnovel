@@ -22,6 +22,21 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// --- REFRESH TOKEN HANDLING ---
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
 // Response interceptor - Handle errors globally
 apiClient.interceptors.response.use(
   (response) => response,
@@ -30,7 +45,20 @@ apiClient.interceptors.response.use(
 
     // Handle 401 Unauthorized - Token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // If already refreshing, add this request to the queue
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -42,29 +70,36 @@ apiClient.interceptors.response.use(
           refreshToken,
         });
 
-        // Handle both possible response structures
         const newToken = response.data.token || response.data.data?.token || response.data.accessToken;
+        
         if (!newToken) {
           throw new Error('No token in refresh response');
         }
 
         localStorage.setItem('authToken', newToken);
-
-        // Update refresh token if a new one is provided
+        
         if (response.data.refreshToken || response.data.data?.refreshToken) {
           localStorage.setItem('refreshToken', response.data.refreshToken || response.data.data.refreshToken);
         }
 
-        // Retry original request with new token
+        processQueue(null, newToken);
+        
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
-        // Refresh failed - Clear tokens and redirect to login
+        processQueue(refreshError, null);
+        
         localStorage.removeItem('authToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
-        window.location.href = '/novels';
+        
+        // Use a less invasive redirect if possible, but window.location is safe for major auth failure
+        if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
 
