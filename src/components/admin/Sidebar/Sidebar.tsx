@@ -24,6 +24,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   // Handle window resize
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
+  const [isHovered, setIsHovered] = React.useState(false);
 
   React.useEffect(() => {
     const handleResize = () => {
