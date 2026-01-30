@@ -321,6 +321,16 @@ const NovelDetailPageAPI = () => {
                     ))}
                 </div>
 
+                {/* Description Section - MOVED & RESTYLED */}
+                <div className="mb-8 w-full">
+                    <h2 className="text-xl font-bold text-primary mb-3 border-l-4 border-neon-gold pl-3">
+                        {language === 'tamil' ? 'கதை சுருக்கம்' : 'Story Summary'}
+                    </h2>
+                    <p className="text-secondary leading-relaxed whitespace-pre-line text-sm md:text-base">
+                        {getNovelDescription(novel)}
+                    </p>
+                </div>
+
                 {/* Actions */}
                 <div className="flex flex-wrap gap-4 mt-auto justify-center md:justify-start w-full md:w-auto">
 
@@ -358,15 +368,7 @@ const NovelDetailPageAPI = () => {
             </div>
         </div>
 
-        {/* Description Section */}
-        <div className="mb-12 bg-surface/30 p-6 rounded-xl border border-white/5 backdrop-blur-sm">
-            <h2 className="text-xl font-bold text-primary mb-4 border-l-4 border-neon-gold pl-3">
-                {language === 'tamil' ? 'கதை சுருக்கம்' : 'Story Summary'}
-            </h2>
-            <p className="text-secondary leading-relaxed whitespace-pre-line">
-                {getNovelDescription(novel)}
-            </p>
-        </div>
+
 
         {/* Chapters List - REFERENCE STYLE */}
         <div className="max-w-4xl">
