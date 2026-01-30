@@ -386,11 +386,7 @@ const ChapterPageAPI = () => {
                         className="bg-bg-primary p-4 rounded-lg border border-border hover:border-neon-gold/30 cursor-pointer group"
                         onClick={() => navigateToChapter(c.id || c._id || '')}
                     >
-                        <div className="flex justify-between items-start mb-2">
-                            <span className="text-neon-gold text-xs font-bold bg-neon-gold/10 px-2 py-1 rounded">
-                                #{c.chapterNumber}
-                            </span>
-                            <span className="text-xs text-muted">
+
                                 {calculateReadTime(c.content)}
                             </span>
                         </div>

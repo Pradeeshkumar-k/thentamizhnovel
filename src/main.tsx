@@ -1,6 +1,7 @@
 // import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import ScrollToTop from './components/common/ScrollToTop'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import './styles/index.scss'
@@ -57,6 +58,7 @@ createRoot(rootElement).render(
     <LanguageProvider>
       <ThemeProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <App />
         </BrowserRouter>
       </ThemeProvider>
