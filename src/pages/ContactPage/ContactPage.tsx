@@ -212,7 +212,7 @@ const ContactPage: React.FC = () => {
                         name="name" 
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
+                        className="w-full bg-white/5 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
                         placeholder="Your Name"
                         required
                       />
@@ -225,7 +225,7 @@ const ContactPage: React.FC = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
+                        className="w-full bg-white/5 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
                         placeholder="your@email.com"
                         required
                       />
@@ -240,7 +240,7 @@ const ContactPage: React.FC = () => {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
+                        className="w-full bg-white/5 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all"
                         placeholder="How can we help?"
                         required
                       />
@@ -254,7 +254,7 @@ const ContactPage: React.FC = () => {
                       value={formData.message}
                       onChange={handleChange}
                       rows={5}
-                      className="w-full bg-bg-primary/50 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all resize-none"
+                      className="w-full bg-white/5 border border-border rounded-xl px-4 py-3 focus:outline-none focus:border-neon-gold focus:ring-1 focus:ring-neon-gold transition-all resize-none"
                       placeholder="Your message here..."
                       required
                     ></textarea>
