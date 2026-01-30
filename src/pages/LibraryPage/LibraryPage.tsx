@@ -68,7 +68,7 @@ const LibraryPage = () => {
         <div className="min-h-screen bg-bg-primary text-primary transition-colors duration-300">
             <Header />
             
-            <main className="container mx-auto px-4 pt-36 pb-12">
+            <main className="container mx-auto px-4 pt-52 md:pt-36 pb-12">
                 <header className="mb-12 border-b border-border pb-6 flex justify-between items-center">
                     <h1 className="text-3xl font-bold flex items-center gap-3 text-neon-gold">
                         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +89,7 @@ const LibraryPage = () => {
 
                 {isLoading && bookmarks.length === 0 ? (
                     // Skeleton Grid
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 md:gap-5">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 md:gap-5">
                         {[...Array(12)].map((_, i) => (
                             <div key={i} className="bg-surface rounded-lg overflow-hidden border border-border h-full flex flex-col animate-pulse">
                                 <div className="aspect-[4/5] bg-muted/20"></div>
@@ -111,7 +111,7 @@ const LibraryPage = () => {
                         </button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 md:gap-5">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 md:gap-5">
                         {bookmarks.map((novel) => (
                             <motion.div
                                 key={novel._id || novel.id}
