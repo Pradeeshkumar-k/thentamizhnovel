@@ -133,10 +133,10 @@ const NovelsPageAPI = () => {
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.slice(0, 4).map(novel => (
                       <motion.div 
-                        key={novel._id}
+                        key={novel.id || novel._id}
                         whileHover={{ scale: 1.05 }}
                         className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-all duration-300"
-                        onClick={() => handleNovelClick(novel._id)}
+                        onClick={() => handleNovelClick(novel.id || novel._id)}
                       >
                          <div className="aspect-[2/3] w-full relative">
                             {novel.coverImage ? (
@@ -177,10 +177,10 @@ const NovelsPageAPI = () => {
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.slice(0, 10).map(novel => (
                       <motion.div 
-                        key={novel._id}
+                        key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
-                        onClick={() => handleNovelClick(novel._id)}
+                        onClick={() => handleNovelClick(novel.id || novel._id)}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">
@@ -236,10 +236,10 @@ const NovelsPageAPI = () => {
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.filter(n => n.status !== 'COMPLETED').map(novel => (
                       <motion.div 
-                        key={novel._id}
+                        key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
-                        onClick={() => handleNovelClick(novel._id)}
+                        onClick={() => handleNovelClick(novel.id || novel._id)}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">
@@ -297,10 +297,10 @@ const NovelsPageAPI = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
                     {novels.filter(n => n.status === 'COMPLETED').map(novel => (
                       <motion.div 
-                        key={novel._id}
+                        key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
-                        onClick={() => handleNovelClick(novel._id)}
+                        onClick={() => handleNovelClick(novel.id || novel._id)}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">

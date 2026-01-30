@@ -114,14 +114,14 @@ const LibraryPage = () => {
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 md:gap-5">
                         {bookmarks.map((novel) => (
                             <motion.div
-                                key={novel._id || novel.id}
+                                key={novel.id || novel._id}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-surface rounded-lg overflow-hidden border border-border hover:border-neon-gold/50 transition-all group shadow-sm hover:shadow-md h-full flex flex-col relative"
                             >
                                 <div className="absolute top-2 right-2 z-20">
                                     <button
-                                        onClick={(e) => handleRemoveBookmark(e, novel._id || novel.id)}
+                                        onClick={(e) => handleRemoveBookmark(e, novel.id || novel._id || '')}
                                         className="w-8 h-8 rounded-full bg-black/60 text-white hover:bg-red-500 hover:text-white flex items-center justify-center transition-colors backdrop-blur-sm"
                                         title={language === 'tamil' ? 'நூலகத்திலிருந்து நீக்கு' : 'Remove from library'}
                                     >
@@ -130,7 +130,7 @@ const LibraryPage = () => {
                                         </svg>
                                     </button>
                                 </div>
-                                <Link to={`/novel/${novel._id || novel.id}`} className="block relative aspect-[4/5] overflow-hidden">
+                                <Link to={`/novel/${novel.id || novel._id}`} className="block relative aspect-[4/5] overflow-hidden">
                                      <img 
                                         src={(novel as any).coverImageUrl || novel.coverImage || 'https://via.placeholder.com/300x450'} 
                                         alt={getString(novel.title)}
@@ -152,7 +152,7 @@ const LibraryPage = () => {
                                     </div>
                                     <div className="mt-auto">
                                         <Link 
-                                            to={`/novel/${novel._id || novel.id}`}
+                                            to={`/novel/${novel.id || novel._id}`}
                                             className="block w-full py-1.5 text-center bg-transparent hover:bg-neon-gold hover:text-black border border-primary/20 hover:border-neon-gold rounded text-xs sm:text-sm font-medium text-primary transition-colors"
                                         >
                                             {t.continue}

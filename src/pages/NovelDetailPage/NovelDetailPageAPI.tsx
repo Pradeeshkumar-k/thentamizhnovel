@@ -374,13 +374,13 @@ const NovelDetailPageAPI = () => {
             <div className="flex flex-col gap-3">
                 {chapters.map((chapter) => (
                     <motion.div
-                        key={chapter._id}
+                        key={chapter.id || chapter._id}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         whileHover={{ backgroundColor: 'rgba(30, 41, 59, 1)' }} // lighter slate on hover
                         className="group relative flex items-center p-3 sm:p-4 bg-bg-secondary/80 border border-gray-800 hover:border-neon-gold/30 rounded-xl cursor-pointer transition-all duration-300"
-                        onClick={() => handleChapterClick(chapter._id || chapter.id)}
+                        onClick={() => handleChapterClick(chapter.id || chapter._id || '')}
                     >
                         {/* Thumbnail with Badge */}
                         <div className="relative flex-shrink-0 mr-4">

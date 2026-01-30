@@ -128,7 +128,7 @@ const ChapterPageAPI = () => {
   }, [novelId, chapterId, language]);
 
   // Handle navigation
-  const currentIndex = allChapters.findIndex(c => (c._id || c.id) === chapterId);
+  const currentIndex = allChapters.findIndex(c => (c.id || c._id) === chapterId);
   const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
   const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
 
@@ -349,7 +349,7 @@ const ChapterPageAPI = () => {
         {/* Navigation Buttons */}
         <div className="flex items-center justify-between mb-16 border-t border-border pt-8">
           <button
-            onClick={() => prevChapter && navigateToChapter(prevChapter._id || prevChapter.id)}
+            onClick={() => prevChapter && navigateToChapter(prevChapter.id || prevChapter._id || '')}
             disabled={!prevChapter}
             className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
                 prevChapter 
@@ -364,7 +364,7 @@ const ChapterPageAPI = () => {
           </button>
 
           <button
-            onClick={() => nextChapter && navigateToChapter(nextChapter._id || nextChapter.id)}
+            onClick={() => nextChapter && navigateToChapter(nextChapter.id || nextChapter._id || '')}
             disabled={!nextChapter}
             className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
                 nextChapter 
@@ -388,14 +388,14 @@ const ChapterPageAPI = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {allChapters
-                    .filter(c => (c._id || c.id) !== chapterId) // Exclude current
+                    .filter(c => (c.id || c._id) !== chapterId) // Exclude current
                     .slice(0, 6) // Show only next 6 recommendations
                     .map(c => (
                     <motion.div
-                        key={c._id || c.id}
+                        key={c.id || c._id}
                         whileHover={{ y: -5 }}
                         className="bg-bg-primary p-4 rounded-lg border border-border hover:border-neon-gold/30 cursor-pointer group"
-                        onClick={() => navigateToChapter(c._id || c.id)}
+                        onClick={() => navigateToChapter(c.id || c._id || '')}
                     >
                         <div className="flex justify-between items-start mb-2">
                             <span className="text-neon-gold text-xs font-bold bg-neon-gold/10 px-2 py-1 rounded">
