@@ -27,7 +27,7 @@ const TermsPage: React.FC = () => {
     <div className="min-h-screen bg-bg-primary text-primary">
       <Header />
       
-      <main className="pt-36 pb-20 px-4">
+      <main className="pt-40 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial="hidden"
