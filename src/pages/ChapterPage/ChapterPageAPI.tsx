@@ -389,6 +389,9 @@ const ChapterPageAPI = () => {
                         <div className="flex justify-between items-start mb-2">
                              <div /> {/* Spacer for flex-between */}
                             <span className="text-xs text-muted">
+                                {calculateReadTime(c.content)}
+                            </span>
+                        </div>
                         <h4 className="text-primary font-medium group-hover:text-neon-gold transition-colors line-clamp-2">
                             {(language === 'english' && c.titleEn) ? c.titleEn : getString(c.title)}
                         </h4>

@@ -36,12 +36,12 @@ const Footer: React.FC = () => {
             <div className="flex justify-center gap-4 md:gap-6">
               <a href="https://whatsapp.com/channel/0029VbB0Wxt65yDK3ZTYCC1D" target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 dark:text-muted hover:text-[#25D366] hover:scale-110 transition-all duration-300">
-                <img src={whatsappLogo} alt="WhatsApp" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={whatsappLogo} alt="WhatsApp" className="w-8 h-8 md:w-10 md:h-10 brightness-150 contrast-125 saturate-150" />
               </a>
 
               <a href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 dark:text-muted hover:text-[#1877F2] hover:scale-110 transition-all duration-300">
-                <img src={facebookLogo} alt="Facebook" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={facebookLogo} alt="Facebook" className="w-8 h-8 md:w-10 md:h-10 brightness-150 contrast-125 saturate-150" />
               </a>
 
               <a href={SOCIAL_LINKS.INSTAGRAM} target="_blank" rel="noopener noreferrer" 
