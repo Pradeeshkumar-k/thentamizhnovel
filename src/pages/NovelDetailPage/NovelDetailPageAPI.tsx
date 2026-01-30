@@ -256,7 +256,7 @@ const NovelDetailPageAPI = () => {
     <div className="min-h-screen bg-bg-primary text-primary pb-20">
       <Header onLoginClick={handleLoginClick} />
 
-      <div className="container mx-auto px-4 pt-36">
+      <div className="container mx-auto px-4 pt-44 md:pt-36">
         
         {/* Back Button */}
         <div className="mb-6">
