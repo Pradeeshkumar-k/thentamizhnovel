@@ -201,7 +201,7 @@ const ChapterPageAPI = () => {
     <div className="min-h-screen bg-bg-primary text-secondary transition-colors duration-300">
       <Header onLoginClick={handleLoginClick} />
 
-      <main className="container mx-auto px-4 pt-52 md:pt-36 pb-20 max-w-4xl">
+      <main className="container mx-auto px-4 pt-28 md:pt-36 pb-20 max-w-4xl">
         {/* Back Button */}
         <button 
           onClick={handleBack}
@@ -223,10 +223,6 @@ const ChapterPageAPI = () => {
           </h1>
           
           <div className="flex flex-wrap justify-center items-center gap-4 text-sm text-secondary font-medium">
-            <span className="bg-surface px-3 py-1 rounded-full text-muted border border-border">
-               {language === 'tamil' ? 'அத்தியாயம்' : 'Chapter'} {chapter.chapterNumber}
-            </span>
-            <span className="hidden sm:inline text-muted">•</span>
             <span className="flex items-center gap-1 text-muted">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -259,9 +255,9 @@ const ChapterPageAPI = () => {
 
 
         {/* Interaction Bar */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-4 border-y border-border py-6 mb-12">
+        <div className="flex flex-row items-center justify-between gap-4 border-y border-border py-4 mb-8">
             {/* Left Group: Like & Save */}
-            <div className="flex items-center gap-6 w-full md:w-auto">
+            <div className="flex items-center gap-4 md:gap-6">
                 <button    
                     onClick={handleLike}
                     className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-red-500' : 'text-secondary hover:text-red-500'}`}
@@ -283,8 +279,8 @@ const ChapterPageAPI = () => {
                 </button>
             </div>
             
-            {/* Right Group: Share & Comments */}
-            <div className="flex items-center gap-6 w-full md:w-auto">
+            {/* Right Group: Share */}
+            <div className="flex items-center gap-4 md:gap-6">
                 {/* Share Button (Moved before Comments) */}
                 <button 
                     onClick={async () => {
@@ -311,8 +307,6 @@ const ChapterPageAPI = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                      </svg>
                 </button>
-
-
             </div>
         </div>
 

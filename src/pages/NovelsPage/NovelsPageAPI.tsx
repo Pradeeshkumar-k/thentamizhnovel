@@ -124,11 +124,11 @@ const NovelsPageAPI = () => {
     <div className="min-h-screen bg-bg-primary text-primary pb-20">
       <Header onLoginClick={handleLoginClick} />
       
-      <div className="pt-44 md:pt-28 pb-8">
+      <div className="pt-24 md:pt-28 pb-8">
         <Carousel />
         
         {/* Main Content Container */}
-        <div className="container mx-auto px-4 mt-8">
+        <div className="container mx-auto px-4 pt-28 md:pt-36">
           {loading ? (
             <div className="space-y-12">
                <div>
