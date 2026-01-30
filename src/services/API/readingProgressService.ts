@@ -60,7 +60,7 @@ const readingProgressService = {
   async updateChapter(novelId: number | string, chapterId: number | string) {
     return this.updateProgress({
       novelId,
-      lastChapter: chapterId,
+      chapterId, // Send as chapterId to match backend
       isCompleted: false,
       updatedAt: new Date().toISOString()
     });
