@@ -137,30 +137,31 @@ const ContactPage: React.FC = () => {
                   <div>
                     <h3 className="text-xl font-bold mb-2">{language === 'tamil' ? 'சமூக வலைத்தளங்கள்' : 'Social Channels'}</h3>
                     <p className="text-secondary mb-4">Follow us for updates and new releases.</p>
-                  <div className="flex justify-center md:justify-start gap-2 md:gap-4 flex-nowrap">
-                        <a href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/5 rounded-full hover:bg-[#1877F2] hover:text-white text-gray-400 transition-all duration-300 group/icon">
-                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <div className="flex justify-center md:justify-start gap-3 flex-nowrap">
+                        {/* Facebook */}
+                        <a href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/5 rounded-full hover:bg-[#1877F2] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                             </svg>
                         </a>
                         
                         {/* Instagram */}
-                        <a href={SOCIAL_LINKS.INSTAGRAM} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-[#E4405F] hover:text-white text-gray-400 transition-all duration-300 group/icon">
-                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <a href={SOCIAL_LINKS.INSTAGRAM} target="_blank" rel="noopener noreferrer" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/5 rounded-full hover:bg-[#E4405F] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468.99c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
                             </svg>
                         </a>
                         
                         {/* YouTube */}
-                        <a href="#" onClick={handleYouTubeClick} className="p-3 bg-white/5 rounded-full hover:bg-[#FF0000] hover:text-white text-gray-400 transition-all duration-300 group/icon">
-                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <a href="#" onClick={handleYouTubeClick} className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/5 rounded-full hover:bg-[#FF0000] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fillRule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 01-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 01-1.768-1.768C2 15.255 2 12 2 12s0-3.255.418-4.814a2.507 2.507 0 011.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418zM15.194 12 10 15V9l5.194 3z" clipRule="evenodd" />
                             </svg>
                         </a>
 
                         {/* WhatsApp */}
-                        <a href="https://whatsapp.com/channel/0029VbB0Wxt65yDK3ZTYCC1D" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-[#25D366] hover:text-white text-gray-400 transition-all duration-300 group/icon">
-                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <a href="https://whatsapp.com/channel/0029VbB0Wxt65yDK3ZTYCC1D" target="_blank" rel="noopener noreferrer" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/5 rounded-full hover:bg-[#25D366] hover:text-white text-gray-400 transition-all duration-300 group/icon">
+                            <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fillRule="evenodd" d="M18.403 5.633A8.919 8.919 0 0012.053 3c-4.948 0-8.976 4.027-8.978 8.977 0 1.582.413 3.126 1.198 4.488L3 21.116l4.759-1.249a8.981 8.981 0 004.29 1.093h.004c4.947 0 8.975-4.027 8.977-8.977a8.926 8.926 0 00-2.627-6.373zM12.053 19.644h-.004a7.468 7.468 0 01-3.811-1.044l-.273-.162-2.834.743.756-2.763-.178-.283a7.482 7.482 0 01-1.15-3.978c.002-4.12 3.356-7.474 7.48-7.474a7.447 7.447 0 015.304 2.193 7.447 7.447 0 012.193 5.304c-.002 4.12-3.356 7.474-7.484 7.474zm4.096-5.592c-.224-.112-1.325-.654-1.53-.728-.206-.075-.356-.112-.506.112-.15.224-.58.73-.711.878-.13.15-.262.168-.486.056-.224-.112-.947-.35-1.803-1.112-.667-.595-1.117-1.329-1.248-1.554-.131-.224-.014-.345.098-.456.1-.1.224-.261.336-.393.112-.13.15-.224.224-.374.075-.15.038-.28-.019-.393-.056-.112-.505-1.217-.692-1.666-.181-.435-.366-.374-.505-.38l-.431-.007c-.15 0-.393.056-.6.28-.206.224-.787.767-.787 1.871 0 1.104.805 2.17.917 2.32.112.15 1.584 2.417 3.837 3.39.536.231.954.369 1.279.473.536.171 1.023.146 1.41.108.43-.042 1.325-.542 1.512-1.065.187-.523.187-.971.131-1.065-.056-.094-.206-.15-.43-.262z" clipRule="evenodd" />
                             </svg>
                         </a>
