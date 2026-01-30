@@ -51,7 +51,7 @@ const TotalChaptersSection: React.FC<TotalChaptersSectionProps> = ({
                 alt={chapter.title}
                 className={styles.chapterImage}
               />
-              <div className={styles.chapterNumber}>{chapter.chapterNumber}</div>
+
             </div>
 
             <div className={styles.chapterInfo}>
