@@ -68,7 +68,7 @@ const LibraryPage = () => {
         <div className="min-h-screen bg-bg-primary text-primary transition-colors duration-300">
             <Header />
             
-            <main className="container mx-auto px-4 pt-28 md:pt-36 pb-12">
+            <main className="container mx-auto px-4 pt-36 md:pt-36 pb-12">
                 <header className="mb-12 border-b border-border pb-6 flex justify-between items-center">
                     <h1 className="text-3xl font-bold flex items-center gap-3 text-neon-gold">
                         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
