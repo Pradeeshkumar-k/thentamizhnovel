@@ -246,9 +246,9 @@ const ChapterPageAPI = () => {
 
 
         {/* Interaction Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-4 border-y border-border py-6 mb-12">
             {/* Left Group: Like & Save */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 w-full md:w-auto">
                 <button    
                     onClick={handleLike}
                     className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-red-500' : 'text-secondary hover:text-red-500'}`}
@@ -271,7 +271,7 @@ const ChapterPageAPI = () => {
             </div>
             
             {/* Right Group: Share & Comments */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 w-full md:w-auto">
                 {/* Share Button (Moved before Comments) */}
                 <button 
                     onClick={async () => {
