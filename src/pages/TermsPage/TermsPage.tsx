@@ -53,10 +53,7 @@ const TermsPage: React.FC = () => {
                     variants={itemVariants}
                     className="bg-surface/30 backdrop-blur-sm border border-border rounded-2xl p-6 md:p-8 hover:border-neon-gold/30 transition-all duration-300"
                   >
-                    <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-full bg-neon-gold/10 flex items-center justify-center text-neon-gold text-sm">
-                        {index + 1}
-                      </span>
+                    <h2 className="text-xl font-bold text-primary mb-4">
                       {section.title}
                     </h2>
                     <p className="text-secondary leading-relaxed">

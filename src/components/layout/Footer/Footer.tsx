@@ -33,25 +33,25 @@ const Footer: React.FC = () => {
           {/* Follow Us */}
           <div className="text-center">
             <h3 className="text-base md:text-lg font-medium text-gray-300 dark:text-muted mb-3 md:mb-4">{_t.footer.followUs}</h3>
-            <div className="flex justify-center gap-4 md:gap-6">
+            <div className="flex justify-center gap-4 md:gap-8">
               <a href="https://whatsapp.com/channel/0029VbB0Wxt65yDK3ZTYCC1D" target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 dark:text-muted hover:text-[#25D366] hover:scale-110 transition-all duration-300">
-                <img src={whatsappLogo} alt="WhatsApp" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={whatsappLogo} alt="WhatsApp" className="w-10 h-10 md:w-14 md:h-14" />
               </a>
 
               <a href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 dark:text-muted hover:text-[#1877F2] hover:scale-110 transition-all duration-300">
-                <img src={facebookLogo} alt="Facebook" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={facebookLogo} alt="Facebook" className="w-10 h-10 md:w-14 md:h-14" />
               </a>
 
               <a href={SOCIAL_LINKS.INSTAGRAM} target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 dark:text-muted hover:text-[#E4405F] hover:scale-110 transition-all duration-300">
-                <img src={instagramLogo} alt="Instagram" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={instagramLogo} alt="Instagram" className="w-10 h-10 md:w-14 md:h-14" />
               </a>
 
               <a href="#" onClick={handleYouTubeClick} 
                  className="text-gray-400 dark:text-muted hover:text-[#FF0000] hover:scale-110 transition-all duration-300">
-                <img src={youtubeLogo} alt="YouTube" className="w-8 h-8 md:w-10 md:h-10" />
+                <img src={youtubeLogo} alt="YouTube" className="w-10 h-10 md:w-14 md:h-14" />
               </a>
             </div>
           </div>

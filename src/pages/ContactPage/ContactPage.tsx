@@ -137,7 +137,7 @@ const ContactPage: React.FC = () => {
                   <div>
                     <h3 className="text-xl font-bold mb-2">{language === 'tamil' ? 'சமூக வலைத்தளங்கள்' : 'Social Channels'}</h3>
                     <p className="text-secondary mb-4">Follow us for updates and new releases.</p>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4">
                         {/* Facebook */}
                         <a href={SOCIAL_LINKS.FACEBOOK} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-[#1877F2] hover:text-white text-gray-400 transition-all duration-300 group/icon">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
