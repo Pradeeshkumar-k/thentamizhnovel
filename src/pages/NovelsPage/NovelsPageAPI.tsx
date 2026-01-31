@@ -31,33 +31,8 @@ const NovelsPageAPI = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  // Lazy Initialization of State from Cache
-  const [novels, setNovels] = useState<any[]>(() => {
-    try {
-      // Only use cache if no search query present
-      if (!window.location.search) {
-        // Level 1: In-Memory (Zero Latency)
-        if (globalNovelsCache && globalNovelsCache.length > 0) {
-            return globalNovelsCache;
-        }
-
-        // Level 2: Session Storage (Persists on Refresh)
-        const cached = sessionStorage.getItem(CACHE_KEY);
-        const timestamp = sessionStorage.getItem(CACHE_TS_KEY);
-        
-        if (cached && timestamp && (Date.now() - Number(timestamp) < CACHE_DURATION)) {
-          const parsed = JSON.parse(cached);
-          if (parsed.length > 0) {
-              globalNovelsCache = parsed; // Populate L1 from L2
-              return parsed;
-          }
-        }
-      }
-    } catch (e) {
-      console.warn('Failed to load novels from session cache', e);
-    }
-    return [];
-  });
+  // Lazy Initialization of State
+  const [novels, setNovels] = useState<any[]>([]);
 
   // Loading is false if we already have novels from cache
   const [loading, setLoading] = useState(() => novels.length === 0);
@@ -87,8 +62,9 @@ const NovelsPageAPI = () => {
         // Update Caches (only if main list)
         if (!query) {
            globalNovelsCache = fetchedNovels; // Update L1
-           sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels)); // Update L2
-           sessionStorage.setItem(CACHE_TS_KEY, Date.now().toString());
+           // Session Storage Removed to prevent stale data
+           // sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels)); 
+           // sessionStorage.setItem(CACHE_TS_KEY, Date.now().toString());
         }
 
         setError(null);
