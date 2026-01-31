@@ -77,20 +77,20 @@ const NovelList = () => {
       return;
     }
 
-    try {
-      // TODO: Replace with real API call
-      const response = await deleteNovel(novel.id);
+    // Optimistic Update - Remove from UI immediately
+    setNovels((prevNovels) => prevNovels.filter((n) => n.id !== novel.id));
 
-      if (response.success) {
-        // Refresh the list
-        fetchNovels();
-        alert('Novel deleted successfully');
-      } else {
-        alert('Failed to delete novel');
-      }
+    try {
+      // Don't wait for completion to update UI
+      await deleteNovel(novel.id);
+      
+      // Success - Silent, or toast if you want (UI already updated)
+      console.log('Novel deleted successfully (Optimistic)');
     } catch (err) {
       console.error('Delete novel error:', err);
+      // Revert optimization on error
       alert('An error occurred while deleting the novel');
+      fetchNovels();
     }
   };
 
