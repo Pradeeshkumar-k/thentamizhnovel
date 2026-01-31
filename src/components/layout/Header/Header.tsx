@@ -5,7 +5,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useAuth } from '../../../context/AuthContext';
 import { translations } from '../../../translations';
-import logo from '../../../assets/images/brand/TTM NOVRLS.png';
+// import logo from '../../../assets/images/brand/TTM NOVRLS.png'; // REMOVED - Using generated webp in public/assets
 // // import styles from './Header.module.scss'; // SCSS REPLACED BY TAILWIND // Removed SCSS
 
 interface HeaderProps {
@@ -117,10 +117,14 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
             
             {/* LOGO */}
             <img 
-                src={logo} 
+                src="/assets/logo.webp" 
                 alt="Logo" 
+                width={182}
+                height={140}
                 className="h-20 md:h-24 lg:h-24 w-auto cursor-pointer object-contain hover:scale-105 transition-transform duration-300 drop-shadow-sm" 
                 onClick={() => navigate('/')} 
+                fetchpriority="high"
+                decoding="async"
             />
 
           {/* MOBILE ICONS ROW (Theme + Profile + Lang + Menu) */}

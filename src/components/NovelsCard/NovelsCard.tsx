@@ -42,6 +42,10 @@ const NovelsCard: React.FC<NovelsCardProps> = ({ sectionTitle, novels }) => {
                   src={novel.image}
                   alt={novel.title}
                   className={styles.novelImage}
+                  width={98}
+                  height={175}
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className={styles.overlay}></div>
                 <div className={styles.novelInfo}>
