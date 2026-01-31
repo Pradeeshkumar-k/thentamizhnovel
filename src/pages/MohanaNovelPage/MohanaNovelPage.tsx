@@ -7,9 +7,10 @@ import UserLogin from '../../components/common/UserLogin/UserLogin';
 import { getNovelConfig } from '../../config/novelConfig';
 import styles from './MohanaNovelPage.module.scss';
 
-// Import images
-import mohanaCard from '../../assets/images/Novel Card/Mohana card.jpg';
-import mohanaChapterImage from '../../assets/images/episodes_card/Mohanamozhi episodes.jpg';
+// Import images (Using public assets)
+// Images moved to public/assets to avoid bundling
+// import mohanaCard from '../../assets/images/Novel Card/Mohana card.jpg';
+// import mohanaChapterImage from '../../assets/images/episodes_card/Mohanamozhi episodes.jpg';
 
 const MohanaNovelPage = () => {
   const { user } = useAuth();
@@ -42,7 +43,7 @@ const MohanaNovelPage = () => {
     title: 'வந்தத்துணையே! என் வாழ்க்கைத் துணையே!',
     author: 'Mohanaamozhi',
     genres: ['Love', 'Romantic'],
-    image: mohanaCard,
+    image: '/assets/covers/Mohana card.jpg',
     stats: {
       views: '25.6K',
       bookmarks: '1.9K',
@@ -125,7 +126,7 @@ const MohanaNovelPage = () => {
               >
                 <div className={styles.chapterImageWrapper}>
                   <img
-                    src={mohanaChapterImage}
+                    src={'/assets/episodes/Mohanamozhi episodes.jpg'}
                     alt={chapter.title}
                     className={styles.chapterImage}
                   />

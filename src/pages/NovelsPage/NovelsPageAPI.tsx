@@ -18,16 +18,11 @@ const CACHE_KEY = 'novels_data_v1';
 const CACHE_TS_KEY = 'novels_data_ts';
 const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 
-// Import novel card images
-import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg';
-import swethaCard from '../../assets/images/Novel Card/swetha card.jpg';
-import mohanaCard from '../../assets/images/Novel Card/Mohana card.jpg';
-
-// Image mapping
+// Image mapping (Using public assets to avoid Base64)
 const imageMap = {
-  '/assets/images/Novel Card/Thenmozhi Card.jpg': thenmozhiCard,
-  '/assets/images/Novel Card/swetha card.jpg': swethaCard,
-  '/assets/images/Novel Card/Mohana card.jpg': mohanaCard
+  '/assets/images/Novel Card/Thenmozhi Card.jpg': '/assets/covers/Thenmozhi Card.jpg',
+  '/assets/images/Novel Card/swetha card.jpg': '/assets/covers/swetha card.jpg',
+  '/assets/images/Novel Card/Mohana card.jpg': '/assets/covers/Mohana card.jpg'
 };
 
 const NovelsPageAPI = () => {

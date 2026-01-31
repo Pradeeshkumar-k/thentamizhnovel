@@ -23,8 +23,11 @@ export const ratsasaneNovelData = {
         totalNovels: 15,
         totalReaders: '2.5M'
       },
-      coverImage: '/assets/images/Novel Card/Thenmozhi Card.jpg',
-      bannerImage: '/assets/images/Novel Card/Thenmozhi Card.jpg',
+      // Import images (Using public assets to avoid Base64)
+      // import thenmozhiCard from '../../../assets/images/Novel Card/Thenmozhi Card.jpg';
+      image: '/assets/covers/Thenmozhi Card.jpg',
+      coverImage: '/assets/covers/Thenmozhi Card.jpg',
+      bannerImage: '/assets/covers/Thenmozhi Card.jpg',
 
       // Novel Stats
       stats: {

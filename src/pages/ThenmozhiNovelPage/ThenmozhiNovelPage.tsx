@@ -8,9 +8,10 @@ import UserLogin from '../../components/common/UserLogin/UserLogin';
 import { getNovelConfig } from '../../config/novelConfig';
 import styles from './ThenmozhiNovelPage.module.scss';
 
-// Import images
-import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg';
-import thenmozhiChapterImage from '../../assets/images/episodes_card/Thenmozhi_episodes.jpg';
+// Import images (Using public assets)
+// Images moved to public/assets to avoid bundling
+// import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg'; 
+// import thenmozhiChapterImage from '../../assets/images/episodes_card/Thenmozhi_episodes.jpg';
 
 const ThenmozhiNovelPage = () => {
   const { user } = useAuth();
@@ -50,7 +51,7 @@ const ThenmozhiNovelPage = () => {
       { tamil: 'காதல்', english: 'Love' },
       { tamil: 'ரொமாண்டிக்', english: 'Romantic' }
     ],
-    image: thenmozhiCard,
+    image: '/assets/covers/Thenmozhi Card.jpg',
     stats: {
       views: '0',
       bookmarks: '0',
@@ -148,7 +149,7 @@ Will a word spoken by the hero before death change the heroine's life? This is a
               >
                 <div className={styles.chapterImageWrapper}>
                   <img
-                    src={thenmozhiChapterImage}
+                    src={'/assets/episodes/Thenmozhi_episodes.jpg'}
                     alt={language === 'tamil' ? chapter.title : chapter.titleEnglish}
                     className={styles.chapterImage}
                   />
