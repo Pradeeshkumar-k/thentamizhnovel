@@ -13,7 +13,9 @@ const novelService = {
    */
   getAllNovels: async (filters: any = {}) => {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params: filters });
+      // Add Cache-Busting Timestamp to force fresh data
+      const params = { ...filters, _t: new Date().getTime() };
+      const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
       return response.data; // Now returns { novels: [...], total: ... }
     } catch (error) {
       console.error('Error fetching novels:', error);
