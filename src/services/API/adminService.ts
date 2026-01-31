@@ -38,12 +38,22 @@ export const getNovelByIdAdmin = async (novelId: string | number) => {
 };
 
 export const createNovel = async (novelData: any) => {
-  const response = await apiClient.post('/admin/novels', novelData);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.post('/admin/novels', novelData, {
+      headers: {
+      Authorization: `Bearer ${token}`
+      }
+  });
   return response.data;
 };
 
 export const updateNovel = async (novelId: string | number, novelData: any) => {
-  const response = await apiClient.put(`/admin/novels/${novelId}`, novelData);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.put(`/admin/novels/${novelId}`, novelData, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return response.data;
 };
 
@@ -72,12 +82,22 @@ export const getChapterById = async (chapterId: string | number) => {
 };
 
 export const createChapter = async (novelId: string | number, chapterData: any) => {
-  const response = await apiClient.post(`/admin/novels/${novelId}/chapters`, chapterData);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.post(`/admin/novels/${novelId}/chapters`, chapterData, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return response.data;
 };
 
 export const updateChapter = async (chapterId: string | number, chapterData: any) => {
-  const response = await apiClient.put(`/admin/chapters/${chapterId}`, chapterData);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.put(`/admin/chapters/${chapterId}`, chapterData, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return response.data;
 };
 
