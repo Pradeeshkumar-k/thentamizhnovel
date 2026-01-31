@@ -48,7 +48,12 @@ export const updateNovel = async (novelId: string | number, novelData: any) => {
 };
 
 export const deleteNovel = async (novelId: string | number) => {
-  const response = await apiClient.delete(`/admin/novels/${novelId}`);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.delete(`/admin/novels/${novelId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return response.data;
 };
 
@@ -77,7 +82,12 @@ export const updateChapter = async (chapterId: string | number, chapterData: any
 };
 
 export const deleteChapter = async (chapterId: string | number) => {
-  const response = await apiClient.delete(`/admin/chapters/${chapterId}`);
+  const token = localStorage.getItem('authToken');
+  const response = await apiClient.delete(`/admin/chapters/${chapterId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return response.data;
 };
 
