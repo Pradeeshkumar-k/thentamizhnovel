@@ -10,25 +10,17 @@ import novelService from '../../services/API/novelService';
 import { Novel, Chapter } from '../../types';
 import { motion } from 'framer-motion';
 
-// Import images
-import thenmozhiCard from '../../assets/images/Novel Card/Thenmozhi Card.jpg';
-import swethaCard from '../../assets/images/Novel Card/swetha card.jpg';
-import mohanaCard from '../../assets/images/Novel Card/Mohana card.jpg';
-import thenmozhiChapterImage from '../../assets/images/episodes_card/Thenmozhi_episodes.jpg';
-import swethaChapterImage from '../../assets/images/episodes_card/swetha swe episodes.jpg';
-import mohanaChapterImage from '../../assets/images/episodes_card/Mohanamozhi episodes.jpg';
-
-// Image mappings
+// Image mappings (Using public assets to avoid Base64)
 const coverImageMap = {
-  '/assets/images/Novel Card/Thenmozhi Card.jpg': thenmozhiCard,
-  '/assets/images/Novel Card/swetha card.jpg': swethaCard,
-  '/assets/images/Novel Card/Mohana card.jpg': mohanaCard
+  '/assets/images/Novel Card/Thenmozhi Card.jpg': '/assets/covers/Thenmozhi Card.jpg',
+  '/assets/images/Novel Card/swetha card.jpg': '/assets/covers/swetha card.jpg',
+  '/assets/images/Novel Card/Mohana card.jpg': '/assets/covers/Mohana card.jpg'
 };
 
 const chapterImageMap = {
-  'Thenmozhi': thenmozhiChapterImage,
-  'Swetha Swe': swethaChapterImage,
-  'Mohanaamozhi': mohanaChapterImage
+  'Thenmozhi': '/assets/episodes/Thenmozhi_episodes.jpg',
+  'Swetha Swe': '/assets/episodes/swetha swe episodes.jpg',
+  'Mohanaamozhi': '/assets/episodes/Mohanamozhi episodes.jpg'
 };
 
 const NovelDetailPageAPI = () => {
@@ -248,8 +240,8 @@ const NovelDetailPageAPI = () => {
     );
   }
 
-  const chapterImage = chapterImageMap[novel.author as keyof typeof chapterImageMap] || thenmozhiChapterImage;
-  const coverImage = (coverImageMap as any)[novel.coverImage || ''] || novel.coverImage || thenmozhiCard;
+  const chapterImage = chapterImageMap[novel.author as keyof typeof chapterImageMap] || '/assets/episodes/Thenmozhi_episodes.jpg';
+  const coverImage = (coverImageMap as any)[novel.coverImage || ''] || novel.coverImage || '/assets/covers/Thenmozhi Card.jpg';
 
 
   return (

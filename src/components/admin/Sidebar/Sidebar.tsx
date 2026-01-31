@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, FileText, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../../../assets/images/brand/TTM NOVRLS.png';
+// import logo from '../../../assets/images/brand/TTM NOVRLS.png'; // Removed
 // import styles from './Sidebar.module.scss'; // Removed SCSS
 
 /**
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="p-4 h-[80px] flex flex-col justify-center border-b border-glass-border bg-gradient-to-b from-primary/5 to-transparent overflow-hidden whitespace-nowrap">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
-              <img src={logo} alt="Logo" className="w-full h-auto object-contain filter drop-shadow-[0_0_12px_rgba(14,165,233,0.4)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
+              <img src="/assets/logo.webp" alt="Logo" width={100} height={100} className="w-full h-auto object-contain filter drop-shadow-[0_0_12px_rgba(14,165,233,0.4)] dark:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
             </div>
             <AnimatePresence>
               {(isHovered || isOpen) && (

@@ -8,7 +8,7 @@ import whatsappLogo from '../../../assets/images/social/whatsapp-3d.png';
 import facebookLogo from '../../../assets/images/social/facebook-3d.png';
 import instagramLogo from '../../../assets/images/social/instagram-logo.png';
 import youtubeLogo from '../../../assets/images/social/youtube-logo.png';
-import logo from '../../../assets/images/brand/TTM NOVRLS.png';
+// import logo from '../../../assets/images/brand/TTM NOVRLS.png'; // Removed - Using public/assets/logo.webp
 // import styles from './Footer.module.scss'; // Removed SCSS
 
 const Footer: React.FC = () => {
@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         <div className="w-full flex flex-col items-center gap-4 md:gap-6">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <img src={logo} alt="TTM Novels Logo" className="h-20 md:h-24 w-auto object-contain glow-sm" />
+            <img src="/assets/logo.webp" alt="TTM Novels Logo" width={182} height={140} className="h-20 md:h-24 w-auto object-contain glow-sm" />
           </div>
 
           {/* Follow Us */}
