@@ -132,7 +132,7 @@ const NovelsPageAPI = () => {
                     Continue Reading
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {novels.slice(0, 4).map(novel => (
+                    {novels.slice(0, 4).map((novel, index) => (
                       <motion.div 
                         key={novel.id || novel._id}
                         whileHover={{ scale: 1.05 }}
@@ -144,7 +144,8 @@ const NovelsPageAPI = () => {
                               <img
                                 src={(imageMap as any)[novel.coverImage] || novel.coverImage}
                                 alt={novel.title}
-                                loading="lazy"
+                                loading={index === 0 ? "eager" : "lazy"}
+                                fetchPriority={index === 0 ? "high" : "auto"}
                                 className="w-full h-full object-cover"
                               />
                             ) : (
