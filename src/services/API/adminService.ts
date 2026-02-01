@@ -58,13 +58,18 @@ export const updateNovel = async (novelId: string | number, novelData: any) => {
 };
 
 export const deleteNovel = async (novelId: string | number) => {
-  const token = localStorage.getItem('authToken');
-  const response = await apiClient.delete(`/admin/novels/${novelId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  return response.data;
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await apiClient.delete(`/admin/novels/${novelId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Delete Novel Error:', error.response?.data || error.message);
+    throw error; // Re-throw to let caller handle generic alerts
+  }
 };
 
 // ============================================
@@ -102,13 +107,18 @@ export const updateChapter = async (chapterId: string | number, chapterData: any
 };
 
 export const deleteChapter = async (chapterId: string | number) => {
-  const token = localStorage.getItem('authToken');
-  const response = await apiClient.delete(`/admin/chapters/${chapterId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  return response.data;
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await apiClient.delete(`/admin/chapters/${chapterId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Delete Chapter Error:', error.response?.data || error.message);
+    throw error;
+  }
 };
 
 // ============================================
