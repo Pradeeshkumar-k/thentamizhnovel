@@ -97,7 +97,15 @@ export const authService = {
   // Verify token
   verifyToken: async () => {
     try {
-      const response = await apiClient.get(API_ENDPOINTS.VERIFY_TOKEN);
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        return { success: false };
+      }
+      const response = await apiClient.get(API_ENDPOINTS.VERIFY_TOKEN, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+      });
       const { user } = response.data;
       if (user) {
          localStorage.setItem('user', JSON.stringify(user));
