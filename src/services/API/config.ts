@@ -69,6 +69,7 @@ export const API_ENDPOINTS = {
   // Comments
   ADD_COMMENT: '/comments',
   DELETE_COMMENT: '/comments/:id',
+  GET_CHAPTER_COMMENTS: '/chapters/:id/comments',
 
   // Admin - Dashboard
   ADMIN_DASHBOARD_STATS: '/admin/dashboard/stats',
