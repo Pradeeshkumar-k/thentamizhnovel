@@ -12,7 +12,7 @@ interface CacheItem {
   timestamp: number;
 }
 const CACHE = new Map<string, CacheItem>();
-const ID_CACHE_TTL = 30 * 60 * 1000; // 30 mins
+const ID_CACHE_TTL = 0; // Disable caching for real-time views
 const LIST_CACHE_TTL = 5 * 60 * 1000; // 5 mins
 const PROGRESS_TTL = 60 * 1000; // 1 min
 
@@ -88,7 +88,7 @@ const novelService = {
     return dedupe(cacheKey, async () => {
       try {
         // Fix 1: Removed _t timestamp to enable Browser & Edge Caching
-        const params = { ...filters }; 
+        const params = { ...filters, _t: Date.now() }; 
         const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
         
         // Fix: Normalize Data Structure (Backend -> Frontend)
@@ -127,7 +127,7 @@ const novelService = {
       try {
         const endpoint = API_ENDPOINTS.GET_NOVEL.replace(':id', novelId.toString());
         const response = await apiClient.get(endpoint, {
-          params: { lang: language }
+          params: { lang: language, _t: Date.now() }
         });
         
         // Fix: Normalize Single Novel Response
@@ -193,7 +193,7 @@ const novelService = {
       try {
         const endpoint = API_ENDPOINTS.GET_NOVEL_CHAPTERS.replace(':id', novelId.toString());
         const response = await apiClient.get(endpoint, {
-          params: { lang: language }
+          params: { lang: language, _t: Date.now() }
         });
         
         const normalizedChapters = (response.data.chapters || []).map(normalizeChapter);
@@ -231,7 +231,7 @@ const novelService = {
 
       // Add language query parameter
       const response = await apiClient.get(endpoint, {
-        params: { lang: language }
+        params: { lang: language, _t: Date.now() }
       });
 
       CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
