@@ -18,6 +18,8 @@
 
   @media (max-width: 640px) {
     flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -97,8 +99,15 @@
   gap: 1rem;
   margin-bottom: 1.5rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-wrap: wrap;
+    align-items: center;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
   }
 }
 
@@ -106,6 +115,10 @@
   flex: 1;
   position: relative;
   min-width: 250px;
+
+  @media (max-width: 640px) {
+    min-width: 0;
+  }
 }
 
 .searchIcon {
@@ -255,6 +268,15 @@
       border-color: rgba(239, 68, 68, 0.3);
     }
   }
+
+  @media (max-width: 640px) {
+    padding: 0.75rem;
+    flex: 1;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 // Footer
@@ -343,8 +365,13 @@
   padding: 2rem;
   margin-bottom: 2rem;
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     padding: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    padding: 1.25rem;
+    border-radius: 1rem;
   }
 }
 
@@ -353,8 +380,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 
+  @media (max-width: 1024px) {
+    gap: 1.25rem;
+  }
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
 

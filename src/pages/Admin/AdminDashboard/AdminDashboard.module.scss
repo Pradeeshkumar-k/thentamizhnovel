@@ -14,8 +14,14 @@
   margin-bottom: 2rem;
   gap: 1rem;
 
+  @media (max-width: 1024px) {
+    margin-bottom: 1.5rem;
+  }
+
   @media (max-width: 640px) {
     flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -75,13 +81,19 @@
 // Statistics Grid
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 2.5rem;
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
     gap: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
@@ -159,8 +171,16 @@
 // Quick Actions
 .actionGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .actionCard {

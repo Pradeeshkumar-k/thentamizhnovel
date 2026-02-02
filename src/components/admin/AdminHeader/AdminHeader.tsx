@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, Home, LogOut, ChevronDown } from 'lucide-react';
 
 /**
@@ -19,7 +19,19 @@ interface AdminHeaderProps {
 const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  // Derive page title from location
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path.includes('/dashboard')) return 'Dashboard Overview';
+    if (path.includes('/novels/create')) return 'Create New Novel';
+    if (path.includes('/novels/edit')) return 'Edit Novel';
+    if (path.includes('/novels')) return 'Novel Management';
+    if (path.includes('/chapters')) return 'Chapter Management';
+    return 'Admin Panel';
+  };
 
   // Close dropdown when clicking outside
   const toggleProfileMenu = (e: React.MouseEvent) => {
@@ -54,9 +66,11 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onToggleSidebar }) => {
         <Menu className="w-6 h-6" />
       </button>
 
-      {/* Page title - can be made dynamic based on route */}
+      {/* Page title - dynamic based on route */}
       <div className="flex-1 ml-4 md:ml-0">
-        <h1 className="text-xl md:text-2xl font-bold text-primary tracking-tight">Admin Dashboard</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-primary tracking-tight transition-all duration-300">
+          {getPageTitle()}
+        </h1>
       </div>
 
       {/* Right section - User profile */}

@@ -128,8 +128,8 @@ const ChapterList = () => {
   ];
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4">
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-8">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Chapter Management</h1>
           <p className="text-gray-600 dark:text-gray-400">Manage chapters for each novel</p>

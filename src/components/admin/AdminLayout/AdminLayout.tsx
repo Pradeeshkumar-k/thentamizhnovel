@@ -32,13 +32,15 @@ const AdminLayout: React.FC = () => {
       <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 md:ml-[80px]">
+      <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 md:pl-[80px]">
         {/* Top header */}
         <AdminHeader onToggleSidebar={toggleSidebar} />
 
         {/* Page content - rendered by nested routes */}
-        <main className="flex-1 p-4 md:p-8 bg-bg-primary overflow-x-hidden transition-colors duration-300">
-          <Outlet />
+        <main className="flex-1 p-4 md:p-6 lg:p-8 bg-bg-primary overflow-x-hidden transition-colors duration-300">
+          <div className="max-w-[1600px] mx-auto w-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

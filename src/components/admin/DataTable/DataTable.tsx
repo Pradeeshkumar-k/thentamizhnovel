@@ -38,43 +38,47 @@ const DataTable: React.FC<ExtendedDataTableProps> = ({
   return (
     <div className="w-full space-y-4">
       {/* Mobile Component: Card View */}
-      <div className="block md:hidden space-y-4">
+      <div className="block md:hidden space-y-5">
         {data.map((row, rowIndex) => (
           <div 
             key={row.id || rowIndex} 
-            className="bg-surface border border-border p-4 rounded-xl shadow-sm space-y-3"
+            className="group relative bg-surface/50 backdrop-blur-sm border border-border p-5 rounded-2xl shadow-sm space-y-4 hover:border-accent/30 transition-all duration-300"
             onClick={() => onRowClick && onRowClick(row)}
           >
-            {columns.map((column) => (
-              <div key={column.key} className="flex justify-between items-start gap-4">
-                <span className="text-xs font-semibold text-muted uppercase tracking-wider min-w-[30%]">
-                  {column.label}
-                </span>
-                <span className="text-sm text-primary text-right font-medium">
-                   {column.render ? column.render(row[column.key], row) : row[column.key]}
-                </span>
-              </div>
-            ))}
+            <div className="space-y-3.5">
+              {columns.map((column) => (
+                <div key={column.key} className="flex flex-col gap-1 border-b border-border/30 pb-3.5 last:border-0 last:pb-0">
+                  <span className="text-[10px] font-black text-muted uppercase tracking-[0.15em]">
+                    {column.label}
+                  </span>
+                  <div className="text-sm text-primary font-bold">
+                     {column.render ? column.render(row[column.key], row) : row[column.key]}
+                  </div>
+                </div>
+              ))}
+            </div>
             
             {actions && (
-              <div className="pt-3 mt-2 border-t border-border flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+              <div className="pt-4 mt-1 border-t border-border flex flex-wrap justify-end gap-3" onClick={(e) => e.stopPropagation()}>
                  {typeof actions === 'function' ? (
                       actions(row)
                     ) : (
-                      actions.map((action, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => action.onClick(row)}
-                          className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                              action.variant === 'danger' ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20' :
-                              action.variant === 'success' ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20' :
-                              'bg-primary/10 text-primary hover:bg-primary/20'
-                          }`}
-                        >
-                          {action.label}
-                        </button>
-                      ))
+                      <div className="flex gap-2 w-full sm:w-auto">
+                        {actions.map((action, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => action.onClick(row)}
+                            className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold tracking-tight transition-all duration-300 active:scale-95 ${
+                                action.variant === 'danger' ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20' :
+                                action.variant === 'success' ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20 border border-green-500/20' :
+                                'bg-muted/10 text-primary hover:bg-muted/20 border border-border/50'
+                            }`}
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </div>
                     )}
               </div>
             )}
