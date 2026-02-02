@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         onMouseEnter={() => !isMobile && setIsHovered(true)}
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         className={`
-          fixed top-0 left-0 h-screen 
+          fixed top-0 left-0 h-[100dvh] 
           bg-bg-secondary border-r border-glass-border
           flex flex-col z-[999] transition-colors duration-300 shadow-2xl shadow-blue-900/10
           overflow-hidden
@@ -156,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         </nav>
 
         {/* Back to Main Site */}
-        <div className="p-4 border-t border-glass-border overflow-hidden whitespace-nowrap">
+        <div className="p-4 pb-8 md:pb-4 border-t border-glass-border overflow-hidden whitespace-nowrap">
           <NavLink 
             to="/novels" 
             className="flex items-center h-[48px] gap-3 px-3 rounded-xl border border-glass-border text-secondary transition-all duration-300 hover:bg-bg-tertiary hover:text-primary"

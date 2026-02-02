@@ -27,12 +27,12 @@ const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-bg-primary relative transition-colors duration-300">
+    <div className="flex min-h-[100dvh] bg-bg-primary relative transition-colors duration-300">
       {/* Sidebar navigation */}
       <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 md:pl-[80px]">
+      <div className="flex-1 flex flex-col min-h-[100dvh] transition-all duration-300 md:pl-[80px]">
         {/* Top header */}
         <AdminHeader onToggleSidebar={toggleSidebar} />
 
