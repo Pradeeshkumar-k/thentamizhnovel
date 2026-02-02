@@ -217,26 +217,16 @@ const novelService = {
    * @returns {Promise} Chapter details with content
    */
   getChapter: async (novelId: string | number, chapterId: string | number, language: string = 'tamil') => {
-    const cacheKey = `chapter-${novelId}-${chapterId}-${language}`;
-    const cached = CACHE.get(cacheKey);
+    const endpoint = API_ENDPOINTS.GET_CHAPTER
+      .replace(':novelId', novelId.toString())
+      .replace(':chapterId', chapterId.toString());
 
-    if (cached && (Date.now() - cached.timestamp < ID_CACHE_TTL)) {
-      return cached.data;
-    }
-
-    return dedupe(cacheKey, async () => {
-      const endpoint = API_ENDPOINTS.GET_CHAPTER
-        .replace(':novelId', novelId.toString())
-        .replace(':chapterId', chapterId.toString());
-
-      // Add language query parameter
-      const response = await apiClient.get(endpoint, {
-        params: { lang: language, _t: Date.now() }
-      });
-
-      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
-      return response.data;
+    // Add language query parameter and timestamp to bypass caches
+    const response = await apiClient.get(endpoint, {
+      params: { lang: language, _t: Date.now() }
     });
+
+    return response.data;
   },
 
   /**
