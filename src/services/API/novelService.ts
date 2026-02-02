@@ -12,7 +12,7 @@ interface CacheItem {
   timestamp: number;
 }
 const CACHE = new Map<string, CacheItem>();
-const ID_CACHE_TTL = 30 * 60 * 1000; // 30 mins
+const ID_CACHE_TTL = 30 * 60 * 1000; // 30 mins (OK for novels)
 const LIST_CACHE_TTL = 5 * 60 * 1000; // 5 mins
 const PROGRESS_TTL = 60 * 1000; // 1 min
 
@@ -87,7 +87,7 @@ const novelService = {
 
     return dedupe(cacheKey, async () => {
       try {
-        // Fix 1: Removed _t timestamp to enable Browser & Edge Caching
+        // No _t here to enable proper caching
         const params = { ...filters }; 
         const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
         
@@ -221,7 +221,7 @@ const novelService = {
       .replace(':novelId', novelId.toString())
       .replace(':chapterId', chapterId.toString());
 
-    // Add language query parameter and timestamp to bypass caches
+    // ONLY place where cache is bypassed with _t trigger
     const response = await apiClient.get(endpoint, {
       params: { lang: language, _t: Date.now() }
     });
@@ -246,7 +246,6 @@ const novelService = {
    * @returns {Promise} Array of novels
    */
   getLibrary: async () => {
-    // FIX 2: Removed cache-buster used previously
     const response = await apiClient.get(API_ENDPOINTS.GET_LIBRARY);
     return response.data;
   },

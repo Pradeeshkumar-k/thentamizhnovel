@@ -27,28 +27,26 @@ let isRefreshing = false;
 let failedQueue: any[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    error ? prom.reject(error) : prom.resolve(token);
-  });
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token)));
   failedQueue = [];
 };
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   async (error) => {
-    const originalRequest = error.config;
+    const original = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !original._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return apiClient(originalRequest);
+          original.headers.Authorization = `Bearer ${token}`;
+          return apiClient(original);
         });
       }
 
-      originalRequest._retry = true;
+      original._retry = true;
       isRefreshing = true;
 
       try {
@@ -60,18 +58,18 @@ apiClient.interceptors.response.use(
         });
 
         const newToken = res.data.token || res.data.accessToken;
-        if (!newToken) throw new Error('Invalid refresh response');
+        if (!newToken) throw new Error('Invalid refresh');
 
         localStorage.setItem('authToken', newToken);
         processQueue(null, newToken);
 
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        return apiClient(originalRequest);
-      } catch (err) {
-        processQueue(err, null);
+        original.headers.Authorization = `Bearer ${newToken}`;
+        return apiClient(original);
+      } catch (e) {
+        processQueue(e, null);
         localStorage.clear();
         window.location.href = '/login';
-        return Promise.reject(err);
+        return Promise.reject(e);
       } finally {
         isRefreshing = false;
       }
