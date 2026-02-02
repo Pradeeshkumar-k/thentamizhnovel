@@ -24,8 +24,6 @@ const novelService = {
   getAllNovels: async (filters: any = {}) => {
     try {
       // Fix 4: Client-side Memory Cache (Optimized for Home Page/Page 1)
-      // Only serve cache if no search and we are on the first page
-      // Fix: Backend uses 0-based indexing for pages
       const page = Number(filters.page ?? 0);
       const isHomePage = !filters.search && page === 0;
 
@@ -37,12 +35,24 @@ const novelService = {
       const params = { ...filters }; 
       const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
       
+      // Fix: Normalize Data Structure (Backend -> Frontend)
+      const normalizedNovels = (response.data.novels || []).map((n: any) => ({
+        ...n,
+        coverImage: n.coverImageUrl || n.coverImage, // Map API field to UI expected field
+        author: typeof n.author === 'object' ? n.author?.name : n.author // Flatten author object
+      }));
+
+      const result = {
+        ...response.data,
+        novels: normalizedNovels
+      };
+
       // Update cache
       if (isHomePage) {
-        novelService.novelListCache = response.data;
+        novelService.novelListCache = result;
       }
 
-      return response.data; 
+      return result; 
     } catch (error) {
       console.error('Error fetching novels:', error);
       throw error;
@@ -60,7 +70,16 @@ const novelService = {
       const response = await apiClient.get(endpoint, {
         params: { lang: language }
       });
-      return response.data;
+      
+      // Fix: Normalize Single Novel Response
+      const rawNovel = response.data;
+      const normalizedNovel = {
+        ...rawNovel,
+        coverImage: rawNovel.coverImageUrl || rawNovel.coverImage,
+        author: typeof rawNovel.author === 'object' ? rawNovel.author?.name : rawNovel.author
+      };
+
+      return normalizedNovel;
     } catch (error) {
        console.error(`Error fetching novel ${novelId}:`, error);
        throw error;
