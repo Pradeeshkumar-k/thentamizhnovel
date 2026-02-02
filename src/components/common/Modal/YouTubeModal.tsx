@@ -1,7 +1,7 @@
 import React from 'react';
 import { ModalProps } from '../../../types';
 import { YOUTUBE_CHANNELS } from '../../../utils/constants';
-import youtubeLogo from '../../../assets/images/social/youtube-logo.png';
+// import youtubeLogo from '../../../assets/images/social/youtube-logo.png'; // Removed - Using public/assets
 // import styles from './YouTubeModal.module.scss'; // Removed SCSS
 
 const YouTubeModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
@@ -34,7 +34,7 @@ const YouTubeModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
               rel="noopener noreferrer"
               className="flex items-center gap-4 p-4 rounded-xl bg-surface/50 hover:bg-red-500/5 hover:border-red-500/20 border border-transparent transition-all duration-200 group"
             >
-              <img src={youtubeLogo} alt="YouTube" className="w-8 h-8 object-contain" />
+              <img src="/assets/social/youtube-logo.png" alt="YouTube" className="w-8 h-8 object-contain" />
               <span className="text-primary font-medium group-hover:text-red-500 transition-colors">{channel.name}</span>
             </a>
           ))}

@@ -10,14 +10,6 @@ import novelService from '../../services/API/novelService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NovelGridSkeleton } from '../../components/common/NovelCardSkeleton/NovelCardSkeleton';
 
-// --- IN-MEMORY CACHE (Level 1) ---
-let globalNovelsCache: any[] | null = null;
-
-// --- SESSION CACHE KEYS ---
-const CACHE_KEY = 'novels_data_v1';
-const CACHE_TS_KEY = 'novels_data_ts';
-const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
-
 // Image mapping (Using public assets to avoid Base64)
 const imageMap = {
   '/assets/images/Novel Card/Thenmozhi Card.jpg': '/assets/covers/Thenmozhi Card.jpg',
@@ -46,27 +38,21 @@ const NovelsPageAPI = () => {
         const searchParams = new URLSearchParams(location.search);
         const query = searchParams.get('search');
         
-        // CACHE HIT: If we have data and no query, skip fetch (Instant Load)
-        if (!query && novels.length > 0) {
-           return;
-        }
+        // Default Params
+        const page = searchParams.get('page') || 1;
+        const limit = 50;
 
-        setLoading(true);
-        const params = query ? { search: query, limit: 50 } : { limit: 50 };
+        const params = { 
+          page, 
+          limit,
+          search: query || undefined
+        };
         
         const response = await novelService.getAllNovels(params);
         const fetchedNovels = response.novels || [];
         
         setNovels(fetchedNovels);
         
-        // Update Caches (only if main list)
-        if (!query) {
-           globalNovelsCache = fetchedNovels; // Update L1
-           // Session Storage Removed to prevent stale data
-           // sessionStorage.setItem(CACHE_KEY, JSON.stringify(fetchedNovels)); 
-           // sessionStorage.setItem(CACHE_TS_KEY, Date.now().toString());
-        }
-
         setError(null);
       } catch (err: any) {
         console.error('Error fetching novels:', err);
