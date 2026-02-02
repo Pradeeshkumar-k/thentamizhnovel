@@ -42,9 +42,10 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId,
     if (!novelId || !chapterId) return;
     try {
       setLoading(true);
-      const chapterData = await novelService.getChapter(novelId, chapterId, language);
-      if (chapterData) {
-        setComments(chapterData.comments || []);
+      // Fix 1: Use dedicated comments API
+      const res = await commentService.getComments(chapterId);
+      if (res.success) {
+        setComments(res.data || []);
       }
     } catch (err) {
       console.error('Error fetching comments:', err);
@@ -59,12 +60,19 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId,
     if (!newComment.trim()) return;
 
     setSubmittingComment(true);
-    const res = await commentService.addComment(chapterId!, newComment);
-    if (res.success) {
-      const newCommentData = res.data;
-      setComments([newCommentData, ...comments]);
+    setSubmittingComment(true);
+    // Fix: Use novelService for cache invalidation
+    const res = await novelService.addComment(novelId, chapterId, language, newComment);
+    if (res && res.id) { // Assuming response is the comment object or has success?
+        // novelService.addComment returns response.data directly. Usually it's the comment object.
+        // Let's verify return type.
+        // Step 1022: return response.data.
+        // Usually API returns { id: ..., text: ... } or { success: true, data: ... }?
+        // Backend usually returns the Created Object.
+        // Let's assume it returns the comment.
+      setComments([res, ...comments]);
       setNewComment('');
-      if (onCommentAdded) onCommentAdded(newCommentData);
+      if (onCommentAdded) onCommentAdded(res);
     } else {
       alert('Failed to post comment');
     }

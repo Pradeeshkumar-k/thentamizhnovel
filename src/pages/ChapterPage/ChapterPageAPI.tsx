@@ -31,7 +31,7 @@ const ChapterPageAPI = () => {
   const [likesCount, setLikesCount] = useState<number | null>(null);
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
   const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
-  const [comments, setComments] = useState<any[] | null>(null);
+  const [commentsCount, setCommentsCount] = useState<number | null>(null);
 
 
   const t = translations[language as keyof typeof translations];
@@ -96,7 +96,7 @@ const ChapterPageAPI = () => {
         // Fix 1: Sync backend state
         setLikesCount(data._count?.likes || 0);
         setIsLiked(!!(data.isLiked || data.likedByMe));
-        setComments(data.comments || []);
+        setCommentsCount(data._count?.comments || 0);
         
         setLoading(false);
       })
@@ -148,9 +148,9 @@ const ChapterPageAPI = () => {
 
     try {
         if (previousLiked) {
-            await novelService.unlikeChapter(chapterId!);
+            await novelService.unlikeChapter(novelId!, chapterId!, language);
         } else {
-            await novelService.likeChapter(chapterId!);
+            await novelService.likeChapter(novelId!, chapterId!, language);
         }
     } catch (err) { 
         console.error('Like error', err);
@@ -338,9 +338,9 @@ const ChapterPageAPI = () => {
                      <svg className="w-6 h-6 text-gray-400 group-hover:text-neon-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                      </svg>
-                     {comments && comments.length > 0 && (
+                     {commentsCount !== null && commentsCount > 0 && (
                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center border-2 border-white dark:border-zinc-900">
-                            {comments.length}
+                            {commentsCount}
                         </span>
                      )}
                 </div>
@@ -425,7 +425,7 @@ const ChapterPageAPI = () => {
         onClose={() => setIsCommentsModalOpen(false)}
         novelId={novelId || ''}
         chapterId={chapterId || ''}
-        onCommentAdded={(newComment) => setComments(prev => prev ? [newComment, ...prev] : [newComment])}
+        onCommentAdded={() => setCommentsCount(prev => (prev || 0) + 1)}
       />
 
       <UserLogin isOpen={isLoginModalOpen} onClose={handleCloseLogin} />
