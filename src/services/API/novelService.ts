@@ -25,11 +25,11 @@ const IN_FLIGHT = new Map<string, Promise<any>>();
 const normalizeNovel = (n: any) => {
   if (!n) return n;
   
-  // Ensure stats object exists and handle root-level views if they exist
+  // Ensure stats object exists and handles various backend field names
   const stats = n.stats || {
-    views: n.views || 0,
-    likes: n.likes || 0,
-    bookmarks: n.bookmarks || 0
+    views: n.views ?? n.viewCount ?? n.view_count ?? n._count?.views ?? 0,
+    likes: n.likes ?? n.likeCount ?? n._count?.likes ?? 0,
+    bookmarks: n.bookmarks ?? n.bookmarkCount ?? n.saveCount ?? n._count?.bookmarks ?? 0
   };
 
   return {
@@ -47,8 +47,13 @@ const normalizeNovel = (n: any) => {
  */
 const normalizeChapter = (c: any) => {
   if (!c) return c;
+  
+  // Fix: Consolidate views from various possible backend fields
+  const views = c.views ?? c.viewCount ?? c.view_count ?? c.stats?.views ?? c._count?.views ?? 0;
+
   return {
     ...c,
+    views,
     titleEn: c.titleEn || c.title_en || c.titleEnglish || c.title_english || c.englishTitle || (typeof c.title === 'object' ? c.title.english || c.title.en : undefined),
     contentEn: c.contentEn || c.content_en || c.contentEnglish || c.content_english || (typeof c.content === 'object' ? c.content.english || c.content.en : undefined)
   };
@@ -226,7 +231,15 @@ const novelService = {
       params: { lang: language, _t: Date.now() }
     });
 
-    return response.data;
+    // Fix: Backend may return { chapter: {...}, _count: {...} } or just the chapter
+    const data = response.data;
+    const chapterObj = data.chapter || data;
+    if (data._count && !chapterObj._count) {
+      chapterObj._count = data._count;
+    }
+    
+    // Normalize and return
+    return normalizeChapter(chapterObj);
   },
 
   /**
