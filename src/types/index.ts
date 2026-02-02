@@ -55,6 +55,7 @@ export interface Novel {
   author: string;
   authorEnglish?: string;
   coverImage: string;
+  coverImageUrl?: string; // Backend field match
   language: 'tamil' | 'english';
   category?: string;
   genre?: string;

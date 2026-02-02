@@ -82,7 +82,7 @@ const ChapterPageAPI = () => {
         // Fetch novel basic info if not already loaded
         if (!novel) {
           const novelData = await novelService.getNovelById(novelId);
-          setNovel(novelData.novel);
+          setNovel(novelData); // Fix: API returns raw object
         }
 
         // Fetch current chapter

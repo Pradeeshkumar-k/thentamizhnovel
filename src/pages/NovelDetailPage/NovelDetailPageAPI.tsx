@@ -91,7 +91,8 @@ const NovelDetailPageAPI = () => {
 
         // Fetch novel details
         const novelResponse = await novelService.getNovelById(id, language);
-        setNovel(novelResponse.novel);
+        // Fix: API returns the object directly, not wrapped in { novel: ... }
+        setNovel(novelResponse);
         
         // Initialize interaction state from API
         setIsLiked(!!novelResponse.isLiked);
@@ -241,7 +242,9 @@ const NovelDetailPageAPI = () => {
   }
 
   const chapterImage = chapterImageMap[novel.author as keyof typeof chapterImageMap] || '/assets/episodes/Thenmozhi_episodes.jpg';
-  const coverImage = (coverImageMap as any)[novel.coverImage || ''] || novel.coverImage || '/assets/covers/Thenmozhi Card.jpg';
+  // Fix: Backend returns coverImageUrl. Frontend used coverImage.
+  const rawCover = novel.coverImageUrl || novel.coverImage || '';
+  const coverImage = (coverImageMap as any)[rawCover] || rawCover || '/assets/covers/Thenmozhi Card.jpg';
 
 
   return (
