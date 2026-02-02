@@ -7,16 +7,42 @@ import { API_ENDPOINTS } from './config';
  */
 
 const novelService = {
+  // Simple memory cache for the home page (Fix 4)
+  novelListCache: null as any,
+
+  /**
+   * Clear the memory cache (Call this after create/update/delete)
+   */
+  clearNovelCache: () => {
+    novelService.novelListCache = null;
+  },
+
   /**
    * Get all novels
    * @returns {Promise} Array of novels
    */
   getAllNovels: async (filters: any = {}) => {
     try {
-      // Add Cache-Busting Timestamp to force fresh data
-      const params = { ...filters, _t: new Date().getTime() };
+      // Fix 4: Client-side Memory Cache (Optimized for Home Page/Page 1)
+      // Only serve cache if no search and we are on the first page
+      // Fix: Backend uses 0-based indexing for pages
+      const page = Number(filters.page ?? 0);
+      const isHomePage = !filters.search && page === 0;
+
+      if (isHomePage && novelService.novelListCache) {
+        return novelService.novelListCache;
+      }
+
+      // Fix 1: Removed _t timestamp to enable Browser & Edge Caching
+      const params = { ...filters }; 
       const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
-      return response.data; // Now returns { novels: [...], total: ... }
+      
+      // Update cache
+      if (isHomePage) {
+        novelService.novelListCache = response.data;
+      }
+
+      return response.data; 
     } catch (error) {
       console.error('Error fetching novels:', error);
       throw error;

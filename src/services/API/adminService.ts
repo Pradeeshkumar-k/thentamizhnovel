@@ -1,4 +1,5 @@
 import apiClient from './client';
+import novelService from './novelService';
 
 /**
  * Admin Service - Real API Integration
@@ -44,6 +45,8 @@ export const createNovel = async (novelData: any) => {
       Authorization: `Bearer ${token}`
       }
   });
+  // Clear frontend cache so new novel appears immediately
+  novelService.clearNovelCache();
   return response.data;
 };
 
@@ -54,6 +57,8 @@ export const updateNovel = async (novelId: string | number, novelData: any) => {
       Authorization: `Bearer ${token}`
     }
   });
+  // Clear frontend cache so updates reflect immediately
+  novelService.clearNovelCache();
   return response.data;
 };
 
@@ -65,6 +70,8 @@ export const deleteNovel = async (novelId: string | number) => {
         Authorization: `Bearer ${token}`
       }
     });
+    // Clear frontend cache so deleted novel is removed immediately
+    novelService.clearNovelCache();
     return response.data;
   } catch (error: any) {
     console.error('Delete Novel Error:', error.response?.data || error.message);
