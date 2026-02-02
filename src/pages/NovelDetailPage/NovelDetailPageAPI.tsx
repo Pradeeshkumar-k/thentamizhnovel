@@ -314,19 +314,11 @@ const NovelDetailPageAPI = () => {
                     {getNovelTitle(novel)}
                 </h1>
                 
-                {/* Meta Row: Author, Genre, Views */}
+                {/* Meta Row: Author, Genre */}
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-secondary font-medium text-base mb-6">
                     <span className="text-primary dark:text-gray-200">{novel.author}</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
                     <span className="text-neon-blue">{novel.genre}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-                    <div className="flex items-center gap-1.5 text-muted">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        <span>{novel.stats?.views || 0}</span>
-                    </div>
                 </div>
 
 
@@ -361,39 +353,46 @@ const NovelDetailPageAPI = () => {
                     </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex flex-wrap gap-4 mt-auto justify-center md:justify-start w-full md:w-auto">
-
-                    <div className="flex gap-3 w-full sm:w-auto">
-                        <button 
-                            onClick={handleBookmark}
-                            className={`flex-1 sm:flex-none px-6 py-3.5 border rounded-xl transition-all flex items-center justify-center gap-2 font-medium ${
-                                isBookmarked 
-                                ? 'bg-neon-gold/10 border-neon-gold text-neon-gold shadow-[0_0_10px_rgba(255,215,0,0.1)]' 
-                                : 'bg-surface/50 border-gray-200 dark:border-white/10 text-secondary hover:border-gray-300 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5'
-                            }`}
-                        >
-                            <span className="text-xl">{isBookmarked ? '🔖' : '🏷️'}</span>
-                            <span className="hidden sm:inline">{isBookmarked ? 'Saved' : 'Save'}</span>
-                            <span className="bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-xs ml-1">
-                              {novel.stats?.bookmarks || 0}
-                            </span>
-                        </button>
-
-                        <button 
-                            onClick={handleLike}
-                            className={`flex-1 sm:flex-none px-6 py-3.5 border rounded-xl transition-all flex items-center justify-center gap-2 font-medium ${
-                                isLiked 
-                                ? 'bg-red-500/10 border-red-500 text-red-500 shadow-[0_0_10px_rgba(239,68,68,0.1)]' 
-                                : 'bg-surface/50 border-gray-200 dark:border-white/10 text-secondary hover:border-gray-300 dark:hover:border-white/30 hover:bg-gray-50 dark:hover:bg-white/5'
-                            }`}
-                        >
-                            <span className="text-xl">{isLiked ? '❤️' : '🤍'}</span> 
-                            <span className="bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-xs ml-1">
-                              {novel.stats?.likes || 0}
-                            </span>
-                        </button>
+                {/* Actions: Views, Save, Like */}
+                <div className="flex flex-wrap gap-3 mt-auto justify-center md:justify-start w-full md:w-auto">
+                    
+                    {/* Views Indicator */}
+                    <div className="flex items-center gap-2 px-4 py-3.5 bg-surface/50 border border-gray-200 dark:border-white/10 rounded-xl text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <span className="font-bold text-sm">{novel.stats?.views || 0}</span>
                     </div>
+
+                    <button 
+                        onClick={handleBookmark}
+                        className={`flex-1 sm:flex-none px-5 py-3.5 border rounded-xl transition-all flex items-center justify-center gap-2 font-medium ${
+                            isBookmarked 
+                            ? 'bg-neon-gold/10 border-neon-gold text-neon-gold shadow-[0_0_10px_rgba(255,215,0,0.1)]' 
+                            : 'bg-surface/50 border-gray-200 dark:border-white/10 text-secondary hover:border-neon-gold/30 hover:bg-neon-gold/5'
+                        }`}
+                    >
+                        <span className="text-xl">{isBookmarked ? '🔖' : '🏷️'}</span>
+                        <span className="hidden sm:inline font-bold text-sm tracking-tight">{isBookmarked ? 'Saved' : 'Save'}</span>
+                        <span className="bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-[10px] font-black ml-1">
+                          {novel.stats?.bookmarks || 0}
+                        </span>
+                    </button>
+
+                    <button 
+                        onClick={handleLike}
+                        className={`flex-1 sm:flex-none px-5 py-3.5 border rounded-xl transition-all flex items-center justify-center gap-2 font-medium ${
+                            isLiked 
+                            ? 'bg-red-500/10 border-red-500 text-red-500 shadow-[0_0_10px_rgba(239,68,68,0.1)]' 
+                            : 'bg-surface/50 border-gray-200 dark:border-white/10 text-secondary hover:border-red-500/30 hover:bg-red-500/5'
+                        }`}
+                    >
+                        <span className="text-xl">{isLiked ? '❤️' : '🤍'}</span> 
+                        <span className="bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-[10px] font-black ml-1">
+                          {novel.stats?.likes || 0}
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>

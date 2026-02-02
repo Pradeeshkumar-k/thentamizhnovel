@@ -272,8 +272,16 @@ const ChapterPageAPI = () => {
 
         {/* Interaction Bar */}
         <div className="flex flex-row items-center justify-between gap-4 border-y border-border py-4 mb-8">
-            {/* Left Group: Like & Save */}
+            {/* Left Group: Views, Like & Save */}
             <div className="flex items-center gap-4 md:gap-6">
+                <div className="flex items-center gap-2 text-muted">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <span className="font-bold text-sm tracking-tight">{chapter.views || 0}</span>
+                </div>
+
                 <button    
                     onClick={handleLike}
                     disabled={isLiked === null}
@@ -282,7 +290,7 @@ const ChapterPageAPI = () => {
                     <svg className={`w-6 h-6 ${isLiked ? 'fill-current' : 'fill-none'}`} viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    <span className="font-medium">{likesCount === null ? '...' : `${likesCount} Likes`}</span>
+                    <span className="font-bold text-sm tracking-tight">{likesCount === null ? '...' : likesCount}</span>
                 </button>
                 
                 <button
@@ -292,7 +300,7 @@ const ChapterPageAPI = () => {
                     <svg className={`w-6 h-6 ${isBookmarked ? 'fill-current' : 'fill-none'}`} viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                     </svg>
-                    <span className="font-medium">{isBookmarked ? 'Saved' : 'Save'}</span>
+                    <span className="font-bold text-sm tracking-tight">{isBookmarked ? 'Saved' : 'Save'}</span>
                 </button>
             </div>
             
