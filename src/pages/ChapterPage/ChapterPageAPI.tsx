@@ -62,9 +62,10 @@ const ChapterPageAPI = () => {
     });
   };
 
-  // Safe string getter
-  const getString = (val: string | { [key: string]: string } | undefined) => {
-    if (!val) return '';
+  // Safe string getter - Simplified as service now normalizes English fields
+  const getString = (val: string | { [key: string]: string } | undefined, fieldEn?: string) => {
+    if (!val) return fieldEn || '';
+    if (language === 'english' && fieldEn) return fieldEn;
     if (typeof val === 'string') return val;
     return val[language] || val['english'] || '';
   };
@@ -80,7 +81,6 @@ const ChapterPageAPI = () => {
     if (!novelId) return;
     novelService.getNovelById(novelId).then(data => {
         setNovel(data);
-        // Fix 5: Initialize bookmark state
         setIsBookmarked(!!data.isBookmarked);
     }).catch(err => console.error(err));
   }, [novelId]);
@@ -91,7 +91,7 @@ const ChapterPageAPI = () => {
     
     // Fix 6: Only refetch if: contentEn is null AND user explicitly requests English
     const isEnglishRequested = language === 'english';
-    const hasEnglishContent = !!(chapter?.contentEn || chapter?.content_en);
+    const hasEnglishContent = !!(chapter?.contentEn);
     const isNewChapter = !chapter || (chapter.id !== chapterId && chapter._id !== chapterId);
 
     if (isNewChapter || (isEnglishRequested && !hasEnglishContent)) {
@@ -100,14 +100,12 @@ const ChapterPageAPI = () => {
       novelService.getChapter(novelId, chapterId, language)
         .then(data => {
           setChapter(prev => {
-            // If it's the same chapter, merge the data (especially English content)
             if (prev && (prev.id === chapterId || prev._id === chapterId)) {
               return { ...prev, ...data };
             }
             return data;
           });
           
-          // Sync backend state
           setLikesCount(data._count?.likes || 0);
           setIsLiked(!!(data.isLiked || data.likedByMe));
           setCommentsCount(data._count?.comments || 0);
@@ -121,19 +119,19 @@ const ChapterPageAPI = () => {
           setLoading(false);
         });
     }
-  }, [novelId, chapterId, language, chapter?.id, chapter?._id, chapter?.contentEn, chapter?.content_en]);
+  }, [novelId, chapterId, language, chapter?.id, chapter?._id, chapter?.contentEn]);
 
   // Effect 3: Chapters list (once per ID)
   useEffect(() => {
     if (!novelId) return;
-    if (allChapters.length > 0) return; // Prevent re-fetch if already loaded via nav
+    if (allChapters.length > 0) return; 
     
     novelService.getNovelChapters(novelId).then(res => 
         setAllChapters(res.chapters || [])
     ).catch(console.error);
   }, [novelId]);
 
-  // Effect 4: Progress Write (Fix 3: Write only)
+  // Effect 4: Progress Write
   useEffect(() => {
     if (novelId && chapterId) {
         updateProgress(novelId, Number(chapterId));
@@ -152,11 +150,8 @@ const ChapterPageAPI = () => {
   // Interaction Handlers
   const handleLike = async () => {
     if (!user) { setIsLoginModalOpen(true); return; }
-    
-    // Optimistic Update
-    const previousLiked = isLiked === true; // Treat null as false for toggle logic safely? No, block if null.
-    if (isLiked === null) return; // Should not happen if button disabled
-    
+    const previousLiked = isLiked === true; 
+    if (isLiked === null) return; 
     const previousCount = likesCount || 0;
 
     setIsLiked(!previousLiked);
@@ -170,7 +165,6 @@ const ChapterPageAPI = () => {
         }
     } catch (err) { 
         console.error('Like error', err);
-        // Rollback on error
         setIsLiked(previousLiked);
         setLikesCount(previousCount);
     }
@@ -186,20 +180,9 @@ const ChapterPageAPI = () => {
             await novelService.bookmarkNovel(novelId);
         }
         setIsBookmarked(!isBookmarked);
-        alert(!isBookmarked ? 'Added to Library' : 'Removed from Library'); // Flipped logic: isBookmarked is OLD state here? 
-        // Wait, logic: if (isBookmarked) { remove } -> New state false.
-        // Alert should say "Removed".
-        // Code: setIsBookmarked(!isBookmarked).
-        // Alert: isBookmarked (old value) ? Removed : Added. Correct.
-        // My fix above: !isBookmarked (new value logic).
-        // Let's stick to safe logic.
-        // Old state: true -> remove. New state: false. Alert: "Removed".
-        // Old state: false -> add. New state: true. Alert: "Added".
-        // Code was: alert(isBookmarked ? 'Removed' : 'Added'). Correct.
+        alert(isBookmarked ? 'Removed from Library' : 'Added to Library');
     } catch (err) { console.error('Bookmark error', err); }
   };
-
-
 
   if (loading) {
     return (
@@ -226,7 +209,7 @@ const ChapterPageAPI = () => {
   }
 
   const contentToDisplay = language === 'english' 
-    ? (chapter.content_en || chapter.contentEn || chapter.content) 
+    ? (chapter.contentEn || chapter.content_en || chapter.content) 
     : chapter.content;
   const contentParagraphs = (contentToDisplay || '').split('\n\n');
 
@@ -243,14 +226,14 @@ const ChapterPageAPI = () => {
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          {getString(novel?.title)}
+          {getString(novel?.title, novel?.titleEn)}
         </button>
 
         {/* Title Section */}
         <header className="mb-12 text-center border-b border-border pb-8">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-primary mb-4 leading-tight">
             {language === 'english' 
-              ? (chapter.titleEn || chapter.title_en || chapter.titleEnglish || getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
+              ? (chapter.titleEn || `Chapter ${chapter.chapterNumber}`)
               : (getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
             }
           </h1>

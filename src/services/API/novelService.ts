@@ -20,6 +20,32 @@ const PROGRESS_TTL = 60 * 1000; // 1 min
 const IN_FLIGHT = new Map<string, Promise<any>>();
 
 /**
+ * Normalizes novel data to ensure consistent field names (especially for translations)
+ */
+const normalizeNovel = (n: any) => {
+  if (!n) return n;
+  return {
+    ...n,
+    titleEn: n.titleEn || n.title_en || n.titleEnglish || (typeof n.title === 'object' ? n.title.english || n.title.en : undefined),
+    descriptionEn: n.descriptionEn || n.description_en || n.summary_en || n.descriptionEnglish || (typeof n.description === 'object' ? n.description.english || n.description.en : undefined),
+    coverImage: n.coverImageUrl || n.coverImage,
+    author: typeof n.author === 'object' ? n.author?.name : n.author
+  };
+};
+
+/**
+ * Normalizes chapter data to ensure consistent field names
+ */
+const normalizeChapter = (c: any) => {
+  if (!c) return c;
+  return {
+    ...c,
+    titleEn: c.titleEn || c.title_en || c.titleEnglish || (typeof c.title === 'object' ? c.title.english || c.title.en : undefined),
+    contentEn: c.contentEn || c.content_en || c.contentEnglish || (typeof c.content === 'object' ? c.content.english || c.content.en : undefined)
+  };
+};
+
+/**
  * Deduplicates concurrent requests for the same key.
  */
 async function dedupe<T>(key: string, fn: () => Promise<T>): Promise<T> {
@@ -57,11 +83,7 @@ const novelService = {
         const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
         
         // Fix: Normalize Data Structure (Backend -> Frontend)
-        const normalizedNovels = (response.data.novels || []).map((n: any) => ({
-          ...n,
-          coverImage: n.coverImageUrl || n.coverImage, // Map API field to UI expected field
-          author: typeof n.author === 'object' ? n.author?.name : n.author // Flatten author object
-        }));
+        const normalizedNovels = (response.data.novels || []).map(normalizeNovel);
 
         const result = {
           ...response.data,
@@ -100,12 +122,7 @@ const novelService = {
         });
         
         // Fix: Normalize Single Novel Response
-        const rawNovel = response.data;
-        const normalizedNovel = {
-          ...rawNovel,
-          coverImage: rawNovel.coverImageUrl || rawNovel.coverImage,
-          author: typeof rawNovel.author === 'object' ? rawNovel.author?.name : rawNovel.author
-        };
+        const normalizedNovel = normalizeNovel(response.data);
          
         CACHE.set(cacheKey, { data: normalizedNovel, timestamp: Date.now() });
 
@@ -167,9 +184,12 @@ const novelService = {
         const endpoint = API_ENDPOINTS.GET_NOVEL_CHAPTERS.replace(':id', novelId.toString());
         const response = await apiClient.get(endpoint);
         
-        CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+        const normalizedChapters = (response.data.chapters || []).map(normalizeChapter);
+        const result = { ...response.data, chapters: normalizedChapters };
         
-        return response.data;
+        CACHE.set(cacheKey, { data: result, timestamp: Date.now() });
+        
+        return result;
       } catch (error) {
         console.error(`Error fetching chapters for novel ${novelId}:`, error);
         return { chapters: [] };

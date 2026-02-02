@@ -43,7 +43,7 @@ const NovelDetailPageAPI = () => {
   const getNovelTitle = (novel: Novel | null): string => {
     if (!novel) return '';
     if (language === 'english') {
-      return novel.titleEn || novel.title_en || novel.titleEnglish || (typeof novel.title === 'string' ? novel.title : (novel.title?.english || novel.title?.tamil || ''));
+      return novel.titleEn || (typeof novel.title === 'string' ? novel.title : (novel.title?.english || novel.title?.tamil || ''));
     }
     if (typeof novel.title === 'string') return novel.title;
     return novel.title?.[language] || novel.title?.tamil || novel.title?.english || '';
@@ -52,7 +52,7 @@ const NovelDetailPageAPI = () => {
   const getNovelDescription = (novel: Novel | null): string => {
     if (!novel) return '';
     if (language === 'english') {
-      return novel.descriptionEn || novel.description_en || novel.summary_en || novel.descriptionEnglish || (typeof novel.description === 'string' ? novel.description : (novel.description?.english || novel.description?.tamil || ''));
+      return novel.descriptionEn || (typeof novel.description === 'string' ? novel.description : (novel.description?.english || novel.description?.tamil || ''));
     }
     if (typeof novel.description === 'string') return novel.description;
     return novel.description?.[language] || novel.description?.tamil || novel.description?.english || '';
@@ -60,7 +60,7 @@ const NovelDetailPageAPI = () => {
 
   const getChapterTitle = (chapter: Chapter): string => {
     if (language === 'english') {
-      return chapter.titleEn || chapter.title_en || (typeof chapter.title === 'string' ? chapter.title : (chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`));
+      return chapter.titleEn || (typeof chapter.title === 'string' ? chapter.title : (chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`));
     }
     if (typeof chapter.title === 'string') return chapter.title;
     return chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`;
