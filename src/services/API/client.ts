@@ -4,6 +4,7 @@ import API_BASE_URL from './config';
 // Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true, // Required for backend view counting logic (cookies)
   headers: {
     'Content-Type': 'application/json',
   },

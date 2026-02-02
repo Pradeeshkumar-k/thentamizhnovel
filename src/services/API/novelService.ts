@@ -24,12 +24,21 @@ const IN_FLIGHT = new Map<string, Promise<any>>();
  */
 const normalizeNovel = (n: any) => {
   if (!n) return n;
+  
+  // Ensure stats object exists and handle root-level views if they exist
+  const stats = n.stats || {
+    views: n.views || 0,
+    likes: n.likes || 0,
+    bookmarks: n.bookmarks || 0
+  };
+
   return {
     ...n,
     titleEn: n.titleEn || n.title_en || n.titleEnglish || n.englishTitle || (typeof n.title === 'object' ? n.title.english || n.title.en : undefined),
     descriptionEn: n.descriptionEn || n.description_en || n.summary_en || n.descriptionEnglish || n.summary_english || (typeof n.description === 'object' ? n.description.english || n.description.en : undefined),
     coverImage: n.coverImageUrl || n.coverImage,
-    author: typeof n.author === 'object' ? n.author?.name : n.author
+    author: typeof n.author === 'object' ? n.author?.name : n.author,
+    stats: stats
   };
 };
 
