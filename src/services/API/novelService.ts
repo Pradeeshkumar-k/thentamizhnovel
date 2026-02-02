@@ -250,6 +250,14 @@ const novelService = {
     const response = await apiClient.post(API_ENDPOINTS.LIKE_NOVEL, {
       novelId
     });
+    
+    // Invalidate caches
+    for (const key of CACHE.keys()) {
+      if (key.startsWith(`novel-${novelId}`) || key.startsWith('novels-')) {
+        CACHE.delete(key);
+      }
+    }
+    
     return response.data;
   },
 
@@ -262,6 +270,14 @@ const novelService = {
     const response = await apiClient.delete(API_ENDPOINTS.LIKE_NOVEL, {
       data: { novelId }
     });
+
+    // Invalidate caches
+    for (const key of CACHE.keys()) {
+      if (key.startsWith(`novel-${novelId}`) || key.startsWith('novels-')) {
+        CACHE.delete(key);
+      }
+    }
+
     return response.data;
   },
 
@@ -273,6 +289,12 @@ const novelService = {
   likeChapter: async (chapterId: string | number) => {
     const endpoint = API_ENDPOINTS.LIKE_CHAPTER.replace(':id', chapterId.toString());
     const response = await apiClient.post(endpoint);
+
+    // Invalidate caches
+    for (const key of CACHE.keys()) {
+      if (key.startsWith('chapter-')) CACHE.delete(key);
+    }
+
     return response.data;
   },
 
@@ -284,6 +306,12 @@ const novelService = {
   unlikeChapter: async (chapterId: string | number) => {
     const endpoint = API_ENDPOINTS.UNLIKE_CHAPTER.replace(':id', chapterId.toString());
     const response = await apiClient.delete(endpoint);
+
+    // Invalidate caches
+    for (const key of CACHE.keys()) {
+      if (key.startsWith('chapter-')) CACHE.delete(key);
+    }
+
     return response.data;
   },
 
@@ -404,6 +432,36 @@ const novelService = {
       CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
       return response.data;
     });
+  },
+
+  /**
+   * Add a comment to a chapter
+   * @param {string|number} chapterId - The ID of the chapter
+   * @param {string} text - The comment text
+   * @returns {Promise} Response data
+   */
+  addComment: async (chapterId: string | number, text: string) => {
+    const response = await apiClient.post(API_ENDPOINTS.ADD_COMMENT, {
+      chapterId,
+      text
+    });
+
+    // force refetch on refresh
+    for (const key of CACHE.keys()) {
+      if (key.includes(`chapter-`)) { // User asked for specific chapter invalidation, but 'chapter-' covers all which is safer for now or specifically `chapter-${chapterId}` if we can parse it from key.
+        // User Code: if (key.includes(`chapter-${chapterId}`))
+        // My Keys: `chapter-${novelId}-${chapterId}-${language}`
+        // So checking includes `chapter-${novelId}` is hard if I don't have novelId.
+        // But checking `chapter-` and checking if it contains the chapterID is possible.
+        // However, the user snippet was: if (key.includes(`chapter-${chapterId}`))
+        // I will follow that.
+        if (key.includes(`chapter-`) && key.includes(chapterId.toString())) {
+             CACHE.delete(key);
+        }
+      }
+    }
+
+    return response.data;
   }
 };
 
