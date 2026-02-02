@@ -6,15 +6,36 @@ import { API_ENDPOINTS } from './config';
  * Handles all API calls related to novels
  */
 
-const novelService = {
-  // Simple memory cache for the home page (Fix 4)
-  novelListCache: null as any,
+// Basic In-Memory Cache System
+interface CacheItem {
+  data: any;
+  timestamp: number;
+}
+const CACHE = new Map<string, CacheItem>();
+const ID_CACHE_TTL = 30 * 60 * 1000; // 30 mins
+const LIST_CACHE_TTL = 5 * 60 * 1000; // 5 mins
+const PROGRESS_TTL = 60 * 1000; // 1 min
 
-  /**
-   * Clear the memory cache (Call this after create/update/delete)
-   */
+// Request Deduplication Map
+const IN_FLIGHT = new Map<string, Promise<any>>();
+
+/**
+ * Deduplicates concurrent requests for the same key.
+ */
+async function dedupe<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  if (IN_FLIGHT.has(key)) {
+    return IN_FLIGHT.get(key) as Promise<T>;
+  }
+
+  const promise = fn().finally(() => IN_FLIGHT.delete(key));
+  IN_FLIGHT.set(key, promise);
+  return promise;
+}
+
+const novelService = {
+  // Helpers
   clearNovelCache: () => {
-    novelService.novelListCache = null;
+    CACHE.clear();
   },
 
   /**
@@ -22,41 +43,40 @@ const novelService = {
    * @returns {Promise} Array of novels
    */
   getAllNovels: async (filters: any = {}) => {
-    try {
-      // Fix 4: Client-side Memory Cache (Optimized for Home Page/Page 1)
-      const page = Number(filters.page ?? 0);
-      const isHomePage = !filters.search && page === 0;
+    const cacheKey = `novels-${JSON.stringify(filters)}`;
+    const cached = CACHE.get(cacheKey);
 
-      if (isHomePage && novelService.novelListCache) {
-        return novelService.novelListCache;
-      }
-
-      // Fix 1: Removed _t timestamp to enable Browser & Edge Caching
-      const params = { ...filters }; 
-      const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
-      
-      // Fix: Normalize Data Structure (Backend -> Frontend)
-      const normalizedNovels = (response.data.novels || []).map((n: any) => ({
-        ...n,
-        coverImage: n.coverImageUrl || n.coverImage, // Map API field to UI expected field
-        author: typeof n.author === 'object' ? n.author?.name : n.author // Flatten author object
-      }));
-
-      const result = {
-        ...response.data,
-        novels: normalizedNovels
-      };
-
-      // Update cache
-      if (isHomePage) {
-        novelService.novelListCache = result;
-      }
-
-      return result; 
-    } catch (error) {
-      console.error('Error fetching novels:', error);
-      throw error;
+    if (cached && (Date.now() - cached.timestamp < LIST_CACHE_TTL)) {
+      return cached.data;
     }
+
+    return dedupe(cacheKey, async () => {
+      try {
+        // Fix 1: Removed _t timestamp to enable Browser & Edge Caching
+        const params = { ...filters }; 
+        const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
+        
+        // Fix: Normalize Data Structure (Backend -> Frontend)
+        const normalizedNovels = (response.data.novels || []).map((n: any) => ({
+          ...n,
+          coverImage: n.coverImageUrl || n.coverImage, // Map API field to UI expected field
+          author: typeof n.author === 'object' ? n.author?.name : n.author // Flatten author object
+        }));
+
+        const result = {
+          ...response.data,
+          novels: normalizedNovels
+        };
+
+        // Set Cache
+        CACHE.set(cacheKey, { data: result, timestamp: Date.now() });
+
+        return result; 
+      } catch (error) {
+        console.error('Error fetching novels:', error);
+        throw error;
+      }
+    });
   },
 
   /**
@@ -65,25 +85,36 @@ const novelService = {
    * @returns {Promise} Novel details
    */
   getNovelById: async (novelId: string | number, language?: string) => {
-    try {
-      const endpoint = API_ENDPOINTS.GET_NOVEL.replace(':id', novelId.toString());
-      const response = await apiClient.get(endpoint, {
-        params: { lang: language }
-      });
-      
-      // Fix: Normalize Single Novel Response
-      const rawNovel = response.data;
-      const normalizedNovel = {
-        ...rawNovel,
-        coverImage: rawNovel.coverImageUrl || rawNovel.coverImage,
-        author: typeof rawNovel.author === 'object' ? rawNovel.author?.name : rawNovel.author
-      };
+    const cacheKey = `novel-${novelId}-${language || 'def'}`;
+    const cached = CACHE.get(cacheKey);
 
-      return normalizedNovel;
-    } catch (error) {
-       console.error(`Error fetching novel ${novelId}:`, error);
-       throw error;
+    if (cached && (Date.now() - cached.timestamp < ID_CACHE_TTL)) {
+       return cached.data;
     }
+
+    return dedupe(cacheKey, async () => {
+      try {
+        const endpoint = API_ENDPOINTS.GET_NOVEL.replace(':id', novelId.toString());
+        const response = await apiClient.get(endpoint, {
+          params: { lang: language }
+        });
+        
+        // Fix: Normalize Single Novel Response
+        const rawNovel = response.data;
+        const normalizedNovel = {
+          ...rawNovel,
+          coverImage: rawNovel.coverImageUrl || rawNovel.coverImage,
+          author: typeof rawNovel.author === 'object' ? rawNovel.author?.name : rawNovel.author
+        };
+         
+        CACHE.set(cacheKey, { data: normalizedNovel, timestamp: Date.now() });
+
+        return normalizedNovel;
+      } catch (error) {
+         console.error(`Error fetching novel ${novelId}:`, error);
+         throw error;
+      }
+    });
   },
 
   /**
@@ -92,33 +123,31 @@ const novelService = {
    * @returns {Promise} Novel details
    */
   getNovelBySlug: async (slug: string) => {
-    try {
-      const response = await apiClient.get(API_ENDPOINTS.GET_NOVEL_BY_SLUG, {
-        params: { slug }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return dedupe(`slug-${slug}`, async () => {
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.GET_NOVEL_BY_SLUG, {
+          params: { slug }
+        });
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    });
   },
 
   /**
    * Get specific novel "ராட்சசனே எனை வதைப்பதேனடா!" by Thenmozhi
-   * This is a dedicated endpoint for this specific novel
-   * @returns {Promise} Novel details with all chapters
    */
   getRatsasaneEnaiVathaippathenaNovel: async () => {
-    // This looks like legacy hardcoded behavior, checking if we can route it dynamically
-    // For now, attempting to call generic endpoint if not implemented on backend
-    try {
-       const response = await apiClient.get(API_ENDPOINTS.GET_RATSASANE_NOVEL);
-       return response.data;
-    } catch (e) {
-      // Fallback to searching by title if specific endpoint doesn't exist on backend
-      // This is a temporary compatibility layer
-       console.warn('Dedicated endpoint failed, trying generic search');
-       return {}; 
-    }
+    return dedupe('ratsasane-novel', async () => {
+      try {
+         const response = await apiClient.get(API_ENDPOINTS.GET_RATSASANE_NOVEL);
+         return response.data;
+      } catch (e) {
+         console.warn('Dedicated endpoint failed, trying generic search');
+         return {}; 
+      }
+    });
   },
 
   /**
@@ -127,14 +156,25 @@ const novelService = {
    * @returns {Promise} Array of chapters
    */
   getNovelChapters: async (novelId: string | number) => {
-    try {
-      const endpoint = API_ENDPOINTS.GET_NOVEL_CHAPTERS.replace(':id', novelId.toString());
-      const response = await apiClient.get(endpoint);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching chapters for novel ${novelId}:`, error);
-      return { chapters: [] };
+    const cacheKey = `chapters-${novelId}`;
+    const cached = CACHE.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp < ID_CACHE_TTL)) {
+      return cached.data;
     }
+
+    return dedupe(cacheKey, async () => {
+      try {
+        const endpoint = API_ENDPOINTS.GET_NOVEL_CHAPTERS.replace(':id', novelId.toString());
+        const response = await apiClient.get(endpoint);
+        
+        CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+        
+        return response.data;
+      } catch (error) {
+        console.error(`Error fetching chapters for novel ${novelId}:`, error);
+        return { chapters: [] };
+      }
+    });
   },
 
   /**
@@ -145,16 +185,26 @@ const novelService = {
    * @returns {Promise} Chapter details with content
    */
   getChapter: async (novelId: string | number, chapterId: string | number, language: string = 'tamil') => {
-    const endpoint = API_ENDPOINTS.GET_CHAPTER
-      .replace(':novelId', novelId.toString())
-      .replace(':chapterId', chapterId.toString());
+    const cacheKey = `chapter-${novelId}-${chapterId}-${language}`;
+    const cached = CACHE.get(cacheKey);
 
-    // Add language query parameter
-    const response = await apiClient.get(endpoint, {
-      params: { lang: language }
+    if (cached && (Date.now() - cached.timestamp < ID_CACHE_TTL)) {
+      return cached.data;
+    }
+
+    return dedupe(cacheKey, async () => {
+      const endpoint = API_ENDPOINTS.GET_CHAPTER
+        .replace(':novelId', novelId.toString())
+        .replace(':chapterId', chapterId.toString());
+
+      // Add language query parameter
+      const response = await apiClient.get(endpoint, {
+        params: { lang: language }
+      });
+
+      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+      return response.data;
     });
-
-    return response.data;
   },
 
   /**
@@ -174,9 +224,8 @@ const novelService = {
    * @returns {Promise} Array of novels
    */
   getLibrary: async () => {
-    const response = await apiClient.get(API_ENDPOINTS.GET_LIBRARY, {
-      params: { _t: new Date().getTime() } // Cache busting
-    });
+    // FIX 2: Removed cache-buster used previously
+    const response = await apiClient.get(API_ENDPOINTS.GET_LIBRARY);
     return response.data;
   },
 
@@ -260,10 +309,21 @@ const novelService = {
    * @returns {Promise} Reading progress data
    */
   getReadingProgress: async (novelId: string | number) => {
-    const response = await apiClient.get(API_ENDPOINTS.GET_READING_PROGRESS, {
-      params: { novelId }
+    const cacheKey = `progress-${novelId}`;
+    const cached = CACHE.get(cacheKey);
+
+    if (cached && (Date.now() - cached.timestamp < PROGRESS_TTL)) {
+      return cached.data;
+    }
+
+    return dedupe(cacheKey, async () => {
+      const response = await apiClient.get(API_ENDPOINTS.GET_READING_PROGRESS, {
+        params: { novelId }
+      });
+      
+      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+      return response.data;
     });
-    return response.data;
   },
 
   /**
@@ -286,10 +346,20 @@ const novelService = {
    * @returns {Promise} Array of matching novels
    */
   searchNovels: async (query: string, filters: Record<string, any> = {}) => {
-    const response = await apiClient.get(API_ENDPOINTS.SEARCH_NOVELS, {
-      params: { query, ...filters }
+    const cacheKey = `search-${query}-${JSON.stringify(filters)}`;
+    const cached = CACHE.get(cacheKey);
+
+    if (cached && (Date.now() - cached.timestamp < LIST_CACHE_TTL)) {
+      return cached.data;
+    }
+
+    return dedupe(cacheKey, async () => {
+      const response = await apiClient.get(API_ENDPOINTS.SEARCH_NOVELS, {
+        params: { query, ...filters }
+      });
+      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+      return response.data;
     });
-    return response.data;
   },
 
   /**
@@ -298,10 +368,20 @@ const novelService = {
    * @returns {Promise} Array of novels
    */
   getNovelsByGenre: async (genre: string) => {
-    const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS_BY_GENRE, {
-      params: { genre }
+     const cacheKey = `genre-${genre}`;
+     const cached = CACHE.get(cacheKey);
+
+     if (cached && (Date.now() - cached.timestamp < LIST_CACHE_TTL)) {
+       return cached.data;
+     }
+
+    return dedupe(cacheKey, async () => {
+      const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS_BY_GENRE, {
+        params: { genre }
+      });
+      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+      return response.data;
     });
-    return response.data;
   },
 
   /**
@@ -310,10 +390,20 @@ const novelService = {
    * @returns {Promise} Array of novels
    */
   getNovelsByAuthor: async (author: string) => {
-    const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS_BY_AUTHOR, {
-      params: { author }
+    const cacheKey = `author-${author}`;
+    const cached = CACHE.get(cacheKey);
+
+    if (cached && (Date.now() - cached.timestamp < LIST_CACHE_TTL)) {
+      return cached.data;
+    }
+
+    return dedupe(cacheKey, async () => {
+      const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS_BY_AUTHOR, {
+        params: { author }
+      });
+      CACHE.set(cacheKey, { data: response.data, timestamp: Date.now() });
+      return response.data;
     });
-    return response.data;
   }
 };
 
