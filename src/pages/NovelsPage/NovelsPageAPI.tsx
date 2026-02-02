@@ -8,7 +8,7 @@ import Carousel from '../../components/common/Carousel/Carousel';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NovelGridSkeleton } from '../../components/common/NovelCardSkeleton/NovelCardSkeleton';
+import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 
 // Image mapping (Using public assets to avoid Base64)
 const imageMap = {
@@ -93,16 +93,7 @@ const NovelsPageAPI = () => {
         <div className="container mx-auto px-4 pt-4 md:pt-8">
           {loading ? (
             <div className="space-y-12">
-               <div>
-                  <div className="h-8 bg-gray-700/20 rounded w-48 mb-6 animate-pulse"></div>
-                  <div className="flex space-x-4 overflow-hidden">
-                    {[...Array(4)].map((_, i) => <div key={i} className="flex-shrink-0 w-40 md:w-48 aspect-[2/3] bg-gray-700/20 rounded-xl animate-pulse"></div>)}
-                  </div>
-               </div>
-               <div>
-                  <div className="h-8 bg-gray-700/20 rounded w-48 mb-6 animate-pulse"></div>
-                  <NovelGridSkeleton count={12} />
-               </div>
+               <NovelGridSkeleton count={10} />
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center p-8 bg-red-900/20 border border-red-500/50 rounded-xl text-center">
@@ -137,6 +128,8 @@ const NovelsPageAPI = () => {
                                 alt={novel.title}
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
+                                width="180"
+                                height="270"
                                 className="w-full h-full object-cover"
                               />
                             ) : (

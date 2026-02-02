@@ -9,6 +9,7 @@ import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
 import { Novel, Chapter } from '../../types';
 import { motion } from 'framer-motion';
+import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 
 // Image mappings (Using public assets to avoid Base64)
 const coverImageMap = {
@@ -89,8 +90,12 @@ const NovelDetailPageAPI = () => {
       try {
         setLoading(true);
 
-        // Fetch novel details
-        const novelResponse = await novelService.getNovelById(id, language);
+        // Fix: Parallel Fetch for faster LCP
+        const [novelResponse, chaptersResponse] = await Promise.all([
+          novelService.getNovelById(id, language),
+          novelService.getNovelChapters(id)
+        ]);
+
         // Fix: API returns the object directly, not wrapped in { novel: ... }
         setNovel(novelResponse);
         
@@ -98,9 +103,7 @@ const NovelDetailPageAPI = () => {
         setIsLiked(!!novelResponse.isLiked);
         setIsBookmarked(!!novelResponse.isBookmarked);
         
-        // Fetch chapters
-        const chaptersResponse = await novelService.getNovelChapters(id);
-        // Clean chapters data to remove fake read times if content is missing
+        // Clean chapters data
         setChapters(chaptersResponse.chapters || []);
 
         setError(null);
@@ -219,9 +222,11 @@ const NovelDetailPageAPI = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-primary text-primary pt-36 pb-12 flex justify-center items-center">
+      <div className="min-h-screen bg-bg-primary pt-36 px-4">
         <Header onLoginClick={handleLoginClick} />
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary dark:border-neon-gold"></div>
+        <div className="max-w-6xl mx-auto">
+          <NovelGridSkeleton count={1} />
+        </div>
       </div>
     );
   }
@@ -280,6 +285,9 @@ const NovelDetailPageAPI = () => {
                     <img 
                       src={coverImage} 
                       alt={getNovelTitle(novel)} 
+                      width="300"
+                      height="450"
+                      fetchPriority="high"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -370,9 +378,7 @@ const NovelDetailPageAPI = () => {
                 {chapters.map((chapter) => (
                     <motion.div
                         key={chapter.id || chapter._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        initial={false} // PERF: Disable initial animation
                         whileHover={{ backgroundColor: 'rgba(30, 41, 59, 1)' }} // lighter slate on hover
                         className="group relative flex items-center p-3 sm:p-4 bg-bg-secondary/80 border border-gray-800 hover:border-neon-gold/30 rounded-xl cursor-pointer transition-all duration-300"
                         onClick={() => handleChapterClick(chapter.id || chapter._id || '')}
@@ -383,6 +389,9 @@ const NovelDetailPageAPI = () => {
                                 <img 
                                     src={coverImage} 
                                     alt="Chapter" 
+                                    width="80"
+                                    height="80"
+                                    loading="lazy"
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                             </div>
@@ -403,17 +412,6 @@ const NovelDetailPageAPI = () => {
                                     </svg>
                                     {formatDate(chapter.createdAt)}
                                 </span>
-                                {calculateReadTime(chapter.content) && (
-                                    <>
-                                        <span className="hidden sm:inline w-1 h-1 rounded-full bg-gray-600"></span>
-                                        <span className="flex items-center gap-1">
-                                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            {calculateReadTime(chapter.content)}
-                                        </span>
-                                    </>
-                                )}
                                 <span className="hidden sm:inline w-1 h-1 rounded-full bg-gray-600"></span>
                                 <span className="flex items-center gap-1">
                                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
