@@ -1,17 +1,16 @@
 import axios from 'axios';
 import API_BASE_URL from './config';
 
-// Create axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // Required for backend view counting logic (cookies)
+  withCredentials: true, // ✅ REQUIRED for real views
   headers: {
     'Content-Type': 'application/json',
   },
   timeout: 60000,
 });
 
-// Request interceptor - Add auth token to requests
+/* ---------- REQUEST INTERCEPTOR ---------- */
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
@@ -23,39 +22,30 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// --- REFRESH TOKEN HANDLING ---
+/* ---------- REFRESH TOKEN HANDLING ---------- */
 let isRefreshing = false;
 let failedQueue: any[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
+    error ? prom.reject(error) : prom.resolve(token);
   });
   failedQueue = [];
 };
 
-// Response interceptor - Handle errors globally
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle 401 Unauthorized - Token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // If already refreshing, add this request to the queue
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return apiClient(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
+        }).then((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return apiClient(originalRequest);
+        });
       }
 
       originalRequest._retry = true;
@@ -63,42 +53,25 @@ apiClient.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-          throw new Error('No refresh token available');
-        }
+        if (!refreshToken) throw new Error('No refresh token');
 
-        const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+        const res = await axios.post(`${API_BASE_URL}/auth/refresh`, {
           refreshToken,
         });
 
-        const newToken = response.data.token || response.data.data?.token || response.data.accessToken;
-        
-        if (!newToken) {
-          throw new Error('No token in refresh response');
-        }
+        const newToken = res.data.token || res.data.accessToken;
+        if (!newToken) throw new Error('Invalid refresh response');
 
         localStorage.setItem('authToken', newToken);
-        
-        if (response.data.refreshToken || response.data.data?.refreshToken) {
-          localStorage.setItem('refreshToken', response.data.refreshToken || response.data.data.refreshToken);
-        }
-
         processQueue(null, newToken);
-        
+
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError, null);
-        
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        
-        // Use a less invasive redirect if possible, but window.location is safe for major auth failure
-        if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
-        }
-        return Promise.reject(refreshError);
+      } catch (err) {
+        processQueue(err, null);
+        localStorage.clear();
+        window.location.href = '/login';
+        return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
@@ -107,7 +80,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-
 
 export default apiClient;
