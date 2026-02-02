@@ -36,7 +36,54 @@ const DataTable: React.FC<ExtendedDataTableProps> = ({
   }
 
   return (
-    <div className="w-full overflow-hidden border border-border rounded-xl shadow-sm bg-surface overflow-x-auto">
+    <div className="w-full space-y-4">
+      {/* Mobile Component: Card View */}
+      <div className="block md:hidden space-y-4">
+        {data.map((row, rowIndex) => (
+          <div 
+            key={row.id || rowIndex} 
+            className="bg-surface border border-border p-4 rounded-xl shadow-sm space-y-3"
+            onClick={() => onRowClick && onRowClick(row)}
+          >
+            {columns.map((column) => (
+              <div key={column.key} className="flex justify-between items-start gap-4">
+                <span className="text-xs font-semibold text-muted uppercase tracking-wider min-w-[30%]">
+                  {column.label}
+                </span>
+                <span className="text-sm text-primary text-right font-medium">
+                   {column.render ? column.render(row[column.key], row) : row[column.key]}
+                </span>
+              </div>
+            ))}
+            
+            {actions && (
+              <div className="pt-3 mt-2 border-t border-border flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                 {typeof actions === 'function' ? (
+                      actions(row)
+                    ) : (
+                      actions.map((action, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => action.onClick(row)}
+                          className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                              action.variant === 'danger' ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20' :
+                              action.variant === 'success' ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20' :
+                              'bg-primary/10 text-primary hover:bg-primary/20'
+                          }`}
+                        >
+                          {action.label}
+                        </button>
+                      ))
+                    )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Component: Standard Table */}
+      <div className="hidden md:block w-full overflow-hidden border border-border rounded-xl shadow-sm bg-surface overflow-x-auto">
       <table className="w-full min-w-[800px] border-collapse text-sm">
         <thead className="bg-muted/5 border-b border-border">
           <tr>
@@ -88,6 +135,7 @@ const DataTable: React.FC<ExtendedDataTableProps> = ({
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
