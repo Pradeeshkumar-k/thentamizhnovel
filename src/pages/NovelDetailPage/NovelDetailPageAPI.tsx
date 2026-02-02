@@ -61,7 +61,12 @@ const NovelDetailPageAPI = () => {
 
   const getChapterTitle = (chapter: Chapter): string => {
     if (language === 'english') {
-      return chapter.titleEn || (typeof chapter.title === 'string' ? chapter.title : (chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`));
+      if (chapter.titleEn) return chapter.titleEn;
+      if (typeof chapter.title === 'object' && (chapter.title.english || chapter.title.en)) {
+        return chapter.title.english || chapter.title.en || '';
+      }
+      // If no English found, use a fallback
+      return `Chapter ${chapter.chapterNumber}`;
     }
     if (typeof chapter.title === 'string') return chapter.title;
     return chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`;
@@ -91,14 +96,16 @@ const NovelDetailPageAPI = () => {
     const fetchNovelData = async () => {
       if (!id) return;
 
-      // Fix 6: Optimization - Only refetch novel if we need English and don't have it
-      const isEnglishRequested = language === 'english';
-      const hasEnglishTitle = !!(novel?.titleEn || novel?.title_en || novel?.titleEnglish);
+      // Ensure we have data for the current language
+      const isEnglish = language === 'english';
+      const hasCorrectLangData = isEnglish 
+        ? !!(novel?.titleEn) 
+        : !!(novel && !novel.titleEn); // Weak check for Tamil, but better than nothing
+
       const isNewNovel = !novel || (novel.id !== id && novel._id !== id);
 
-      if (isNewNovel || (isEnglishRequested && !hasEnglishTitle)) {
+      if (isNewNovel || (isEnglish && !novel?.titleEn)) {
         try {
-          // Only show overall loading for new novel
           if (isNewNovel) setLoading(true);
 
           const [novelResponse, chaptersResponse] = await Promise.all([
@@ -106,13 +113,7 @@ const NovelDetailPageAPI = () => {
             novelService.getNovelChapters(id, language)
           ]);
 
-          setNovel(prev => {
-            if (prev && (prev.id === id || prev._id === id)) {
-              return { ...prev, ...novelResponse };
-            }
-            return novelResponse;
-          });
-          
+          setNovel(novelResponse);
           setIsLiked(!!novelResponse.isLiked);
           setIsBookmarked(!!novelResponse.isBookmarked);
           
@@ -131,7 +132,7 @@ const NovelDetailPageAPI = () => {
     };
 
     fetchNovelData();
-  }, [id, language, novel?.id, novel?._id, novel?.titleEn, novel?.title_en, novel?.titleEnglish, chapters.length]);
+  }, [id, language, novel?.id, novel?._id, novel?.titleEn]);
 
   // Sync bookmark state with library context on load could be added here
   // But for now, we just implement the action.

@@ -26,8 +26,8 @@ const normalizeNovel = (n: any) => {
   if (!n) return n;
   return {
     ...n,
-    titleEn: n.titleEn || n.title_en || n.titleEnglish || (typeof n.title === 'object' ? n.title.english || n.title.en : undefined),
-    descriptionEn: n.descriptionEn || n.description_en || n.summary_en || n.descriptionEnglish || (typeof n.description === 'object' ? n.description.english || n.description.en : undefined),
+    titleEn: n.titleEn || n.title_en || n.titleEnglish || n.englishTitle || (typeof n.title === 'object' ? n.title.english || n.title.en : undefined),
+    descriptionEn: n.descriptionEn || n.description_en || n.summary_en || n.descriptionEnglish || n.summary_english || (typeof n.description === 'object' ? n.description.english || n.description.en : undefined),
     coverImage: n.coverImageUrl || n.coverImage,
     author: typeof n.author === 'object' ? n.author?.name : n.author
   };
@@ -40,8 +40,8 @@ const normalizeChapter = (c: any) => {
   if (!c) return c;
   return {
     ...c,
-    titleEn: c.titleEn || c.title_en || c.titleEnglish || (typeof c.title === 'object' ? c.title.english || c.title.en : undefined),
-    contentEn: c.contentEn || c.content_en || c.contentEnglish || (typeof c.content === 'object' ? c.content.english || c.content.en : undefined)
+    titleEn: c.titleEn || c.title_en || c.titleEnglish || c.title_english || c.englishTitle || (typeof c.title === 'object' ? c.title.english || c.title.en : undefined),
+    contentEn: c.contentEn || c.content_en || c.contentEnglish || c.content_english || (typeof c.content === 'object' ? c.content.english || c.content.en : undefined)
   };
 };
 
