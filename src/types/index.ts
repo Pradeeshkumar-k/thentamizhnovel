@@ -47,9 +47,11 @@ export interface Novel {
   title: string | { [key: string]: string };
   titleEn?: string; 
   title_en?: string; // Snake case support
+  titleEnglish?: string; // Mock data support
   description: string | { [key: string]: string };
   descriptionEn?: string; 
   description_en?: string; // Snake case support
+  descriptionEnglish?: string; // Mock data support
   summary_en?: string; // Frontend alias
   novel_summary?: string; // Frontend alias
   author: string;
@@ -67,6 +69,8 @@ export interface Novel {
     likes: number;
     bookmarks: number;
   };
+  isLiked?: boolean; // Added for API state sync
+  isBookmarked?: boolean; // Added for API state sync
   createdAt?: string;
   updatedAt?: string;
 }
@@ -80,6 +84,7 @@ export interface Chapter {
   title: string | { [key: string]: string };
   titleEn?: string; 
   title_en?: string; // Snake case support
+  titleEnglish?: string; // Support
   content: string;
   contentEn?: string; 
   content_en?: string; // Snake case support
@@ -88,6 +93,12 @@ export interface Chapter {
   createdAt?: string;
   updatedAt?: string;
   views?: number;
+  isLiked?: boolean; // Sync
+  likedByMe?: boolean; // Sync
+  _count?: {
+    likes: number;
+    comments: number;
+  };
 }
 
 // Reading Progress Types

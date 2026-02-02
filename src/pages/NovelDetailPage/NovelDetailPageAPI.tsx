@@ -43,7 +43,7 @@ const NovelDetailPageAPI = () => {
   const getNovelTitle = (novel: Novel | null): string => {
     if (!novel) return '';
     if (language === 'english') {
-      return novel.title_en || novel.titleEn || (typeof novel.title === 'string' ? novel.title : (novel.title?.english || novel.title?.tamil || ''));
+      return novel.titleEn || novel.title_en || novel.titleEnglish || (typeof novel.title === 'string' ? novel.title : (novel.title?.english || novel.title?.tamil || ''));
     }
     if (typeof novel.title === 'string') return novel.title;
     return novel.title?.[language] || novel.title?.tamil || novel.title?.english || '';
@@ -52,14 +52,16 @@ const NovelDetailPageAPI = () => {
   const getNovelDescription = (novel: Novel | null): string => {
     if (!novel) return '';
     if (language === 'english') {
-      return novel.summary_en || novel.description_en || novel.descriptionEn || (typeof novel.description === 'string' ? novel.description : (novel.description?.english || novel.description?.tamil || ''));
+      return novel.descriptionEn || novel.description_en || novel.summary_en || novel.descriptionEnglish || (typeof novel.description === 'string' ? novel.description : (novel.description?.english || novel.description?.tamil || ''));
     }
     if (typeof novel.description === 'string') return novel.description;
     return novel.description?.[language] || novel.description?.tamil || novel.description?.english || '';
   };
 
   const getChapterTitle = (chapter: Chapter): string => {
-    if (language === 'english' && chapter.titleEn) return chapter.titleEn;
+    if (language === 'english') {
+      return chapter.titleEn || chapter.title_en || (typeof chapter.title === 'string' ? chapter.title : (chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`));
+    }
     if (typeof chapter.title === 'string') return chapter.title;
     return chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`;
   };
@@ -83,42 +85,53 @@ const NovelDetailPageAPI = () => {
     return `${minutes} min read`;
   };
 
-  // Fetch novel and chapters from API
+  // Fetch novel and chapters from API - Optimized with Fix 6
   useEffect(() => {
     const fetchNovelData = async () => {
       if (!id) return;
-      try {
-        setLoading(true);
 
-        // Fix: Parallel Fetch for faster LCP
-        const [novelResponse, chaptersResponse] = await Promise.all([
-          novelService.getNovelById(id, language),
-          novelService.getNovelChapters(id)
-        ]);
+      // Fix 6: Optimization - Only refetch novel if we need English and don't have it
+      const isEnglishRequested = language === 'english';
+      const hasEnglishTitle = !!(novel?.titleEn || novel?.title_en || novel?.titleEnglish);
+      const isNewNovel = !novel || (novel.id !== id && novel._id !== id);
 
-        // Fix: API returns the object directly, not wrapped in { novel: ... }
-        setNovel(novelResponse);
-        
-        // Initialize interaction state from API
-        setIsLiked(!!novelResponse.isLiked);
-        setIsBookmarked(!!novelResponse.isBookmarked);
-        
-        // Clean chapters data
-        setChapters(chaptersResponse.chapters || []);
+      if (isNewNovel || (isEnglishRequested && !hasEnglishTitle)) {
+        try {
+          // Only show overall loading for new novel
+          if (isNewNovel) setLoading(true);
 
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching novel data:', err);
-        setError('Failed to load novel details. Please try again later.');
-      } finally {
-        setLoading(false);
+          const [novelResponse, chaptersResponse] = await Promise.all([
+            novelService.getNovelById(id, language),
+            // Only fetch chapters if it's a new novel or chapters list is empty
+            chapters.length === 0 || isNewNovel ? novelService.getNovelChapters(id) : Promise.resolve({ chapters })
+          ]);
+
+          setNovel(prev => {
+            if (prev && (prev.id === id || prev._id === id)) {
+              return { ...prev, ...novelResponse };
+            }
+            return novelResponse;
+          });
+          
+          setIsLiked(!!novelResponse.isLiked);
+          setIsBookmarked(!!novelResponse.isBookmarked);
+          
+          if (chaptersResponse.chapters) {
+            setChapters(chaptersResponse.chapters);
+          }
+
+          setError(null);
+        } catch (err) {
+          console.error('Error fetching novel data:', err);
+          if (isNewNovel) setError('Failed to load novel details. Please try again later.');
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
-    if (id) {
-      fetchNovelData();
-    }
-  }, [id, language]);
+    fetchNovelData();
+  }, [id, language, novel?.id, novel?._id, novel?.titleEn, novel?.title_en, novel?.titleEnglish, chapters.length]);
 
   // Sync bookmark state with library context on load could be added here
   // But for now, we just implement the action.

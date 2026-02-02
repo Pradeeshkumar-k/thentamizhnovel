@@ -85,27 +85,43 @@ const ChapterPageAPI = () => {
     }).catch(err => console.error(err));
   }, [novelId]);
 
-  // Effect 2: Chapter (language dependent)
+  // Effect 2: Chapter (language dependent with Fix 6 optimization)
   useEffect(() => {
     if (!novelId || !chapterId) return;
-    setLoading(true);
     
-    novelService.getChapter(novelId, chapterId, language)
-      .then(data => {
-        setChapter(data);
-        // Fix 1: Sync backend state
-        setLikesCount(data._count?.likes || 0);
-        setIsLiked(!!(data.isLiked || data.likedByMe));
-        setCommentsCount(data._count?.comments || 0);
-        
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Failed to load chapter.');
-        setLoading(false);
-      });
-  }, [novelId, chapterId, language]);
+    // Fix 6: Only refetch if: contentEn is null AND user explicitly requests English
+    const isEnglishRequested = language === 'english';
+    const hasEnglishContent = !!(chapter?.contentEn || chapter?.content_en);
+    const isNewChapter = !chapter || (chapter.id !== chapterId && chapter._id !== chapterId);
+
+    if (isNewChapter || (isEnglishRequested && !hasEnglishContent)) {
+      setLoading(true);
+      
+      novelService.getChapter(novelId, chapterId, language)
+        .then(data => {
+          setChapter(prev => {
+            // If it's the same chapter, merge the data (especially English content)
+            if (prev && (prev.id === chapterId || prev._id === chapterId)) {
+              return { ...prev, ...data };
+            }
+            return data;
+          });
+          
+          // Sync backend state
+          setLikesCount(data._count?.likes || 0);
+          setIsLiked(!!(data.isLiked || data.likedByMe));
+          setCommentsCount(data._count?.comments || 0);
+          
+          setLoading(false);
+          setError(null);
+        })
+        .catch(err => {
+          console.error(err);
+          setError('Failed to load chapter.');
+          setLoading(false);
+        });
+    }
+  }, [novelId, chapterId, language, chapter?.id, chapter?._id, chapter?.contentEn, chapter?.content_en]);
 
   // Effect 3: Chapters list (once per ID)
   useEffect(() => {
@@ -234,7 +250,7 @@ const ChapterPageAPI = () => {
         <header className="mb-12 text-center border-b border-border pb-8">
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-primary mb-4 leading-tight">
             {language === 'english' 
-              ? (chapter.title_en || chapter.titleEn || getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
+              ? (chapter.titleEn || chapter.title_en || chapter.titleEnglish || getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
               : (getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
             }
           </h1>
@@ -411,7 +427,10 @@ const ChapterPageAPI = () => {
                             </span>
                         </div>
                         <h4 className="text-primary font-medium group-hover:text-neon-gold transition-colors line-clamp-2">
-                            {(language === 'english' && c.titleEn) ? c.titleEn : getString(c.title)}
+                            {language === 'english' 
+                                ? (c.titleEn || c.title_en || c.titleEnglish || getString(c.title)) 
+                                : getString(c.title)
+                            }
                         </h4>
                     </motion.div>
                 ))}
