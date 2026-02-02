@@ -27,10 +27,11 @@ const ChapterPageAPI = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Interaction State
-  const [likesCount, setLikesCount] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [comments, setComments] = useState<any[]>([]);
+  // Interaction State - Fix 1: Lock UI to backend state (null init)
+  const [likesCount, setLikesCount] = useState<number | null>(null);
+  const [isLiked, setIsLiked] = useState<boolean | null>(null);
+  const [isBookmarked, setIsBookmarked] = useState<boolean | null>(null);
+  const [comments, setComments] = useState<any[] | null>(null);
 
 
   const t = translations[language as keyof typeof translations];
@@ -72,61 +73,56 @@ const ChapterPageAPI = () => {
     window.scrollTo(0, 0);
   }, [chapterId]);
 
+  // Fix 2: Split Effects
+
+  // Effect 1: Novel (once per ID)
   useEffect(() => {
-    const fetchChapterData = async () => {
-      if (!novelId || !chapterId) return;
-      try {
-        setLoading(true);
-        setError(null);
+    if (!novelId) return;
+    novelService.getNovelById(novelId).then(data => {
+        setNovel(data);
+        // Fix 5: Initialize bookmark state
+        setIsBookmarked(!!data.isBookmarked);
+    }).catch(err => console.error(err));
+  }, [novelId]);
 
-        // Fetch novel basic info if not already loaded
-        if (!novel) {
-          const novelData = await novelService.getNovelById(novelId);
-          setNovel(novelData); // Fix: API returns raw object
-        }
-
-        // Fetch current chapter
-        const chapterData = await novelService.getChapter(novelId, chapterId, language);
-        setChapter(chapterData);
-
-        // Fetch all chapters for navigation
-        if (allChapters.length === 0) {
-          const chaptersList = await novelService.getNovelChapters(novelId);
-          setAllChapters(chaptersList.chapters || []);
-        }
-
-        // Update reading progress - Rule #1: Only when IDs exist
-        if (novelId && chapterId && chapterData) {
-            updateProgress(novelId, Number(chapterId));
-            
-            // Rule #4: Call progress fetch only on Reader page
-            if (user) {
-                readingProgressService.getReadingProgress(novelId, chapterId)
-                    .then((res: any) => {
-                        if (res?.success && res.data) {
-                            console.log('Reading progress restored:', res.data.progress);
-                        }
-                    })
-                    .catch((err: any) => console.error('Error fetching progress:', err));
-            }
-        }
+  // Effect 2: Chapter (language dependent)
+  useEffect(() => {
+    if (!novelId || !chapterId) return;
+    setLoading(true);
+    
+    novelService.getChapter(novelId, chapterId, language)
+      .then(data => {
+        setChapter(data);
+        // Fix 1: Sync backend state
+        setLikesCount(data._count?.likes || 0);
+        setIsLiked(!!(data.isLiked || data.likedByMe));
+        setComments(data.comments || []);
         
-        // Update interaction counts
-        if (chapterData) {
-            setLikesCount(chapterData._count?.likes || 0);
-            setComments(chapterData.comments || []);
-        }
-      } catch (err) {
-        console.error('Error fetching chapter:', err);
-        setError('Failed to load chapter content.');
-      } finally {
         setLoading(false);
-      }
-    };
-
-    fetchChapterData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      })
+      .catch(err => {
+        console.error(err);
+        setError('Failed to load chapter.');
+        setLoading(false);
+      });
   }, [novelId, chapterId, language]);
+
+  // Effect 3: Chapters list (once per ID)
+  useEffect(() => {
+    if (!novelId) return;
+    if (allChapters.length > 0) return; // Prevent re-fetch if already loaded via nav
+    
+    novelService.getNovelChapters(novelId).then(res => 
+        setAllChapters(res.chapters || [])
+    ).catch(console.error);
+  }, [novelId]);
+
+  // Effect 4: Progress Write (Fix 3: Write only)
+  useEffect(() => {
+    if (novelId && chapterId) {
+        updateProgress(novelId, Number(chapterId));
+    }
+  }, [novelId, chapterId]);
 
   // Handle navigation
   const currentIndex = allChapters.findIndex(c => (c.id || c._id) === chapterId);
@@ -140,16 +136,28 @@ const ChapterPageAPI = () => {
   // Interaction Handlers
   const handleLike = async () => {
     if (!user) { setIsLoginModalOpen(true); return; }
+    
+    // Optimistic Update
+    const previousLiked = isLiked === true; // Treat null as false for toggle logic safely? No, block if null.
+    if (isLiked === null) return; // Should not happen if button disabled
+    
+    const previousCount = likesCount || 0;
+
+    setIsLiked(!previousLiked);
+    setLikesCount(previousLiked ? Math.max(0, previousCount - 1) : previousCount + 1);
+
     try {
-        if (isLiked) {
+        if (previousLiked) {
             await novelService.unlikeChapter(chapterId!);
-            setLikesCount(p => Math.max(0, p - 1));
         } else {
             await novelService.likeChapter(chapterId!);
-            setLikesCount(p => p + 1);
         }
-        setIsLiked(!isLiked);
-    } catch (err) { console.error('Like error', err); }
+    } catch (err) { 
+        console.error('Like error', err);
+        // Rollback on error
+        setIsLiked(previousLiked);
+        setLikesCount(previousCount);
+    }
   };
 
   const handleBookmark = async () => {
@@ -162,7 +170,16 @@ const ChapterPageAPI = () => {
             await novelService.bookmarkNovel(novelId);
         }
         setIsBookmarked(!isBookmarked);
-        alert(isBookmarked ? 'Removed from Library' : 'Added to Library');
+        alert(!isBookmarked ? 'Added to Library' : 'Removed from Library'); // Flipped logic: isBookmarked is OLD state here? 
+        // Wait, logic: if (isBookmarked) { remove } -> New state false.
+        // Alert should say "Removed".
+        // Code: setIsBookmarked(!isBookmarked).
+        // Alert: isBookmarked (old value) ? Removed : Added. Correct.
+        // My fix above: !isBookmarked (new value logic).
+        // Let's stick to safe logic.
+        // Old state: true -> remove. New state: false. Alert: "Removed".
+        // Old state: false -> add. New state: true. Alert: "Added".
+        // Code was: alert(isBookmarked ? 'Removed' : 'Added'). Correct.
     } catch (err) { console.error('Bookmark error', err); }
   };
 
@@ -260,12 +277,13 @@ const ChapterPageAPI = () => {
             <div className="flex items-center gap-4 md:gap-6">
                 <button    
                     onClick={handleLike}
-                    className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-red-500' : 'text-secondary hover:text-red-500'}`}
+                    disabled={isLiked === null}
+                    className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-red-500' : 'text-secondary hover:text-red-500'} ${isLiked === null ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     <svg className={`w-6 h-6 ${isLiked ? 'fill-current' : 'fill-none'}`} viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    <span className="font-medium">{likesCount} Likes</span>
+                    <span className="font-medium">{likesCount === null ? '...' : `${likesCount} Likes`}</span>
                 </button>
                 
                 <button
@@ -320,7 +338,7 @@ const ChapterPageAPI = () => {
                      <svg className="w-6 h-6 text-gray-400 group-hover:text-neon-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                      </svg>
-                     {comments.length > 0 && (
+                     {comments && comments.length > 0 && (
                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center border-2 border-white dark:border-zinc-900">
                             {comments.length}
                         </span>
@@ -407,6 +425,7 @@ const ChapterPageAPI = () => {
         onClose={() => setIsCommentsModalOpen(false)}
         novelId={novelId || ''}
         chapterId={chapterId || ''}
+        onCommentAdded={(newComment) => setComments(prev => prev ? [newComment, ...prev] : [newComment])}
       />
 
       <UserLogin isOpen={isLoginModalOpen} onClose={handleCloseLogin} />

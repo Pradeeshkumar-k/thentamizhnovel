@@ -12,9 +12,10 @@ interface CommentsModalProps {
   onClose: () => void;
   novelId: string;
   chapterId: string;
+  onCommentAdded?: (comment: any) => void;
 }
 
-const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId, chapterId }) => {
+const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId, chapterId, onCommentAdded }) => {
   const { user } = useAuth();
   const { language } = useLanguage();
   const [comments, setComments] = useState<any[]>([]);
@@ -60,8 +61,10 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId,
     setSubmittingComment(true);
     const res = await commentService.addComment(chapterId!, newComment);
     if (res.success) {
-      setComments([res.data, ...comments]);
+      const newCommentData = res.data;
+      setComments([newCommentData, ...comments]);
       setNewComment('');
+      if (onCommentAdded) onCommentAdded(newCommentData);
     } else {
       alert('Failed to post comment');
     }
