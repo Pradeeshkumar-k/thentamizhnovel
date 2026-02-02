@@ -39,8 +39,13 @@ const NovelsPageAPI = () => {
         const query = searchParams.get('search');
         
         // Default Params
-        const page = searchParams.get('page') || 1;
-        const limit = 50;
+        // Fix: Backend uses 0-based indexing. URL uses 1-based (standard).
+        // If ?page=1 -> send 0. If ?page=2 -> send 1.
+        const pageQuery = Number(searchParams.get('page')) || 1;
+        const page = pageQuery > 0 ? pageQuery - 1 : 0;
+        
+        // Backend hardcodes limit to 20, but we send 20 to match expectations
+        const limit = 20;
 
         const params = { 
           page, 
