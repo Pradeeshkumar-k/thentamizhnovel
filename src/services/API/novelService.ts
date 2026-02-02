@@ -170,10 +170,11 @@ const novelService = {
   /**
    * Get chapters for a novel
    * @param {string|number} novelId - The ID of the novel
+   * @param {string} language - The language
    * @returns {Promise} Array of chapters
    */
-  getNovelChapters: async (novelId: string | number) => {
-    const cacheKey = `chapters-${novelId}`;
+  getNovelChapters: async (novelId: string | number, language: string = 'tamil') => {
+    const cacheKey = `chapters-${novelId}-${language}`;
     const cached = CACHE.get(cacheKey);
     if (cached && (Date.now() - cached.timestamp < ID_CACHE_TTL)) {
       return cached.data;
@@ -182,7 +183,9 @@ const novelService = {
     return dedupe(cacheKey, async () => {
       try {
         const endpoint = API_ENDPOINTS.GET_NOVEL_CHAPTERS.replace(':id', novelId.toString());
-        const response = await apiClient.get(endpoint);
+        const response = await apiClient.get(endpoint, {
+          params: { lang: language }
+        });
         
         const normalizedChapters = (response.data.chapters || []).map(normalizeChapter);
         const result = { ...response.data, chapters: normalizedChapters };

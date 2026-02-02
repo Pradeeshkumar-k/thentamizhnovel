@@ -38,6 +38,7 @@ const NovelDetailPageAPI = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
 
   // Helper functions to safely extract string values
   const getNovelTitle = (novel: Novel | null): string => {
@@ -102,8 +103,7 @@ const NovelDetailPageAPI = () => {
 
           const [novelResponse, chaptersResponse] = await Promise.all([
             novelService.getNovelById(id, language),
-            // Only fetch chapters if it's a new novel or chapters list is empty
-            chapters.length === 0 || isNewNovel ? novelService.getNovelChapters(id) : Promise.resolve({ chapters })
+            novelService.getNovelChapters(id, language)
           ]);
 
           setNovel(prev => {
@@ -335,9 +335,29 @@ const NovelDetailPageAPI = () => {
                     <h2 className="text-xl font-bold text-primary mb-3 border-l-4 border-neon-gold pl-3">
                         {language === 'tamil' ? 'கதை சுருக்கம்' : 'Story Summary'}
                     </h2>
-                    <p className="text-secondary leading-relaxed whitespace-pre-line text-sm md:text-base">
-                        {getNovelDescription(novel)}
-                    </p>
+                    <div className="relative group">
+                        <p className={`text-secondary leading-relaxed whitespace-pre-line text-sm md:text-base transition-all duration-300 ${!isSummaryExpanded ? 'line-clamp-4' : ''}`}>
+                            {getNovelDescription(novel)}
+                        </p>
+                        {getNovelDescription(novel).length > 200 && (
+                            <button 
+                                onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
+                                className="mt-2 text-neon-gold hover:text-primary transition-colors text-sm font-bold flex items-center gap-1"
+                            >
+                                {isSummaryExpanded 
+                                    ? (language === 'tamil' ? 'சுருக்கமாக' : 'Read Less') 
+                                    : (language === 'tamil' ? 'மேலும் படிக்க' : 'Read More')}
+                                <svg 
+                                    className={`w-4 h-4 transition-transform duration-300 ${isSummaryExpanded ? 'rotate-180' : ''}`} 
+                                    fill="none" 
+                                    viewBox="0 0 24 24" 
+                                    stroke="currentColor"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Actions */}
