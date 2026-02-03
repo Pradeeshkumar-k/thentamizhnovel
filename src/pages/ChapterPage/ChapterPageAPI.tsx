@@ -11,9 +11,29 @@ import readingProgressService from '../../services/API/readingProgressService';
 import { Chapter, Novel } from '../../types';
 import { motion } from 'framer-motion';
 import CommentsModal from '../../components/comments/CommentsModal';
+import API_BASE_URL from '../../services/API/config';
+
+// MANDATORY VIEW TRACKING HOOK
+export function useChapterView(chapterId: string | undefined) {
+  useEffect(() => {
+    if (!chapterId) return;
+
+    fetch(`${API_BASE_URL}/chapters/${chapterId}/view`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(() => console.log("[VIEW POSTED]", chapterId))
+      .catch(console.error);
+
+  }, [chapterId]);
+}
 
 const ChapterPageAPI = () => {
   const { novelId, chapterId } = useParams();
+  
+  // 🔥 Call this hook ONCE
+  useChapterView(chapterId);
+
   const navigate = useNavigate();
   const { user } = useAuth();
   const { language } = useLanguage();
@@ -112,8 +132,7 @@ const ChapterPageAPI = () => {
           
           setLoading(false);
           setError(null);
-          // Increment views in background
-          novelService.incrementChapterView(chapterId);
+          // View increment moved to useChapterView hook
         })
         .catch(err => {
           console.error(err);
