@@ -111,7 +111,15 @@ export const authService = {
          localStorage.setItem('user', JSON.stringify(user));
       }
       return { success: true, data: response.data };
-    } catch (error) {
+    } catch (error: any) {
+      // 🟢 FIX: Handle 401 silently, log others
+      if (error.response?.status === 401) {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        return { success: false };
+      }
+      
+      console.error("Auth verify failed:", error);
       // If verify fails, clear local storage
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');

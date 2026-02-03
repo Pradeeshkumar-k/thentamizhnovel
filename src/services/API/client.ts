@@ -37,6 +37,11 @@ apiClient.interceptors.response.use(
     const original = error.config;
 
     if (error.response?.status === 401 && !original._retry) {
+      // 🟢 FIX: Do not attempt refresh/redirect for verifyToken check
+      if (original.url?.includes('/auth/verify')) {
+        return Promise.reject(error);
+      }
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
