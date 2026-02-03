@@ -25,39 +25,27 @@ const NovelsPageAPI = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   // Lazy Initialization of State
   const [novels, setNovels] = useState<any[]>([]);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  // Loading is false if we already have novels from cache
-  const [loading, setLoading] = useState(() => novels.length === 0);
+  // Loading is true only on first load
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const t = translations[language as keyof typeof translations];
 
-  // Fetch Logic
+  // Initial Fetch Logic
   useEffect(() => {
-    const fetchNovels = async () => {
+    const fetchInitialNovels = async () => {
       try {
+        setLoading(true);
         const searchParams = new URLSearchParams(location.search);
         const query = searchParams.get('search');
         
-        // Default Params
-        // Fix: Backend uses 0-based indexing. URL uses 1-based (standard).
-        // If ?page=1 -> send 0. If ?page=2 -> send 1.
-        const pageQuery = Number(searchParams.get('page')) || 1;
-        const page = pageQuery > 0 ? pageQuery - 1 : 0;
-        
-        // Backend hardcodes limit to 20, but we send 20 to match expectations
-        const limit = 20;
-
-        const params = { 
-          page, 
-          limit,
-          search: query || undefined
-        };
-        
-        const response = await novelService.getAllNovels(params);
-        const fetchedNovels = response.novels || [];
-        
-        setNovels(fetchedNovels);
-        
+        const response = await novelService.getAllNovels({ search: query || undefined });
+        setNovels(response.novels || []);
+        setNextCursor(response.nextCursor || null);
+        setHasMore(!!response.nextCursor);
         setError(null);
       } catch (err: any) {
         console.error('Error fetching novels:', err);
@@ -67,8 +55,49 @@ const NovelsPageAPI = () => {
       }
     };
 
-    fetchNovels();
+    fetchInitialNovels();
   }, [location.search]);
+
+  // Load More Function
+  const loadMore = async () => {
+    if (!nextCursor || isFetchingMore) return;
+    
+    try {
+      setIsFetchingMore(true);
+      const searchParams = new URLSearchParams(location.search);
+      const query = searchParams.get('search');
+      
+      const response = await novelService.getAllNovels({ search: query || undefined }, nextCursor);
+      const newNovels = response.novels || [];
+      
+      setNovels(prev => [...prev, ...newNovels]);
+      setNextCursor(response.nextCursor || null);
+      setHasMore(!!response.nextCursor);
+    } catch (err) {
+      console.error('Error fetching more novels:', err);
+    } finally {
+      setIsFetchingMore(false);
+    }
+  };
+
+  // Infinite Scroll Trigger (Simplified Intersection Observer)
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const target = document.querySelector('#infinite-scroll-trigger');
+    if (target) observer.observe(target);
+
+    return () => observer.disconnect();
+  }, [nextCursor, hasMore, loading, isFetchingMore]);
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -326,6 +355,16 @@ const NovelsPageAPI = () => {
                   </div>
                 ) : (
                    <p className="text-gray-500 ml-4">No completed novels found.</p>
+                )}
+              </div>
+
+              {/* Infinite Scroll Trigger */}
+              <div id="infinite-scroll-trigger" className="h-20 flex items-center justify-center">
+                {isFetchingMore && (
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-neon-gold"></div>
+                )}
+                {!hasMore && novels.length > 0 && (
+                  <p className="text-muted text-sm font-medium">✨ You've reached the end of the collection</p>
                 )}
               </div>
             </>

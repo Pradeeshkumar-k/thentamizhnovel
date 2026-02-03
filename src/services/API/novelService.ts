@@ -79,11 +79,13 @@ const novelService = {
   },
 
   /**
-   * Get all novels
-   * @returns {Promise} Array of novels
+   * Get all novels with cursor pagination
+   * @param {string} cursor - Optional cursor for pagination
+   * @param {Object} filters - Search and filtering options
+   * @returns {Promise} Novels and next cursor
    */
-  getAllNovels: async (filters: any = {}) => {
-    const cacheKey = `novels-${JSON.stringify(filters)}`;
+  getAllNovels: async (filters: any = {}, cursor?: string) => {
+    const cacheKey = `novels-${JSON.stringify(filters)}-${cursor || 'first'}`;
     const cached = CACHE.get(cacheKey);
 
     if (cached && (Date.now() - cached.timestamp < LIST_CACHE_TTL)) {
@@ -92,16 +94,16 @@ const novelService = {
 
     return dedupe(cacheKey, async () => {
       try {
-        // No _t here to enable proper caching
-        const params = { ...filters }; 
+        const params = { ...filters, cursor }; 
         const response = await apiClient.get(API_ENDPOINTS.GET_NOVELS, { params });
         
-        // Fix: Normalize Data Structure (Backend -> Frontend)
+        // Data is already normalized by backend now, but keep normalizeNovel for safety
         const normalizedNovels = (response.data.novels || []).map(normalizeNovel);
 
         const result = {
           ...response.data,
-          novels: normalizedNovels
+          novels: normalizedNovels,
+          nextCursor: response.data.nextCursor
         };
 
         // Set Cache

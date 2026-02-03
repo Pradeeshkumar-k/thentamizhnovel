@@ -55,6 +55,7 @@ export interface Novel {
   summary_en?: string; // Frontend alias
   novel_summary?: string; // Frontend alias
   author: string;
+  authorName?: string;
   authorEnglish?: string;
   coverImage: string;
   coverImageUrl?: string; // Backend field match

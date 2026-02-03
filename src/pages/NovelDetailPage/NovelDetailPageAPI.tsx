@@ -316,7 +316,7 @@ const NovelDetailPageAPI = () => {
                 
                 {/* Meta Row: Author & Genres */}
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
-                    <span className="text-primary dark:text-gray-200 font-bold bg-surface/30 px-3 py-1 rounded-lg border border-border/50 shadow-sm">{novel.author}</span>
+                    <span className="text-primary dark:text-gray-200 font-bold bg-surface/30 px-3 py-1 rounded-lg border border-border/50 shadow-sm">{novel.authorName || novel.author}</span>
                     
                     {novel.genre && (
                       <div className="flex flex-wrap gap-2">
