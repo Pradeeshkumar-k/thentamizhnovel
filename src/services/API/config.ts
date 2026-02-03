@@ -39,6 +39,7 @@ export const API_ENDPOINTS = {
   GET_NOVELS_BY_GENRE: '/novels/genre',
   GET_NOVELS_BY_AUTHOR: '/novels/author',
   SEARCH_NOVELS: '/novels/search',
+  INCREMENT_NOVEL_VIEW: '/novels/:id/view',
 
   // Specific Novel - ராட்சசனே எனை வதைப்பதேனடா!
   GET_RATSASANE_NOVEL: '/novels/ratsasane-enai-vathaippathena',
@@ -46,6 +47,7 @@ export const API_ENDPOINTS = {
   // Chapters
   GET_NOVEL_CHAPTERS: '/novels/:id/chapters',
   GET_CHAPTER: '/novels/:novelId/chapters/:chapterId',
+  INCREMENT_CHAPTER_VIEW: '/chapters/:id/view',
 
   // Novel Interactions
   BOOKMARK_NOVEL: '/novels/bookmark',

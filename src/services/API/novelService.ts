@@ -246,6 +246,32 @@ const novelService = {
   },
 
   /**
+   * Increment view count for a novel
+   * @param {string|number} id - Novel ID
+   */
+  incrementNovelView: async (id: string | number) => {
+    try {
+      const endpoint = API_ENDPOINTS.INCREMENT_NOVEL_VIEW.replace(':id', id.toString());
+      await apiClient.post(endpoint);
+    } catch (error) {
+      console.error('Error incrementing novel view:', error);
+    }
+  },
+
+  /**
+   * Increment view count for a chapter
+   * @param {string|number} id - Chapter ID
+   */
+  incrementChapterView: async (id: string | number) => {
+    try {
+      const endpoint = API_ENDPOINTS.INCREMENT_CHAPTER_VIEW.replace(':id', id.toString());
+      await apiClient.post(endpoint);
+    } catch (error) {
+      console.error('Error incrementing chapter view:', error);
+    }
+  },
+
+  /**
    * Bookmark a novel
    * @param {string|number} novelId - The ID of the novel
    * @returns {Promise} Bookmark status

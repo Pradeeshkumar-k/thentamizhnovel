@@ -112,6 +112,8 @@ const ChapterPageAPI = () => {
           
           setLoading(false);
           setError(null);
+          // Increment views in background
+          novelService.incrementChapterView(chapterId);
         })
         .catch(err => {
           console.error(err);

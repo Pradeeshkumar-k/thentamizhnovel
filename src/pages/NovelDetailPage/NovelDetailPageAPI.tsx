@@ -126,6 +126,8 @@ const NovelDetailPageAPI = () => {
           }
 
           setError(null);
+          // Increment views in background
+          novelService.incrementNovelView(id);
         } catch (err) {
           console.error('Error fetching novel data:', err);
           if (isNewNovel) setError('Failed to load novel details. Please try again later.');
