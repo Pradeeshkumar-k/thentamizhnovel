@@ -38,6 +38,7 @@ const normalizeNovel = (n: any) => {
     descriptionEn: n.descriptionEn || n.description_en || n.summary_en || n.descriptionEnglish || n.summary_english || (typeof n.description === 'object' ? n.description.english || n.description.en : undefined),
     coverImage: n.coverImageUrl || n.coverImage,
     author: typeof n.author === 'object' ? n.author?.name : n.author,
+    totalChapters: n.totalChapters ?? n._count?.chapters ?? 0,
     stats: stats
   };
 };

@@ -106,10 +106,7 @@ const AppRoutes = () => {
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-        {/* Specific routes first (for hardcoded novel pages) */}
-        <Route path="/novel/1" element={<ThenmozhiNovelPage />} />
-        <Route path="/novel/3" element={<MohanaNovelPage />} />
-        {/* Generic routes after specific ones */}
+        {/* Generic routes */}
         <Route path="/novel/:id" element={<NovelDetailPage />} />
         <Route path="/novel/:novelId/chapter/:chapterId" element={<ChapterPage />} />
         <Route path="/novel/:novelId/chapter/:chapterId/comments" element={<ChapterCommentsPage />} />

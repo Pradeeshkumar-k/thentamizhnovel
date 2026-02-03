@@ -117,8 +117,12 @@ const NovelDetailPageAPI = () => {
           setIsLiked(!!novelResponse.isLiked);
           setIsBookmarked(!!novelResponse.isBookmarked);
           
-          if (chaptersResponse.chapters) {
+          if (chaptersResponse.chapters && chaptersResponse.chapters.length > 0) {
             setChapters(chaptersResponse.chapters);
+          } else if (novelResponse.chapters && novelResponse.chapters.length > 0) {
+            setChapters(novelResponse.chapters);
+          } else {
+            setChapters([]);
           }
 
           setError(null);
