@@ -105,42 +105,28 @@ const ChapterPageAPI = () => {
     }).catch(err => console.error(err));
   }, [novelId]);
 
-  // Effect 2: Chapter (language dependent with Fix 6 optimization)
+  // Effect 2: Chapter (language dependent - optimized)
   useEffect(() => {
     if (!novelId || !chapterId) return;
     
-    // Fix 6: Only refetch if: contentEn is null AND user explicitly requests English
-    const isEnglishRequested = language === 'english';
-    const hasEnglishContent = !!(chapter?.contentEn);
-    const isNewChapter = !chapter || (chapter.id !== chapterId && chapter._id !== chapterId);
-
-    if (isNewChapter || (isEnglishRequested && !hasEnglishContent)) {
-      setLoading(true);
-      
-      novelService.getChapter(novelId, chapterId, language)
-        .then(data => {
-          setChapter(prev => {
-            if (prev && (prev.id === chapterId || prev._id === chapterId)) {
-              return { ...prev, ...data };
-            }
-            return data;
-          });
-          
-          setLikesCount(data._count?.likes || 0);
-          setIsLiked(!!(data.isLiked || data.likedByMe));
-          setCommentsCount(data._count?.comments || 0);
-          
-          setLoading(false);
-          setError(null);
-          // View increment moved to useChapterView hook
-        })
-        .catch(err => {
-          console.error(err);
-          setError('Failed to load chapter.');
-          setLoading(false);
-        });
-    }
-  }, [novelId, chapterId, language, chapter?.id, chapter?._id, chapter?.contentEn]);
+    setLoading(true);
+    
+    novelService.getChapter(novelId, chapterId, language)
+      .then(data => {
+        setChapter(data);
+        setLikesCount(data._count?.likes || 0);
+        setIsLiked(!!(data.isLiked || data.likedByMe));
+        setCommentsCount(data._count?.comments || 0);
+        
+        setLoading(false);
+        setError(null);
+      })
+      .catch(err => {
+        console.error(err);
+        setError('Failed to load chapter.');
+        setLoading(false);
+      });
+  }, [novelId, chapterId, language]);
 
   // Effect 3: Chapters list (once per ID)
   useEffect(() => {
