@@ -43,6 +43,7 @@ const NovelsPageAPI = () => {
         const query = searchParams.get('search');
         
         const response = await novelService.getAllNovels({ search: query || undefined });
+        console.log('Fetched Novels Data:', response.novels);
         setNovels(response.novels || []);
         setNextCursor(response.nextCursor || null);
         setHasMore(!!response.nextCursor);
