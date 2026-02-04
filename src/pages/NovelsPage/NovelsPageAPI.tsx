@@ -48,8 +48,12 @@ const NovelsPageAPI = () => {
         setHasMore(!!response.nextCursor);
         setError(null);
       } catch (err: any) {
-        console.error('Error fetching novels:', err);
-        setError(`Failed to load: ${err.message || 'Unknown error'}`);
+        console.error('Error fetching novels (Full Object):', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
+        if (err.response) {
+            console.error('Server Error Response:', err.response.data);
+            console.error('Server Status:', err.response.status);
+        }
+        setError(`Failed to load: ${err.response?.data?.error || err.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
       }
@@ -73,8 +77,12 @@ const NovelsPageAPI = () => {
       setNovels(prev => [...prev, ...newNovels]);
       setNextCursor(response.nextCursor || null);
       setHasMore(!!response.nextCursor);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching more novels:', err);
+      if (err.response) {
+        console.error('Server Error Response:', err.response.data);
+        console.error('Server Status:', err.response.status);
+      }
     } finally {
       setIsFetchingMore(false);
     }
