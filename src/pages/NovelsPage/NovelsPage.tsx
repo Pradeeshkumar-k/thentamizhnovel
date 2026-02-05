@@ -100,7 +100,7 @@ const NovelsPage = () => {
       <Header onLoginClick={handleLoginClick} />
       <Carousel />
       <NovelsCard sectionTitle="Continue Reading" novels={continueReadingNovels} />
-      <NovelsCard sectionTitle="Latest Launch" novels={latestNovels} />
+      <NovelsCard sectionTitle="Latest Update" novels={latestNovels} />
       <NovelsCard sectionTitle="Ongoing Novels" novels={ongoingNovels} />
       <NovelsCard sectionTitle="Completed Novels" novels={completedNovels} />
 

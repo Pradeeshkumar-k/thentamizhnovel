@@ -196,7 +196,7 @@ const NovelsPageAPI = () => {
               {novels.length > 0 && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
-                    Latest Launch
+                    Latest Update
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.slice(0, 10).map(novel => (
