@@ -143,7 +143,7 @@
   background: var(--color-surface);
   border: 1px solid var(--glass-border);
   border-radius: 0.75rem;
-  overflow: hidden;
+  // overflow: hidden; // Removed to allow dropdowns to overflow
   box-shadow: var(--shadow-sm);
 }
 
