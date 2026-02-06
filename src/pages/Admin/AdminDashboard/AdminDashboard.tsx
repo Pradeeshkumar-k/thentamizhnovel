@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getDashboardStats, deleteActivityLog } from '../../../services/API/adminService';
 import StatCard from '../../../components/admin/StatCard/StatCard';
-import { Book, FileText, Users, Star, FilePen, PlusCircle, List, RefreshCw } from 'lucide-react';
+import { Book, FileText, Users, Star, FilePen, PlusCircle, List, RefreshCw, MoreVertical, Eye, Trash2 } from 'lucide-react';
 import styles from './AdminDashboard.module.scss';
 import { DashboardStats } from '../../../types';
 import { motion } from 'framer-motion';
@@ -10,9 +10,15 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDashboardStats();
+
+    // Close dropdown when clicking outside
+    const handleClickOutside = () => setActiveDropdownId(null);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const fetchDashboardStats = async () => {
@@ -153,15 +159,37 @@ const AdminDashboard = () => {
                     {new Date(activity.timestamp).toLocaleString()}
                   </p>
                 </div>
-                {/* Delete Button */}
-                <button 
-                  onClick={() => handleDeleteActivity(String(activity.id))}
-                  className={styles.deleteActivityButton}
-                  title="Delete Activity Log"
-                >
-                  <span className="sr-only">Delete</span>
-                  ❌ 
-                </button>
+                {/* Action Dropdown */}
+                <div className={styles.actionDropdownContainer} onClick={(e) => e.stopPropagation()}>
+                    <button 
+                        className={styles.dropdownTrigger}
+                        onClick={() => setActiveDropdownId(activeDropdownId === String(activity.id) ? null : String(activity.id))}
+                    >
+                        <MoreVertical size={18} />
+                    </button>
+                    
+                    {activeDropdownId === String(activity.id) && (
+                        <div className={styles.dropdownMenu}>
+                            <button 
+                                className={styles.dropdownItem}
+                                onClick={() => {
+                                    alert(`View details for: ${activity.action}`);
+                                    setActiveDropdownId(null);
+                                }}
+                            >
+                                <Eye size={14} />
+                                <span>View Details</span>
+                            </button>
+                            <button 
+                                className={`${styles.dropdownItem} ${styles.delete}`}
+                                onClick={() => handleDeleteActivity(String(activity.id))}
+                            >
+                                <Trash2 size={14} />
+                                <span>Delete Log</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
               </div>
             ))
           ) : (
