@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useInfiniteQuery } from '@tanstack/react-query'; // Import React Query
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { translations } from '../../translations';
@@ -23,80 +24,48 @@ const NovelsPageAPI = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  // Lazy Initialization of State
-  const [novels, setNovels] = useState<any[]>([]);
-  const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(true);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-
-  // Loading is true only on first load
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  
   const t = translations[language as keyof typeof translations];
 
-  // Initial Fetch Logic
-  useEffect(() => {
-    const fetchInitialNovels = async () => {
-      try {
-        setLoading(true);
+  // ==========================================
+  // React Query Implementation
+  // ==========================================
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error: queryError
+  } = useInfiniteQuery({
+    queryKey: ['novels', location.search],
+    queryFn: async ({ pageParam = null }) => {
         const searchParams = new URLSearchParams(location.search);
         const query = searchParams.get('search');
-        
-        const response = await novelService.getAllNovels({ search: query || undefined });
-        console.log('Fetched Novels Data:', response.novels);
-        setNovels(response.novels || []);
-        setNextCursor(response.nextCursor || null);
-        setHasMore(!!response.nextCursor);
-        setError(null);
-      } catch (err: any) {
-        console.error('Error fetching novels (Full Object):', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
-        if (err.response) {
-            console.error('Server Error Response:', err.response.data);
-            console.error('Server Status:', err.response.status);
-        }
-        setError(`Failed to load: ${err.response?.data?.error || err.message || 'Unknown error'}`);
-      } finally {
-        setLoading(false);
-      }
-    };
+        // Ensure novelService.getAllNovels accepts pageParam as cursor.
+        // Assuming signature: getAllNovels(params, cursor)
+        return novelService.getAllNovels({ search: query || undefined }, (pageParam as unknown) as string | undefined);
+    },
+    getNextPageParam: (lastPage: any) => lastPage.nextCursor || undefined,
+    initialPageParam: null,
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+  });
 
-    fetchInitialNovels();
-  }, [location.search]);
+  // Flatten the pages into a single array of novels
+  const novels = data?.pages.flatMap((page: any) => page.novels) || [];
+  const loading = isLoading;
+  // Format error message
+  const errorMessage = isError ? ((queryError as any)?.response?.data?.error || (queryError as any)?.message || 'Unknown error') : null;
 
-  // Load More Function
-  const loadMore = async () => {
-    if (!nextCursor || isFetchingMore) return;
-    
-    try {
-      setIsFetchingMore(true);
-      const searchParams = new URLSearchParams(location.search);
-      const query = searchParams.get('search');
-      
-      const response = await novelService.getAllNovels({ search: query || undefined }, nextCursor);
-      const newNovels = response.novels || [];
-      
-      setNovels(prev => [...prev, ...newNovels]);
-      setNextCursor(response.nextCursor || null);
-      setHasMore(!!response.nextCursor);
-    } catch (err: any) {
-      console.error('Error fetching more novels:', err);
-      if (err.response) {
-        console.error('Server Error Response:', err.response.data);
-        console.error('Server Status:', err.response.status);
-      }
-    } finally {
-      setIsFetchingMore(false);
-    }
-  };
-
-  // Infinite Scroll Trigger (Simplified Intersection Observer)
+  // Infinite Scroll Trigger
   useEffect(() => {
-    if (!hasMore || loading) return;
+    if (!hasNextPage || isFetchingNextPage) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !isFetchingMore) {
-          loadMore();
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
         }
       },
       { threshold: 0.1 }
@@ -106,7 +75,7 @@ const NovelsPageAPI = () => {
     if (target) observer.observe(target);
 
     return () => observer.disconnect();
-  }, [nextCursor, hasMore, loading, isFetchingMore]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -133,9 +102,9 @@ const NovelsPageAPI = () => {
             <div className="space-y-12">
                <NovelGridSkeleton count={10} />
             </div>
-          ) : error ? (
+          ) : isError ? (
             <div className="flex flex-col items-center justify-center p-8 bg-red-900/20 border border-red-500/50 rounded-xl text-center">
-              <p className="text-red-300 text-lg mb-4">{error}</p>
+              <p className="text-red-300 text-lg mb-4">{errorMessage}</p>
               <button 
                 onClick={() => window.location.reload()}
                 className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
@@ -152,7 +121,7 @@ const NovelsPageAPI = () => {
                     Continue Reading
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {novels.slice(0, 4).map((novel, index) => (
+                    {novels.slice(0, 4).map((novel: any, index: number) => (
                       <motion.div 
                         key={novel.id || novel._id}
                         whileHover={{ scale: 1.05 }}
@@ -199,7 +168,7 @@ const NovelsPageAPI = () => {
                     Latest Update
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {novels.slice(0, 10).map(novel => (
+                    {novels.slice(0, 10).map((novel: any) => (
                       <motion.div 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
@@ -256,9 +225,9 @@ const NovelsPageAPI = () => {
                 <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                   Ongoing Novels
                 </h2>
-                {novels.filter(n => n.status !== 'COMPLETED').length > 0 ? (
+                {novels.filter((n: any) => n.status !== 'COMPLETED').length > 0 ? (
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {novels.filter(n => n.status !== 'COMPLETED').map(novel => (
+                    {novels.filter((n: any) => n.status !== 'COMPLETED').map((novel: any) => (
                       <motion.div 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
@@ -317,9 +286,9 @@ const NovelsPageAPI = () => {
                 <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                   Completed Novels
                 </h2>
-                {novels.filter(n => n.status === 'COMPLETED').length > 0 ? (
+                {novels.filter((n: any) => n.status === 'COMPLETED').length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
-                    {novels.filter(n => n.status === 'COMPLETED').map(novel => (
+                    {novels.filter((n: any) => n.status === 'COMPLETED').map((novel: any) => (
                       <motion.div 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
@@ -369,10 +338,10 @@ const NovelsPageAPI = () => {
 
               {/* Infinite Scroll Trigger */}
               <div id="infinite-scroll-trigger" className="h-20 flex items-center justify-center">
-                {isFetchingMore && (
+                {isFetchingNextPage && (
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-neon-gold"></div>
                 )}
-                {!hasMore && novels.length > 0 && (
+                {!hasNextPage && novels.length > 0 && (
                   <p className="text-muted text-sm font-medium">✨ You've reached the end of the collection</p>
                 )}
               </div>

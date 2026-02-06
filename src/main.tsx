@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import ScrollToTop from './components/common/ScrollToTop'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './styles/index.scss'
 import App from './App'
 
@@ -49,6 +50,17 @@ console.log = (...args) => {
 }
 
 console.info('✅ Console filter enabled - Extension errors suppressed. Your app is working perfectly!')
+// Configure Query Client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 const rootElement = document.getElementById('root');
 if (!rootElement) throw new Error('Failed to find root element');
@@ -57,10 +69,12 @@ createRoot(rootElement).render(
   // <StrictMode>
     <LanguageProvider>
       <ThemeProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <App />
-        </BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <App />
+          </BrowserRouter>
+        </QueryClientProvider>
       </ThemeProvider>
     </LanguageProvider>
   // </StrictMode>,
