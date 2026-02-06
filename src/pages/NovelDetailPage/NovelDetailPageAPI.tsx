@@ -10,6 +10,7 @@ import novelService from '../../services/API/novelService';
 import { Novel, Chapter } from '../../types';
 import { motion } from 'framer-motion';
 import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
+import ChapterGridSkeleton from '../../components/common/ChapterGridSkeleton/ChapterGridSkeleton';
 
 // Image mappings (Using public assets to avoid Base64)
 const coverImageMap = {
@@ -245,7 +246,25 @@ const NovelDetailPageAPI = () => {
       <div className="min-h-screen bg-bg-primary pt-36 px-4">
         <Header onLoginClick={handleLoginClick} />
         <div className="max-w-6xl mx-auto">
-          <NovelGridSkeleton count={1} />
+             {/* Novel Info Skeleton */}
+             <div className="flex flex-col md:flex-row gap-8 mb-12 animate-pulse">
+                <div className="w-48 sm:w-56 md:w-64 lg:w-72 aspect-[2/3] bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+                <div className="flex-1 space-y-4 py-4">
+                    <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
+                    <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/4"></div>
+                    <div className="space-y-2 pt-4">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+                    </div>
+                </div>
+             </div>
+             
+             {/* Chapters Skeleton */}
+             <div className="mb-6">
+                 <div className="h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
+                 <ChapterGridSkeleton count={8} />
+             </div>
         </div>
       </div>
     );
