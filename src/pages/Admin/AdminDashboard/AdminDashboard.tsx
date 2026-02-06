@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [sectionExpanded, setSectionExpanded] = useState<boolean>(true);
+  const [sectionExpanded, setSectionExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     fetchDashboardStats();

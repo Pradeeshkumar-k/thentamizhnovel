@@ -41,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   }, []);
 
   // Determine current width for desktop
-  const sidebarWidth = isHovered ? 260 : 80;
+  const sidebarWidth = (isHovered || isOpen) ? 260 : 80;
 
   const menuItems = [
     {
