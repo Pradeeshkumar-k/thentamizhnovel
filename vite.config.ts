@@ -35,5 +35,9 @@ export default defineConfig({
   },
   esbuild: {
     logOverride: { 'css-syntax-error': 'silent' }
+  },
+  server: {
+    host: true, // Listen on all local IPs
+    port: 5173,
   }
 })
