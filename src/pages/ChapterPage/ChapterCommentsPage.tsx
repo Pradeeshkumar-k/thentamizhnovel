@@ -29,9 +29,12 @@ const ChapterCommentsPage = () => {
             if (!novelId || !chapterId) return;
             try {
                 setLoading(true);
-                const chapterData = await novelService.getChapter(novelId, chapterId, language);
-                if (chapterData) {
-                    setComments(chapterData.comments || []);
+                // Fetch comments specifically
+                const res = await commentService.getComments(chapterId);
+                if (res.success && res.data && res.data.success) {
+                    setComments(res.data.data || []);
+                } else {
+                    setComments([]);
                 }
             } catch (err) {
                 console.error('Error fetching comments:', err);

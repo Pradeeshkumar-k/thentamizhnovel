@@ -44,8 +44,10 @@ const CommentsModal: React.FC<CommentsModalProps> = ({ isOpen, onClose, novelId,
       setLoading(true);
       // Fix 1: Use dedicated comments API
       const res = await commentService.getComments(chapterId);
-      if (res.success) {
-        setComments(res.data || []);
+      if (res.success && res.data && res.data.success) {
+        setComments(res.data.data || []);
+      } else if (res.success && Array.isArray(res.data)) {
+         setComments(res.data);
       }
     } catch (err) {
       console.error('Error fetching comments:', err);
