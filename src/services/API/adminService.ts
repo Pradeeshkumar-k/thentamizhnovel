@@ -148,6 +148,25 @@ export const markAllNotificationsAsRead = async () => {
 };
 
 // ============================================
+// ACTIVITY LOG MANAGEMENT
+// ============================================
+
+export const deleteActivityLog = async (logId: string | number) => {
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await apiClient.delete(`/admin/dashboard/activity/${logId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Delete Activity Log Error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// ============================================
 // TRANSLATION UTILITY
 // ============================================
 

@@ -379,6 +379,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
 
   @media (max-width: 1024px) {
     gap: 1.25rem;
@@ -480,15 +487,17 @@
   input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 20px;
+    width: 100%;
+  max-width: 400px;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
     height: 20px;
     border: 2px solid var(--color-text-muted);
     border-radius: 50%;
     margin: 0;
     position: relative;
-    cursor: pointer;
-    background-color: transparent;
-    transition: all 0.2s ease;
 
     &:checked {
       border-color: #06b6d4; // Cyan border
@@ -671,6 +680,30 @@
   max-height: 400px;
   object-fit: contain;
   display: block;
+}
+
+.tableContainer {
+  background: var(--color-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  
+  // Responsive Table Scroll
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  @media (max-width: 768px) {
+    border-radius: 0.5rem;
+    margin: 0 -0.5rem; // Negative margin to flush with edges on small screens
+    width: calc(100% + 1rem);
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; // Force scroll on small screens
 }
 
 .removeImageButton {

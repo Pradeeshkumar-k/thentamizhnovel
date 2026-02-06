@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDashboardStats } from '../../../services/API/adminService';
+import { getDashboardStats, deleteActivityLog } from '../../../services/API/adminService';
 import StatCard from '../../../components/admin/StatCard/StatCard';
 import { Book, FileText, Users, Star, FilePen, PlusCircle, List, RefreshCw } from 'lucide-react';
 import styles from './AdminDashboard.module.scss';
@@ -31,6 +31,22 @@ const AdminDashboard = () => {
       setError(err.response?.data?.message || err.message || 'An error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteActivity = async (id: string) => {
+    if(!window.confirm("Are you sure you want to delete this activity log?")) return;
+
+    try {
+       await deleteActivityLog(id);
+       // Optimistically update UI
+       setStats(prev => prev ? ({
+          ...prev,
+          recentActivity: prev.recentActivity.filter(a => String(a.id) !== String(id))
+       }) : null);
+    } catch (err) {
+       console.error("Failed to delete activity:", err);
+       alert("Failed to delete activity log");
     }
   };
 
@@ -137,6 +153,15 @@ const AdminDashboard = () => {
                     {new Date(activity.timestamp).toLocaleString()}
                   </p>
                 </div>
+                {/* Delete Button */}
+                <button 
+                  onClick={() => handleDeleteActivity(String(activity.id))}
+                  className={styles.deleteActivityButton}
+                  title="Delete Activity Log"
+                >
+                  <span className="sr-only">Delete</span>
+                  ❌ 
+                </button>
               </div>
             ))
           ) : (
