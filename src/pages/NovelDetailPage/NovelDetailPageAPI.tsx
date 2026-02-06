@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { useReadingProgress } from '../../context/ReadingProgressContext'; // Added import
+import { useReadingProgress } from '../../context/ReadingProgressContext';
 
 import Header from '../../components/layout/Header/Header';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
 import { Novel, Chapter } from '../../types';
 import { motion } from 'framer-motion';
-import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 import ChapterGridSkeleton from '../../components/common/ChapterGridSkeleton/ChapterGridSkeleton';
 
 // Image mappings (Using public assets to avoid Base64)
@@ -30,16 +30,117 @@ const NovelDetailPageAPI = () => {
   const { user } = useAuth();
   const { language } = useLanguage();
   const navigate = useNavigate();
-  const { refreshLibrary } = useReadingProgress(); // Get refreshLibrary
+  const { refreshLibrary } = useReadingProgress();
+  const queryClient = useQueryClient();
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [novel, setNovel] = useState<Novel | null>(null);
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
+
+  // Queries
+  const { 
+    data: novel, 
+    isLoading: isNovelLoading, 
+    error: novelError 
+  } = useQuery({
+    queryKey: ['novel', id, language],
+    queryFn: () => novelService.getNovelById(id!, language),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  const { 
+    data: chaptersData, 
+    isLoading: isChaptersLoading 
+  } = useQuery({
+    queryKey: ['novel-chapters', id, language],
+    queryFn: () => novelService.getNovelChapters(id!, language),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  const chapters = chaptersData?.chapters || novel?.chapters || [];
+  const loading = isNovelLoading || isChaptersLoading;
+  const error = novelError ? (novelError as Error).message : null;
+
+  // View Increment
+  useEffect(() => {
+    if (id && novel) {
+        novelService.incrementNovelView(id);
+    }
+  }, [id, novel]);
+
+
+  // Mutations
+  const likeMutation = useMutation({
+    mutationFn: async (vars: { id: string, isLiked: boolean }) => {
+        if (!vars.isLiked) {
+            return novelService.likeNovel(vars.id);
+        } else {
+            return novelService.unlikeNovel(vars.id);
+        }
+    },
+    onMutate: async ({ id, isLiked }) => {
+        await queryClient.cancelQueries({ queryKey: ['novel', id, language] });
+        const previousNovel = queryClient.getQueryData(['novel', id, language]);
+
+        queryClient.setQueryData(['novel', id, language], (old: any) => {
+            if (!old) return old;
+            return {
+                ...old,
+                isLiked: !isLiked,
+                stats: {
+                    ...old.stats,
+                    likes: (old.stats?.likes || 0) + (isLiked ? -1 : 1)
+                }
+            };
+        });
+        return { previousNovel };
+    },
+    onError: (err, newTodo, context: any) => {
+        queryClient.setQueryData(['novel', id, language], context.previousNovel);
+        console.error('Like error:', err);
+    },
+    onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['novel', id, language] });
+    }
+  });
+
+  const bookmarkMutation = useMutation({
+    mutationFn: async (vars: { id: string, isBookmarked: boolean }) => {
+        if (!vars.isBookmarked) {
+            return novelService.bookmarkNovel(vars.id);
+        } else {
+            return novelService.removeBookmark(vars.id);
+        }
+    },
+    onMutate: async ({ id, isBookmarked }) => {
+        await queryClient.cancelQueries({ queryKey: ['novel', id, language] });
+        const previousNovel = queryClient.getQueryData(['novel', id, language]);
+
+        queryClient.setQueryData(['novel', id, language], (old: any) => {
+            if (!old) return old;
+            return {
+                ...old,
+                isBookmarked: !isBookmarked,
+                stats: {
+                    ...old.stats,
+                    bookmarks: (old.stats?.bookmarks || 0) + (isBookmarked ? -1 : 1)
+                }
+            };
+        });
+        return { previousNovel };
+    },
+    onError: (err, newTodo, context: any) => {
+        queryClient.setQueryData(['novel', id, language], context.previousNovel);
+        console.error('Bookmark error:', err);
+        alert(language === 'tamil' ? 'பிழை ஏற்பட்டது' : 'Error occurred');
+    },
+    onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['novel', id, language] });
+        refreshLibrary();
+    }
+  });
+
 
   // Helper functions to safely extract string values
   const getNovelTitle = (novel: Novel | null): string => {
@@ -66,14 +167,12 @@ const NovelDetailPageAPI = () => {
       if (typeof chapter.title === 'object' && (chapter.title.english || chapter.title.en)) {
         return chapter.title.english || chapter.title.en || '';
       }
-      // If no English found, use a fallback
       return `Chapter ${chapter.chapterNumber}`;
     }
     if (typeof chapter.title === 'string') return chapter.title;
     return chapter.title?.[language] || chapter.title?.tamil || chapter.title?.english || `Chapter ${chapter.chapterNumber}`;
   };
 
-  // Helper to format date
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Unknown Date';
     return new Date(dateString).toLocaleDateString(language === 'tamil' ? 'ta-IN' : 'en-US', {
@@ -83,162 +182,28 @@ const NovelDetailPageAPI = () => {
     });
   };
 
-  // Helper to calculate read time
   const calculateReadTime = (content?: string) => {
-    if (!content) return null; // Hide if no content
+    if (!content) return null;
     const wordsPerMinute = 200;
     const words = content.trim().split(/\s+/).length;
     const minutes = Math.ceil(words / wordsPerMinute);
     return `${minutes} min read`;
   };
 
-  // Fetch novel and chapters from API - Optimized with Fix 6
-  useEffect(() => {
-    const fetchNovelData = async () => {
-      if (!id) return;
+  const handleLoginClick = () => setIsLoginModalOpen(true);
+  const handleCloseLogin = () => setIsLoginModalOpen(false);
+  const handleChapterClick = (chapterId: string) => navigate(`/novel/${id}/chapter/${chapterId}`);
 
-      // Ensure we have data for the current language
-      const isEnglish = language === 'english';
-      const hasCorrectLangData = isEnglish 
-        ? !!(novel?.titleEn) 
-        : !!(novel && !novel.titleEn); // Weak check for Tamil, but better than nothing
-
-      const isNewNovel = !novel || (novel.id !== id && novel._id !== id);
-
-      if (isNewNovel || (isEnglish && !novel?.titleEn)) {
-        try {
-          if (isNewNovel) setLoading(true);
-
-          const [novelResponse, chaptersResponse] = await Promise.all([
-            novelService.getNovelById(id, language),
-            novelService.getNovelChapters(id, language)
-          ]);
-
-          setNovel(novelResponse);
-          setIsLiked(!!novelResponse.isLiked);
-          setIsBookmarked(!!novelResponse.isBookmarked);
-          
-          if (chaptersResponse.chapters && chaptersResponse.chapters.length > 0) {
-            setChapters(chaptersResponse.chapters);
-          } else if (novelResponse.chapters && novelResponse.chapters.length > 0) {
-            setChapters(novelResponse.chapters);
-          } else {
-            setChapters([]);
-          }
-
-          setError(null);
-          // Increment views in background
-          novelService.incrementNovelView(id);
-        } catch (err) {
-          console.error('Error fetching novel data:', err);
-          if (isNewNovel) setError('Failed to load novel details. Please try again later.');
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchNovelData();
-  }, [id, language, novel?.id, novel?._id, novel?.titleEn]);
-
-  // Sync bookmark state with library context on load could be added here
-  // But for now, we just implement the action.
-
-  const handleLoginClick = () => {
-    setIsLoginModalOpen(true);
+  const handleBookmark = () => {
+    if (!user) { handleLoginClick(); return; }
+    if (!id || !novel) return;
+    bookmarkMutation.mutate({ id, isBookmarked: !!novel.isBookmarked });
   };
 
-  const handleCloseLogin = () => {
-    setIsLoginModalOpen(false);
-  };
-
-  const handleChapterClick = (chapterId: string) => {
-    navigate(`/novel/${id}/chapter/${chapterId}`);
-  };
-
-
-
-  const handleBookmark = async () => {
-    if (!user) {
-      handleLoginClick();
-      return;
-    }
-    if (!id) return;
-
-    // Optimistic UI update
-    const previousState = isBookmarked;
-    setIsBookmarked(!previousState);
-
-    try {
-      if (!previousState) {
-          await novelService.bookmarkNovel(id);
-          // alert(language === 'tamil' ? 'புக்மார்க் சேர்க்கப்பட்டது' : 'Bookmarked successfully');
-      } else {
-          await novelService.removeBookmark(id);
-          // alert(language === 'tamil' ? 'புக்மார்க் நீக்கப்பட்டது' : 'Bookmark removed');
-      }
-      
-      // Update stats count locally
-      setNovel(prev => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          stats: {
-            ...prev.stats,
-            views: prev.stats?.views || 0,
-            likes: prev.stats?.likes || 0,
-            bookmarks: (prev.stats?.bookmarks || 0) + (previousState ? -1 : 1)
-          }
-        };
-      });
-
-      // Update library cache
-      refreshLibrary();
-
-    } catch (err) {
-      console.error('Error bookmarking novel:', err);
-      // Revert on error
-      setIsBookmarked(previousState);
-      alert(language === 'tamil' ? 'பிழை ஏற்பட்டது' : 'Error occurred');
-    }
-  };
-
-  const handleLike = async () => {
-    if (!user) {
-      handleLoginClick();
-      return;
-    }
-    if (!id) return;
-
-    // Optimistic UI
-    const previousState = isLiked;
-    setIsLiked(!previousState);
-
-    try {
-      if (!previousState) {
-        await novelService.likeNovel(id);
-      } else {
-        await novelService.unlikeNovel(id);
-      }
-      
-      // Update stats
-      setNovel(prev => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          stats: {
-             ...prev.stats,
-             views: prev.stats?.views || 0,
-             bookmarks: prev.stats?.bookmarks || 0,
-             likes: (prev.stats?.likes || 0) + (previousState ? -1 : 1)
-          }
-        };
-      });
-    } catch (err) {
-      console.error('Error toggling like:', err);
-      // Revert on error
-      setIsLiked(previousState);
-    }
+  const handleLike = () => {
+    if (!user) { handleLoginClick(); return; }
+    if (!id || !novel) return;
+    likeMutation.mutate({ id, isLiked: !!novel.isLiked });
   };
 
   if (loading) {
@@ -246,7 +211,6 @@ const NovelDetailPageAPI = () => {
       <div className="min-h-screen bg-bg-primary pt-36 px-4">
         <Header onLoginClick={handleLoginClick} />
         <div className="max-w-6xl mx-auto">
-             {/* Novel Info Skeleton */}
              <div className="flex flex-col md:flex-row gap-8 mb-12 animate-pulse">
                 <div className="w-48 sm:w-56 md:w-64 lg:w-72 aspect-[2/3] bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
                 <div className="flex-1 space-y-4 py-4">
@@ -259,8 +223,6 @@ const NovelDetailPageAPI = () => {
                     </div>
                 </div>
              </div>
-             
-             {/* Chapters Skeleton */}
              <div className="mb-6">
                  <div className="h-8 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
                  <ChapterGridSkeleton count={8} />
@@ -286,10 +248,11 @@ const NovelDetailPageAPI = () => {
   }
 
   const chapterImage = chapterImageMap[novel.author as keyof typeof chapterImageMap] || '/assets/episodes/Thenmozhi_episodes.jpg';
-  // Fix: Backend returns coverImageUrl. Frontend used coverImage.
   const rawCover = novel.coverImageUrl || novel.coverImage || '';
   const coverImage = (coverImageMap as any)[rawCover] || rawCover || '/assets/covers/Thenmozhi Card.jpg';
 
+  const isLiked = !!novel.isLiked;
+  const isBookmarked = !!novel.isBookmarked;
 
   return (
     <div className="min-h-screen bg-bg-primary text-primary pb-20">
@@ -345,7 +308,7 @@ const NovelDetailPageAPI = () => {
                     
                     {novel.genre && (
                       <div className="flex flex-wrap gap-2">
-                        {novel.genre.split(',').map((g, i) => (
+                        {novel.genre.split(',').map((g: string, i: number) => (
                           <span 
                             key={i} 
                             className="px-3 py-1 bg-neon-gold/5 border border-neon-gold/20 rounded-full text-xs font-bold text-neon-gold tracking-tight"
@@ -357,9 +320,7 @@ const NovelDetailPageAPI = () => {
                     )}
                 </div>
 
-
-
-                {/* Description Section - MOVED & RESTYLED */}
+                {/* Description Section */}
                 <div className="mb-8 w-full">
                     <h2 className="text-xl font-bold text-primary mb-3 border-l-4 border-neon-gold pl-3">
                         {language === 'tamil' ? 'கதை சுருக்கம்' : 'Story Summary'}
@@ -433,9 +394,7 @@ const NovelDetailPageAPI = () => {
             </div>
         </div>
 
-
-
-        {/* Chapters List - REFERENCE STYLE */}
+        {/* Chapters List */}
         <div className="max-w-4xl">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                 <span className="border-l-[6px] border-neon-gold pl-4">
@@ -444,11 +403,11 @@ const NovelDetailPageAPI = () => {
             </h2>
 
             <div className="flex flex-col gap-3">
-                {chapters.map((chapter) => (
+                {chapters.map((chapter: Chapter) => (
                     <motion.div
                         key={chapter.id || chapter._id}
-                        initial={false} // PERF: Disable initial animation
-                        whileHover={{ backgroundColor: 'rgba(30, 41, 59, 1)' }} // lighter slate on hover
+                        initial={false}
+                        whileHover={{ backgroundColor: 'rgba(30, 41, 59, 1)' }}
                         className="group relative flex items-center p-3 sm:p-4 bg-bg-secondary/80 border border-gray-800 hover:border-neon-gold/30 rounded-xl cursor-pointer transition-all duration-300"
                         onClick={() => handleChapterClick(chapter.id || chapter._id || '')}
                     >
