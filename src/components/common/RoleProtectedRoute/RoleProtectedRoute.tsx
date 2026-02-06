@@ -65,7 +65,9 @@ const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ children, allow
 
   // MOCK: For development, simulate ADMIN role
   // Remove this mock and use real user.role from backend
-  const userRole = user.role || 'ADMIN'; // MOCK - Replace with real user.role
+  // MOCK: For development, simulate ADMIN role
+  // Remove this mock and use real user.role from backend
+  const userRole = user.role; // FIXED: Do not default to ADMIN
 
   // Check if user's role is in the allowed roles
   const hasRequiredRole = allowedRoles.includes(userRole);
