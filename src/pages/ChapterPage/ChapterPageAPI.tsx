@@ -12,6 +12,7 @@ import { Chapter, Novel } from '../../types';
 import { motion } from 'framer-motion';
 import CommentsModal from '../../components/comments/CommentsModal';
 import API_BASE_URL from '../../services/API/config';
+import ChapterContentSkeleton from '../../components/common/ChapterContentSkeleton/ChapterContentSkeleton';
 
 // MANDATORY VIEW TRACKING HOOK
 export function useChapterView(chapterId: string | undefined) {
@@ -191,13 +192,22 @@ const ChapterPageAPI = () => {
     } catch (err) { console.error('Bookmark error', err); }
   };
 
+// ... (Move this import up manually to not break file structure in diff)
+// The tool works by replacing chunks. I will delete the misplaced import and add it to the top.
+// Actually, I can just delete it here and add it to the top in one go if I use multi_replace?
+// I will just use replace_file_content to remove the misplaced one first, then another call to add to top.
+// Or just do it in two steps.
+// Step 1: Remove the misplaced import and the surrounding loading block correction if needed.
+// Ah, the previous edit inserted `import ...` AND the loading block.
+// I need to fix the file to be valid.
+// I will replace the block I just inserted with JUST the loading logic, and then add the import at the top.
   if (loading) {
-    return (
-      <div className="min-h-screen bg-bg-primary text-primary flex justify-center items-center">
-        <Header onLoginClick={handleLoginClick} />
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-neon-gold"></div>
-      </div>
-    );
+     return (
+        <>
+            <Header onLoginClick={handleLoginClick} />
+            <ChapterContentSkeleton />
+        </>
+     );
   }
 
   if (error || !chapter) {
