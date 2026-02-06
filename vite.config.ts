@@ -7,7 +7,10 @@ export default defineConfig({
   plugins: [
     react(),
     ViteImageOptimizer({
-      /* pass your config */
+      jpg: { quality: 80 },
+      jpeg: { quality: 80 },
+      png: { quality: 80 },
+      webp: { quality: 80, lossless: true },
     }),
   ],
   css: {
