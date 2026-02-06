@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getDashboardStats, deleteActivityLog } from '../../../services/API/adminService';
+import { getDashboardStats } from '../../../services/API/adminService';
 import StatCard from '../../../components/admin/StatCard/StatCard';
-import { Book, FileText, Users, Star, FilePen, PlusCircle, List, RefreshCw, MoreVertical, Eye, Trash2 } from 'lucide-react';
+import { Book, FileText, Users, Star, FilePen, PlusCircle, List, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './AdminDashboard.module.scss';
 import { DashboardStats } from '../../../types';
 import { motion } from 'framer-motion';
@@ -10,15 +10,10 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
+  const [sectionExpanded, setSectionExpanded] = useState<boolean>(true);
 
   useEffect(() => {
     fetchDashboardStats();
-
-    // Close dropdown when clicking outside
-    const handleClickOutside = () => setActiveDropdownId(null);
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const fetchDashboardStats = async () => {
@@ -40,21 +35,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeleteActivity = async (id: string) => {
-    if(!window.confirm("Are you sure you want to delete this activity log?")) return;
-
-    try {
-       await deleteActivityLog(id);
-       // Optimistically update UI
-       setStats(prev => prev ? ({
-          ...prev,
-          recentActivity: prev.recentActivity.filter(a => String(a.id) !== String(id))
-       }) : null);
-    } catch (err) {
-       console.error("Failed to delete activity:", err);
-       alert("Failed to delete activity log");
-    }
-  };
+  /* handleDeleteActivity removed as requested */
 
   if (error) {
     return (
@@ -133,8 +114,20 @@ const AdminDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h2 className={styles.sectionTitle}>Recent Activity</h2>
-        <div className={styles.activityList}>
+        <div className={styles.sectionHeader} onClick={() => setSectionExpanded(!sectionExpanded)}>
+            <h2 className={styles.sectionTitle}>Recent Activity</h2>
+            <button className={styles.expandButton}>
+                {sectionExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </button>
+        </div>
+
+        {sectionExpanded && (
+        <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className={styles.activityList}
+        >
           {loading ? (
              <div className="divide-y divide-white/5">
                 {[1, 2, 3].map((i) => (
@@ -159,43 +152,13 @@ const AdminDashboard = () => {
                     {new Date(activity.timestamp).toLocaleString()}
                   </p>
                 </div>
-                {/* Action Dropdown */}
-                <div className={styles.actionDropdownContainer} onClick={(e) => e.stopPropagation()}>
-                    <button 
-                        className={styles.dropdownTrigger}
-                        onClick={() => setActiveDropdownId(activeDropdownId === String(activity.id) ? null : String(activity.id))}
-                    >
-                        <MoreVertical size={18} />
-                    </button>
-                    
-                    {activeDropdownId === String(activity.id) && (
-                        <div className={styles.dropdownMenu}>
-                            <button 
-                                className={styles.dropdownItem}
-                                onClick={() => {
-                                    alert(`View details for: ${activity.action}`);
-                                    setActiveDropdownId(null);
-                                }}
-                            >
-                                <Eye size={14} />
-                                <span>View Details</span>
-                            </button>
-                            <button 
-                                className={`${styles.dropdownItem} ${styles.delete}`}
-                                onClick={() => handleDeleteActivity(String(activity.id))}
-                            >
-                                <Trash2 size={14} />
-                                <span>Delete Log</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
               </div>
             ))
           ) : (
              <div className="p-12 text-center text-secondary font-medium opacity-50 italic">No recent activity detected.</div>
           )}
-        </div>
+        </motion.div>
+        )}
       </motion.div>
 
       {/* Quick Actions */}
