@@ -129,6 +129,29 @@ const ChapterPageAPI = () => {
       });
   }, [novelId, chapterId, language]);
 
+  // Effect: Polling for translation
+  useEffect(() => {
+    if (!novelId || !chapterId || language !== 'english' || !chapter) return;
+
+    // Check if we need to poll: English requested, but no English content, and backend says it's translating
+    const needsPolling = !chapter.contentEn && !chapter.content_en && chapter.isTranslating;
+
+    if (!needsPolling) return;
+
+    const pollInterval = setInterval(() => {
+      novelService.getChapter(novelId, chapterId, 'english')
+        .then(data => {
+          if (data.contentEn || data.content_en || !data.isTranslating) {
+            setChapter(data); // Update with new content
+            // If we have content now, the effect will re-run and stop polling naturally (or we can clear here)
+          }
+        })
+        .catch(console.error);
+    }, 3000);
+
+    return () => clearInterval(pollInterval);
+  }, [novelId, chapterId, language, chapter?.isTranslating, chapter?.contentEn]);
+
   // Effect 3: Chapters list (once per ID)
   useEffect(() => {
     if (!novelId) return;
@@ -228,6 +251,9 @@ const ChapterPageAPI = () => {
   const contentToDisplay = language === 'english' 
     ? (chapter.contentEn || chapter.content_en || chapter.content) 
     : chapter.content;
+
+  const isTranslating = language === 'english' && !chapter.contentEn && !chapter.content_en && chapter.isTranslating;
+
   const contentParagraphs = (contentToDisplay || '').split('\n\n');
 
   return (
@@ -273,14 +299,23 @@ const ChapterPageAPI = () => {
 
         {/* Story Content */}
         <article className="prose prose-lg max-w-none mb-16 dark:prose-invert">
-          {contentParagraphs.map((paragraph, index) => (
-            <p 
-              key={index} 
-              className="text-primary leading-8 mb-6 font-serif"
-            >
-              {paragraph}
-            </p>
-          ))}
+          {isTranslating ? (
+            <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-pulse">
+              <div className="w-12 h-12 border-4 border-neon-gold border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-lg text-muted font-serif italic">
+                Translating chapter to English... this may take a few moments.
+              </p>
+            </div>
+          ) : (
+            contentParagraphs.map((paragraph, index) => (
+              <p 
+                key={index} 
+                className="text-primary leading-8 mb-6 font-serif"
+              >
+                {paragraph}
+              </p>
+            ))
+          )}
         </article>
 
 

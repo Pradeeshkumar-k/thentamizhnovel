@@ -123,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                 height={140}
                 className="h-20 md:h-24 lg:h-24 w-auto cursor-pointer object-contain hover:scale-105 transition-transform duration-300 drop-shadow-sm" 
                 onClick={() => navigate('/')} 
-                fetchpriority="high"
+                fetchPriority="high"
                 decoding="async"
             />
 

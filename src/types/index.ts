@@ -100,6 +100,7 @@ export interface Chapter {
     likes: number;
     comments: number;
   };
+  isTranslating?: boolean;
 }
 
 // Reading Progress Types
