@@ -318,7 +318,7 @@ const NovelDetailPageAPI = () => {
 
                 {/* Description Section */}
                 <div className="mb-8 w-full">
-                    <h2 className="text-xl font-bold text-primary mb-3 border-l-4 border-neon-gold pl-3">
+                    <h2 className="text-xl font-bold text-primary mb-3">
                         {language === 'tamil' ? 'கதை சுருக்கம்' : 'Story Summary'}
                     </h2>
                     <div className="relative group">
@@ -393,7 +393,7 @@ const NovelDetailPageAPI = () => {
         {/* Chapters List */}
         <div className="max-w-4xl">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-                <span className="border-l-[6px] border-neon-gold pl-4">
+                <span>
                     {language === 'tamil' ? 'அத்தியாயங்கள்' : 'Chapters'} {chapters.length > 0 && `[` + chapters.length + `]`}
                 </span>
             </h2>
