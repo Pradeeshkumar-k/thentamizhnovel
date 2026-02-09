@@ -56,7 +56,9 @@ const NovelsPage = () => {
         const formattedNovels = allNovels.map((n: any) => ({
           id: n.id,
           title: n.title,
+          titleEnglish: n.titleEn, // Map English title
           author: n.author,
+          authorEnglish: n.authorEnglish, // Map English author
           image: n.coverImage || 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=500&fit=crop', // Fallback
           novelUrl: `/novel/${n.id}`, 
           status: n.status
@@ -82,14 +84,18 @@ const NovelsPage = () => {
     {
       id: 1,
       title: 'தாள்பாட்டும் தேவதை',
+      titleEnglish: 'Lullaby Angel',
       author: 'தென்மொழி',
+      authorEnglish: 'Thenmozhi',
       image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=400&h=500&fit=crop',
       novelUrl: '/novel/thaalpaattum-devadhai',
     },
     {
       id: 2,
       title: 'ராட்சசனே',
+      titleEnglish: 'Ratsasane',
       author: 'ஸ்வேதா',
+      authorEnglish: 'Swetha',
       image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&h=500&fit=crop',
       novelUrl: '/novel/raatchasane',
     }

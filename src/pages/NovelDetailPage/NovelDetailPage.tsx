@@ -3,12 +3,30 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/layout/Header/Header';
 import TotalChaptersSection from '../../components/TotalChaptersSection/TotalChaptersSection';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
+import { useReadingProgress } from '../../context/ReadingProgressContext';
 import styles from './NovelDetailPage.module.scss';
+import { useLanguage } from '../../context/LanguageContext';
 
 const NovelDetailPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { startReading } = useReadingProgress();
+  const { language } = useLanguage();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  // Sample data - replace with actual API data
+  const novelData = {
+    title: 'தாள்பாட்டும் தேவதை',
+    titleEnglish: 'Lullaby Angel', // Added English title
+    author: 'எழுதியவர் தென்மொழி',
+    authorEnglish: 'Thenmozhi',
+    status: 'ONGOING',
+    chapters: '45 அத்தியாயங்கள்',
+    views: '12,500 பார்வைகள்',
+    genre: 'Romance, Drama',
+    description: 'காதல், சோதனை, மற்றும் வெற்றியின் ஒரு அற்புதமான கதை',
+    coverImage: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=600&h=800&fit=crop',
+  };
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
@@ -19,6 +37,13 @@ const NovelDetailPage: React.FC = () => {
   };
 
   const handleStartReading = () => {
+    startReading(
+      id || '1', 
+      novelData.title, 
+      novelData.coverImage, 
+      novelData.author,
+      novelData.titleEnglish // Pass English title
+    );
     navigate(`/novel/${id}/chapter/1`);
   };
 
@@ -28,18 +53,6 @@ const NovelDetailPage: React.FC = () => {
 
   const handleBookmark = () => {
     console.log('Bookmarked');
-  };
-
-  // Sample data - replace with actual API data
-  const novelData = {
-    title: 'தாள்பாட்டும் தேவதை',
-    author: 'எழுதியவர் தென்மொழி',
-    status: 'ONGOING',
-    chapters: '45 அத்தியாயங்கள்',
-    views: '12,500 பார்வைகள்',
-    genre: 'Romance, Drama',
-    description: 'காதல், சோதனை, மற்றும் வெற்றியின் ஒரு அற்புதமான கதை',
-    coverImage: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?w=600&h=800&fit=crop',
   };
 
   // Sample chapters data - 45 chapters
@@ -73,10 +86,14 @@ const NovelDetailPage: React.FC = () => {
           {/* Right Side - Novel Information */}
           <div className={styles.novelInfo}>
             {/* Novel Title */}
-            <h1 className={styles.novelTitle}>{novelData.title}</h1>
+            <h1 className={styles.novelTitle}>
+              {language === 'english' ? novelData.titleEnglish : novelData.title}
+            </h1>
 
             {/* Author Name */}
-            <p className={styles.authorName}>{novelData.author}</p>
+            <p className={styles.authorName}>
+              {language === 'english' ? novelData.authorEnglish : novelData.author}
+            </p>
 
             {/* Status and Stats */}
             <div className={styles.statsRow}>
@@ -91,7 +108,10 @@ const NovelDetailPage: React.FC = () => {
 
             {/* Action Buttons */}
             <div className={styles.actionButtons}>
-              <button className={styles.startReadingBtn} onClick={handleStartReading}>
+              <button 
+                className={styles.startReadingBtn} 
+                onClick={handleStartReading}
+              >
                 <span className={styles.playIcon}>▶</span>
                 Read Now
               </button>

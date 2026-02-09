@@ -2,10 +2,14 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NovelsCard.module.scss';
 
+import { useLanguage } from '../../context/LanguageContext';
+
 interface Novel {
-  id: number;
+  id: number | string; // Updated to allow string IDs
   title: string;
+  titleEnglish?: string; // Added
   author: string;
+  authorEnglish?: string; // Added
   image: string;
   novelUrl: string;
 }
@@ -18,6 +22,7 @@ interface NovelsCardProps {
 const NovelsCard: React.FC<NovelsCardProps> = ({ sectionTitle, novels }) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { isEnglish } = useLanguage();
 
   const handleCardClick = (novelUrl: string) => {
     navigate(novelUrl);
@@ -46,11 +51,21 @@ const NovelsCard: React.FC<NovelsCardProps> = ({ sectionTitle, novels }) => {
                   height={175}
                   loading="lazy"
                   decoding="async"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes('placeholder')) {
+                        target.src = '/assets/images/placeholder.jpg';
+                    }
+                  }}
                 />
                 <div className={styles.overlay}></div>
                 <div className={styles.novelInfo}>
-                  <h3 className={styles.novelTitle}>{novel.title}</h3>
-                  <p className={styles.novelAuthor}>{novel.author}</p>
+                  <h3 className={styles.novelTitle}>
+                    {isEnglish && novel.titleEnglish ? novel.titleEnglish : novel.title}
+                  </h3>
+                  <p className={styles.novelAuthor}>
+                    {isEnglish && novel.authorEnglish ? novel.authorEnglish : novel.author}
+                  </p>
                 </div>
               </div>
             </div>

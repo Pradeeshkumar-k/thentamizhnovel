@@ -36,11 +36,11 @@ apiClient.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
-    if (error.response?.status === 401 && !original._retry) {
-      // 🟢 FIX: Do not attempt refresh/redirect for verifyToken check
-      if (original.url?.includes('/auth/verify')) {
-        return Promise.reject(error);
-      }
+      if (error.response?.status === 401 && !original._retry) {
+        // 🟢 FIX: Allow refresh even for verifyToken check to keep session alive
+        // if (original.url?.includes('/auth/verify')) {
+        //   return Promise.reject(error);
+        // }
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {

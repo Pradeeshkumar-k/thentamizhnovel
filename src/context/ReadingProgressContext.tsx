@@ -69,7 +69,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   }, [bookmarks, loading]);
 
   // Start reading a novel
-  const startReading = async (novelId: string, novelTitle: string, coverImage: string, author: string) => {
+  const startReading = async (novelId: string, novelTitle: string, coverImage: string, author: string, novelTitleEn?: string) => {
     // Don't add if already completed
     if (completedNovels.some(novel => novel.novelId === novelId)) {
       return;
@@ -82,6 +82,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
       const newNovel = {
         novelId,
         novelTitle,
+        novelTitleEn, // Store English title
         coverImage,
         author,
         lastChapter: 1,
@@ -99,6 +100,11 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
           // Silent fail - local state already updated
         }
       }
+    } else {
+       // If exists but English title is missing, update it
+       if (novelTitleEn && !ongoingNovels[existingIndex].novelTitleEn) {
+          setOngoingNovels(prev => prev.map((n, i) => i === existingIndex ? { ...n, novelTitleEn } : n));
+       }
     }
   };
 
@@ -124,7 +130,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   };
 
   // Mark novel as completed
-  const completeNovel = async (novelId: string, novelTitle: string, coverImage: string, author: string) => {
+  const completeNovel = async (novelId: string, novelTitle: string, coverImage: string, author: string, novelTitleEn?: string) => {
     // Remove from ongoing
     setOngoingNovels(prev => prev.filter(novel => novel.novelId !== novelId));
 
@@ -133,6 +139,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
       const completedNovel = {
         novelId,
         novelTitle,
+        novelTitleEn,
         coverImage,
         author,
         completedAt: new Date().toISOString()

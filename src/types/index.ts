@@ -156,9 +156,9 @@ export interface ReadingProgressContextType {
   completedNovels: CompletedNovel[];
   bookmarks: Novel[]; // Added for Library Caching
   isLoading: boolean; // Added for Library Loading State
-  startReading: (novelId: string, novelTitle: string, coverImage: string, author: string) => Promise<void>;
+  startReading: (novelId: string, novelTitle: string, coverImage: string, author: string, novelTitleEn?: string) => Promise<void>;
   updateProgress: (novelId: string, chapterId: number) => Promise<void>;
-  completeNovel: (novelId: string, novelTitle: string, coverImage: string, author: string) => Promise<void>;
+  completeNovel: (novelId: string, novelTitle: string, coverImage: string, author: string, novelTitleEn?: string) => Promise<void>;
   refreshLibrary: () => Promise<void>; // Added for manual refresh
   isOngoing: (novelId: string) => boolean;
   isCompleted: (novelId: string) => boolean;

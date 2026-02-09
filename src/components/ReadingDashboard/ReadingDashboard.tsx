@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { OngoingNovel, CompletedNovel } from '../../types';
 import readingProgressService from '../../services/API/readingProgressService';
 import { useLanguage } from '../../context/LanguageContext';
+import { useReadingProgress } from '../../context/ReadingProgressContext';
 import styles from './ReadingDashboard.module.scss';
 
 interface Stats {
@@ -19,6 +20,7 @@ interface NovelProgress extends OngoingNovel {
 const ReadingDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { isEnglish } = useLanguage();
+  const { ongoingNovels: contextOngoing } = useReadingProgress();
   const [ongoingNovels, setOngoingNovels] = useState<NovelProgress[]>([]);
   const [completedNovels, setCompletedNovels] = useState<NovelProgress[]>([]);
   const [stats, setStats] = useState<Stats>({
@@ -129,7 +131,15 @@ const ReadingDashboard: React.FC = () => {
 
                   <div className={styles.cardContent}>
                     <h3 className={styles.novelTitle}>
-                      {isEnglish && novel.novelTitleEn ? novel.novelTitleEn : novel.novelTitle}
+                      {(() => {
+                        // Priority: API English Title -> Context English Title -> API/Context Tamil Title
+                        if (isEnglish) {
+                           if (novel.novelTitleEn) return novel.novelTitleEn;
+                           const ctxNovel = contextOngoing.find(n => n.novelId === novel.novelId);
+                           if (ctxNovel?.novelTitleEn) return ctxNovel.novelTitleEn;
+                        }
+                        return novel.novelTitle;
+                      })()}
                     </h3>
                     <p className={styles.author}>{novel.author}</p>
 
