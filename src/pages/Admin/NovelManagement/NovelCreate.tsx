@@ -113,9 +113,9 @@ const NovelCreate = () => {
         let width = img.width;
         let height = img.height;
 
-        // Max dimensions
-        const MAX_WIDTH = 800;
-        const MAX_HEIGHT = 1200;
+        // Max dimensions (Reduced)
+        const MAX_WIDTH = 600;
+        const MAX_HEIGHT = 800;
 
         if (width > height) {
           if (width > MAX_WIDTH) {
@@ -134,11 +134,11 @@ const NovelCreate = () => {
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(img, 0, 0, width, height);
 
-        // Compress to JPEG 0.7
-        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+        // Compress to JPEG 0.6 (Values 0-1)
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
         
         // Check size
-        console.log(`Original: ${file.size}, Compressed: ${compressedBase64.length * 0.75}`); // Approx size
+        console.log(`Original: ${file.size}, Compressed: ${compressedBase64.length * 0.75}`);
 
         setImagePreview(compressedBase64);
         setFormData(prev => ({ ...prev, cover_image: compressedBase64 }));
@@ -190,7 +190,7 @@ const NovelCreate = () => {
 
     try {
       setLoading(true);
-      // Payload mapping with robust image fields
+      // Payload mapping
       const payload = {
         title: formData.title,
         titleEn: formData.title_en,
@@ -199,10 +199,7 @@ const NovelCreate = () => {
         descriptionEn: formData.summary_en,
         categories: formData.categories,
         status: formData.status,
-        coverImage: formData.cover_image,
-        // Add variations for backend compatibility
-        image: formData.cover_image, 
-        coverImageUrl: formData.cover_image
+        coverImage: formData.cover_image, // Send ONLY coverImage in camelCase
       };
 
       const response = await createNovel(payload);
@@ -216,8 +213,18 @@ const NovelCreate = () => {
       }
     } catch (err: any) {
       console.error('Create novel error:', err);
-      // Show specific error to help debugging (e.g. timeout, 413, 500)
-      const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Unknown error';
+      // Show specific error to help debugging
+      let errorMessage = 'Unknown error';
+      if (err.response) {
+        errorMessage = err.response.data?.error || err.response.data?.message || `Status: ${err.response.status}`;
+        // If data is an object, try to stringify it
+        if (typeof err.response.data === 'object') {
+           errorMessage += ` - ${JSON.stringify(err.response.data)}`;
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
       alert(`Error creating novel: ${errorMessage}`);
     } finally {
       setLoading(false);
