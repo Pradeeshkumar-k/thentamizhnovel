@@ -104,18 +104,46 @@ const NovelCreate = () => {
       return;
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB');
-      return;
-    }
-
-    // Create preview
+    // Compress image
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const result = reader.result as string;
-      setImagePreview(result);
-      setFormData(prev => ({ ...prev, cover_image: result }));
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        // Max dimensions
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 1200;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        // Compress to JPEG 0.7
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+        
+        // Check size
+        console.log(`Original: ${file.size}, Compressed: ${compressedBase64.length * 0.75}`); // Approx size
+
+        setImagePreview(compressedBase64);
+        setFormData(prev => ({ ...prev, cover_image: compressedBase64 }));
+      };
+      img.src = event.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -186,9 +214,11 @@ const NovelCreate = () => {
       } else {
         alert('Failed to create novel: ' + (response.error || 'Unknown error'));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Create novel error:', err);
-      alert('An error occurred while creating the novel');
+      // Show specific error to help debugging (e.g. timeout, 413, 500)
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || 'Unknown error';
+      alert(`Error creating novel: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
