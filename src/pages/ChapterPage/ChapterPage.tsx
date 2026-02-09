@@ -81,9 +81,11 @@ const ChapterPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [chapterId]);
 
-  // Update reading progress when chapter changes
+  // Update reading progress when chapter changes (Buffered 10s)
   useEffect(() => {
-    if (numNovelId && numChapterId) {
+    if (!numNovelId || !numChapterId) return;
+
+    const timer = setTimeout(() => {
       updateProgress(novelId!, numChapterId);
 
       // Check if this is the last chapter based on novel metadata
@@ -93,7 +95,9 @@ const ChapterPage = () => {
         // Mark as complete when reaching the last chapter
         completeNovel(novelId!, metadata.title, getNovelCoverImage(numNovelId), getNovelAuthor(numNovelId));
       }
-    }
+    }, 10000); // 10 seconds delay
+
+    return () => clearTimeout(timer);
   }, [numNovelId, numChapterId, updateProgress, completeNovel]);
 
   // Helper function to get novel cover image

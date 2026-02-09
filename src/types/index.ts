@@ -114,6 +114,7 @@ export interface ReadingProgress {
 export interface OngoingNovel {
   novelId: string;
   novelTitle: string;
+  novelTitleEn?: string;
   coverImage: string;
   author: string;
   lastChapter: number;
@@ -124,6 +125,7 @@ export interface OngoingNovel {
 export interface CompletedNovel {
   novelId: string;
   novelTitle: string;
+  novelTitleEn?: string;
   coverImage: string;
   author: string;
   completedAt: string;

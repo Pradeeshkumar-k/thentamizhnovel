@@ -8,9 +8,16 @@ const readingProgressService = {
    * @param {string} chapterId - Chapter ID
    * @returns {Promise} - User's reading progress data
    */
-  async getReadingProgress(novelId: string, chapterId: string) {
-    if (!novelId || !chapterId) return null;
-    const response = await apiClient.get(`${API_ENDPOINTS.GET_READING_PROGRESS}?novelId=${novelId}&chapterId=${chapterId}`);
+  async getReadingProgress(novelId?: string, chapterId?: string) {
+    let url = API_ENDPOINTS.GET_READING_PROGRESS;
+    if (novelId && chapterId) {
+      url += `?novelId=${novelId}&chapterId=${chapterId}`;
+    } else if (novelId) {
+      url += `?novelId=${novelId}`;
+    }
+    
+    // If no args, it fetches all progress (dashboard view)
+    const response = await apiClient.get(url);
     return response.data;
   },
 

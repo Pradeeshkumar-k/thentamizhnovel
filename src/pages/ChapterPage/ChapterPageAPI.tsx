@@ -162,11 +162,15 @@ const ChapterPageAPI = () => {
     ).catch(console.error);
   }, [novelId]);
 
-  // Effect 4: Progress Write
+  // Effect 4: Progress Write (Buffered 10s to prevent accidental clicks)
   useEffect(() => {
-    if (novelId && chapterId) {
+    if (!novelId || !chapterId) return;
+
+    const timer = setTimeout(() => {
         updateProgress(novelId, Number(chapterId));
-    }
+    }, 10000); // 10 seconds delay
+
+    return () => clearTimeout(timer);
   }, [novelId, chapterId]);
 
   // Handle navigation

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OngoingNovel, CompletedNovel } from '../../types';
 import readingProgressService from '../../services/API/readingProgressService';
+import { useLanguage } from '../../context/LanguageContext';
 import styles from './ReadingDashboard.module.scss';
 
 interface Stats {
@@ -17,6 +18,7 @@ interface NovelProgress extends OngoingNovel {
 
 const ReadingDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { isEnglish } = useLanguage();
   const [ongoingNovels, setOngoingNovels] = useState<NovelProgress[]>([]);
   const [completedNovels, setCompletedNovels] = useState<NovelProgress[]>([]);
   const [stats, setStats] = useState<Stats>({
@@ -45,16 +47,13 @@ const ReadingDashboard: React.FC = () => {
       setLoading(true);
       const progress = await readingProgressService.getReadingProgress();
       
-      if (progress && Array.isArray(progress)) {
-        const ongoing = progress.filter(p => !p.isCompleted);
-        const completed = progress.filter(p => p.isCompleted);
-
-        setOngoingNovels(ongoing);
-        setCompletedNovels(completed);
+      if (progress && progress.ongoing) {
+        setOngoingNovels(progress.ongoing);
+        setCompletedNovels(progress.completed || []);
         setStats({
-          totalNovels: progress.length,
-          startedNovels: ongoing.length,
-          completedNovels: completed.length
+          totalNovels: (progress.ongoing.length || 0) + (progress.completed?.length || 0),
+          startedNovels: progress.ongoing.length || 0,
+          completedNovels: progress.completed?.length || 0
         });
       }
     } catch (_error) {
@@ -129,7 +128,9 @@ const ReadingDashboard: React.FC = () => {
                   </div>
 
                   <div className={styles.cardContent}>
-                    <h3 className={styles.novelTitle}>{novel.novelTitle}</h3>
+                    <h3 className={styles.novelTitle}>
+                      {isEnglish && novel.novelTitleEn ? novel.novelTitleEn : novel.novelTitle}
+                    </h3>
                     <p className={styles.author}>{novel.author}</p>
 
                     {/* Progress Bar */}
@@ -192,7 +193,9 @@ const ReadingDashboard: React.FC = () => {
                 </div>
 
                 <div className={styles.cardContent}>
-                  <h3 className={styles.novelTitle}>{novel.novelTitle}</h3>
+                  <h3 className={styles.novelTitle}>
+                    {isEnglish && novel.novelTitleEn ? novel.novelTitleEn : novel.novelTitle}
+                  </h3>
                   <p className={styles.author}>{novel.author}</p>
 
                   {/* Completion Dates */}
