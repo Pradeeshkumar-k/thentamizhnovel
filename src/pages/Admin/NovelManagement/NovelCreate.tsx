@@ -162,7 +162,7 @@ const NovelCreate = () => {
 
     try {
       setLoading(true);
-      // Payload mapping
+      // Payload mapping with robust image fields
       const payload = {
         title: formData.title,
         titleEn: formData.title_en,
@@ -171,12 +171,16 @@ const NovelCreate = () => {
         descriptionEn: formData.summary_en,
         categories: formData.categories,
         status: formData.status,
-        coverImage: formData.cover_image
+        coverImage: formData.cover_image,
+        // Add variations for backend compatibility
+        image: formData.cover_image, 
+        coverImageUrl: formData.cover_image
       };
 
       const response = await createNovel(payload);
 
-      if (response.success) {
+      // Relaxed success check: success flag OR valid ID returned
+      if (response.success || response.id || response._id || response.data?.id) {
         alert('Novel created successfully!');
         navigate('/admin/novels');
       } else {
