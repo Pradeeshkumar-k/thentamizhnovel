@@ -162,8 +162,19 @@ const NovelCreate = () => {
 
     try {
       setLoading(true);
-      // TODO: Replace with real API call
-      const response = await createNovel(formData);
+      // Payload mapping
+      const payload = {
+        title: formData.title,
+        titleEn: formData.title_en,
+        author: formData.author_name,
+        description: formData.novel_summary,
+        descriptionEn: formData.summary_en,
+        categories: formData.categories,
+        status: formData.status,
+        coverImage: formData.cover_image
+      };
+
+      const response = await createNovel(payload);
 
       if (response.success) {
         alert('Novel created successfully!');

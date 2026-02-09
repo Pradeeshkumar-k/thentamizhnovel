@@ -141,9 +141,20 @@ const NovelEdit = () => {
 
     try {
       setSaving(true);
-      // TODO: Replace with real API call
+      // Payload mapping
+      const payload = {
+        title: formData.title,
+        titleEn: formData.title_en,
+        author: formData.author_name,
+        description: formData.novel_summary,
+        descriptionEn: formData.summary_en,
+        categories: formData.categories,
+        status: formData.status,
+        coverImage: formData.cover_image
+      };
+
       if (!id) return;
-      const response = await updateNovel(id, formData);
+      const response = await updateNovel(id, payload);
 
       if (response.success) {
         alert('Novel updated successfully!');
