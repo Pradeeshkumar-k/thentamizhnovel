@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
             {/* LOGO */}
             <img 
                 src="/assets/logo.webp" 
-                alt="Logo" 
+                alt="Thentamizh Novels Logo" 
                 width={182}
                 height={140}
                 className="h-20 md:h-24 lg:h-24 w-auto cursor-pointer object-contain hover:scale-105 transition-transform duration-300 drop-shadow-sm" 
@@ -132,6 +132,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                 {/* THEME TOGGLE (Restored) */}
                 <button
                   type="button"
+                  aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                   className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-primary transition-all hover:border-neon-gold hover:text-neon-gold"
                   onClick={toggleTheme}
                 >
@@ -142,6 +143,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                <div className="relative" ref={userDropdownRef}>
                   <button
                      onClick={handleAuthClick}
+                     aria-label={isAuthenticated ? 'Open user profile' : 'Login'}
                      className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
                   >
                      <User size={20} />
@@ -152,6 +154,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                 <div className="relative" ref={mobileLanguageDropdownRef}>
                    <button 
                       onClick={(e) => { e.stopPropagation(); setIsLanguageDropdownOpen(!isLanguageDropdownOpen); }}
+                      aria-label="Change language"
                       className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
                    >
                       <Globe size={20} />
@@ -166,6 +169,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
                 <button 
                     type="button" 
+                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 p-2 bg-transparent border-none text-white dark:text-secondary hover:text-neon-gold transition-colors z-[1200]"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
@@ -178,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
           <div className="hidden md:flex items-center flex-1 justify-between md:ml-4 lg:ml-8">
               {/* SEARCH BAR */}
                <form onSubmit={handleSearch} className="relative flex items-center bg-surface/50 border border-border rounded-full px-4 py-2 md:w-[140px] lg:w-[220px] hover:border-neon-gold/50 focus-within:border-neon-gold focus-within:ring-1 focus-within:ring-neon-gold transition-all group">
-                     <button type="submit" className="shrink-0 flex items-center justify-center">
+                     <button type="submit" aria-label="Search" className="shrink-0 flex items-center justify-center">
                         <Search className="w-5 h-5 text-gray-500 dark:text-gray-400 group-focus-within:text-neon-gold transition-colors" />
                      </button>
                     <input
@@ -201,22 +205,22 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
               {/* NAV LINKS */}
                <nav className="flex items-center md:gap-3 lg:gap-6 md:text-sm lg:text-base">
-                <span className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/')}>
+                <button className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/')}>
                   <Home size={16} />
                   {_t.header.home}
-                </span>
-                <span className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/library')}>
+                </button>
+                <button className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/library')}>
                   <BookOpen size={16} />
                   {_t.header.library}
-                </span>
-                <span className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/about')}>
+                </button>
+                <button className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/about')}>
                   <Info size={16} />
                   {_t.header.about}
-                </span>
-                <span className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/contact')}>
+                </button>
+                <button className="flex items-center gap-1.5 text-gray-300 dark:text-secondary hover:text-neon-gold cursor-pointer font-medium transition-colors" onClick={() => navigate('/contact')}>
                   <PhoneCall size={16} />
                   {_t.header.contact}
-                </span>
+                </button>
                </nav>
 
                {/* ICONS GROUP */}
@@ -224,6 +228,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                   {/* THEME */}
                   <button
                     onClick={toggleTheme}
+                    aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                     className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
                   >
                      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -233,6 +238,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                   <div className="relative" ref={languageDropdownRef}>
                      <button 
                         onClick={(e) => { e.stopPropagation(); setIsLanguageDropdownOpen(!isLanguageDropdownOpen); }}
+                        aria-label="Change language"
                         className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
                      >
                         <Globe size={20} />
@@ -249,6 +255,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                   <div className="relative" ref={userDropdownRef}>
                      <button
                         onClick={handleAuthClick}
+                        aria-label={isAuthenticated ? 'Open user profile' : 'Login'}
                         className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
                      >
                         <User size={20} />

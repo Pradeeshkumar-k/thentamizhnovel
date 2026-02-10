@@ -19,9 +19,9 @@ function App() {
       <ReadingProgressProvider>
 
         <div className="app">
-          <div className="app-content">
+          <main className="app-content">
             <AppRoutes />
-          </div>
+          </main>
 
           <Footer />
         </div>

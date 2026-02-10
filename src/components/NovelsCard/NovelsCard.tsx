@@ -37,15 +37,16 @@ const NovelsCard: React.FC<NovelsCardProps> = ({ sectionTitle, novels }) => {
       <div className={styles.sliderContainer}>
         <div className={styles.sliderWrapper} ref={sliderRef}>
           {novels.map((novel) => (
-            <div
+            <button
               key={novel.id}
               className={styles.novelCard}
               onClick={() => handleCardClick(novel.novelUrl)}
+              aria-label={`Read ${isEnglish && novel.titleEnglish ? novel.titleEnglish : novel.title}`}
             >
               <div className={styles.imageWrapper}>
                 <img
                   src={novel.image}
-                  alt={novel.title}
+                  alt={`Cover of ${isEnglish && novel.titleEnglish ? novel.titleEnglish : novel.title}`}
                   className={styles.novelImage}
                   width={98}
                   height={175}
@@ -68,7 +69,7 @@ const NovelsCard: React.FC<NovelsCardProps> = ({ sectionTitle, novels }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

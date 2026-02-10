@@ -27,11 +27,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split React and related libraries
+          // React core
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // Split animation libraries
+          // State management & data fetching
+          'query-vendor': ['@tanstack/react-query'],
+          // Icons (Lucide is large)
+          'icons-vendor': ['lucide-react'],
+          // Animation
           'animation-vendor': ['framer-motion'],
-
         }
       }
     }
