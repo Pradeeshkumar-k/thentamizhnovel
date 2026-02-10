@@ -130,7 +130,7 @@ const NovelsPageAPI = () => {
                       <motion.button 
                         key={novel.novelId}
                         whileHover={{ scale: 1.05 }}
-                        className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-all duration-300"
+                        className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-[transform,border-color] duration-300 transform-gpu"
                         onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`)}
                         aria-label={`Continue reading ${getLocalizedTitle(novel, language)}`}
                       >
@@ -187,7 +187,7 @@ const NovelsPageAPI = () => {
                       <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
-                        className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
+                        className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-[transform,box-shadow,ring] duration-300 transform-gpu hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
                         aria-label={`Read ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
@@ -247,7 +247,7 @@ const NovelsPageAPI = () => {
                       <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
-                        className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
+                        className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-[transform,box-shadow,ring] duration-300 transform-gpu hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
                         aria-label={`Read ongoing novel ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
@@ -309,7 +309,7 @@ const NovelsPageAPI = () => {
                       <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
-                        className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
+                        className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-[transform,box-shadow,ring] duration-300 transform-gpu hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
                         aria-label={`Read completed novel ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >

@@ -232,22 +232,13 @@ const ChapterPageAPI = () => {
     } catch (err) { console.error('Bookmark error', err); }
   };
 
-// ... (Move this import up manually to not break file structure in diff)
-// The tool works by replacing chunks. I will delete the misplaced import and add it to the top.
-// Actually, I can just delete it here and add it to the top in one go if I use multi_replace?
-// I will just use replace_file_content to remove the misplaced one first, then another call to add to top.
-// Or just do it in two steps.
-// Step 1: Remove the misplaced import and the surrounding loading block correction if needed.
-// Ah, the previous edit inserted `import ...` AND the loading block.
-// I need to fix the file to be valid.
-// I will replace the block I just inserted with JUST the loading logic, and then add the import at the top.
   if (loading) {
-     return (
-        <>
-            <Header onLoginClick={handleLoginClick} />
-            <ChapterContentSkeleton />
-        </>
-     );
+    return (
+      <>
+        <Header onLoginClick={handleLoginClick} />
+        <ChapterContentSkeleton />
+      </>
+    );
   }
 
   if (error || !chapter) {
@@ -335,12 +326,8 @@ const ChapterPageAPI = () => {
           )}
         </article>
 
-
-
-
         {/* Interaction Bar */}
         <div className="flex flex-row items-center justify-between gap-4 border-y border-border py-4 mb-8">
-            {/* Left Group: Views, Like & Save */}
             <div className="flex items-center gap-4 md:gap-6">
                 <div className="flex items-center gap-2 text-muted">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -372,9 +359,7 @@ const ChapterPageAPI = () => {
                 </button>
             </div>
             
-            {/* Right Group: Share */}
             <div className="flex items-center gap-4 md:gap-6">
-                {/* Share Button (Moved before Comments) */}
                 <button 
                     onClick={async () => {
                         const shareData = {
@@ -394,7 +379,6 @@ const ChapterPageAPI = () => {
                         }
                     }}
                     className="flex items-center gap-2 text-secondary hover:text-neon-gold transition-colors"
-                    title={language === 'tamil' ? 'பகிர்' : 'Share'}
                 >
                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -407,7 +391,7 @@ const ChapterPageAPI = () => {
         <div className="flex justify-center mb-16">
             <button
                 onClick={() => setIsCommentsModalOpen(true)}
-                className="flex items-center gap-3 px-8 py-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-md transition-all group w-full sm:w-auto justify-center"
+                className="flex items-center gap-3 px-8 py-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm border border-gray-100 dark:border-white/5 hover:shadow-md transition-[box-shadow,background-color] duration-300 group w-full sm:w-auto justify-center"
             >
                 <div className="relative">
                      <svg className="w-6 h-6 text-gray-400 group-hover:text-neon-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -433,7 +417,7 @@ const ChapterPageAPI = () => {
           <button
             onClick={() => prevChapter && navigateToChapter(prevChapter.id || prevChapter._id || '')}
             disabled={!prevChapter}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
+            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-[background-color,color,border-color,box-shadow] duration-300 transform-gpu ${
                 prevChapter 
                 ? 'border-neon-gold text-neon-gold hover:bg-neon-gold hover:text-black hover:shadow-[0_0_15px_rgba(255,215,0,0.3)]' 
                 : 'border-border text-muted cursor-not-allowed'
@@ -448,7 +432,7 @@ const ChapterPageAPI = () => {
           <button
             onClick={() => nextChapter && navigateToChapter(nextChapter.id || nextChapter._id || '')}
             disabled={!nextChapter}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-all ${
+            className={`flex items-center gap-2 px-6 py-3 rounded-lg border transition-[background-color,color,border-color,box-shadow] duration-300 transform-gpu ${
                 nextChapter 
                 ? 'border-neon-gold text-neon-gold hover:bg-neon-gold hover:text-black hover:shadow-[0_0_15px_rgba(255,215,0,0.3)]' 
                 : 'border-border text-muted cursor-not-allowed'
@@ -470,8 +454,8 @@ const ChapterPageAPI = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {allChapters
-                    .filter(c => (c.id || c._id) !== chapterId) // Exclude current
-                    .slice(0, 6) // Show only next 6 recommendations
+                    .filter(c => (c.id || c._id) !== chapterId)
+                    .slice(0, 6)
                     .map(c => (
                     <motion.div
                         key={c.id || c._id}
@@ -480,7 +464,7 @@ const ChapterPageAPI = () => {
                         onClick={() => navigateToChapter(c.id || c._id || '')}
                     >
                         <div className="flex justify-between items-start mb-2">
-                             <div /> {/* Spacer for flex-between */}
+                             <div />
                             <span className="text-xs text-muted">
                                 {calculateReadTime(c.content)}
                             </span>
@@ -495,7 +479,6 @@ const ChapterPageAPI = () => {
                 ))}
             </div>
         </section>
-
       </main>
 
       <CommentsModal 

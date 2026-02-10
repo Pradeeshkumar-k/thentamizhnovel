@@ -59,19 +59,19 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color = 'blue',
     <div className={`
         relative overflow-hidden
         bg-glass-bg backdrop-blur-xl border border-glass-border rounded-2xl p-6
-        flex items-center gap-6 transition-all duration-500
+        flex items-center gap-6 transition-[transform,border-color,background-color,box-shadow] duration-500
         hover:-translate-y-1 hover:border-accent/20 hover:bg-glass-bg/80
         hover:shadow-lg dark:hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5),0_0_20px_rgba(14,165,233,0.05)]
-        group
+        group transform-gpu
     `}>
       {/* Dynamic Glow Background */}
       <div className={`absolute -right-4 -top-24 w-48 h-48 rounded-full blur-[80px] opacity-[0.05] dark:opacity-10 transition-opacity group-hover:opacity-20 ${currentStyle.text.replace('text-', 'bg-')}`} />
 
       <div className={`
         w-14 h-14 rounded-2xl flex items-center justify-center
-        flex-shrink-0 transition-all duration-500 group-hover:scale-110
+        flex-shrink-0 transition-[transform,background-color] duration-500 group-hover:scale-110
         ${currentStyle.iconBg} shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]
-        border border-glass-border
+        border border-glass-border transform-gpu
       `}>
         <span className="text-2xl">{icon}</span>
       </div>

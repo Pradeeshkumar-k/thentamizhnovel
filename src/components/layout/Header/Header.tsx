@@ -133,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                 <button
                   type="button"
                   aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-                  className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-primary transition-all hover:border-neon-gold hover:text-neon-gold"
+                  className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-primary transition-[color,border-color] duration-300 hover:border-neon-gold hover:text-neon-gold"
                   onClick={toggleTheme}
                 >
                   {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                   <button
                      onClick={handleAuthClick}
                      aria-label={isAuthenticated ? 'Open user profile' : 'Login'}
-                     className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
+                     className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-[color,border-color] duration-300"
                   >
                      <User size={20} />
                   </button>
@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                    <button 
                       onClick={(e) => { e.stopPropagation(); setIsLanguageDropdownOpen(!isLanguageDropdownOpen); }}
                       aria-label="Change language"
-                      className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
+                      className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-[color,border-color] duration-300"
                    >
                       <Globe size={20} />
                    </button>
@@ -181,7 +181,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
           {/* DESKTOP NAV & CONTROLS */}
           <div className="hidden md:flex items-center flex-1 justify-between md:ml-4 lg:ml-8">
               {/* SEARCH BAR */}
-               <form onSubmit={handleSearch} className="relative flex items-center bg-surface/50 border border-border rounded-full px-4 py-2 md:w-[140px] lg:w-[220px] hover:border-neon-gold/50 focus-within:border-neon-gold focus-within:ring-1 focus-within:ring-neon-gold transition-all group">
+               <form onSubmit={handleSearch} className="relative flex items-center bg-surface/50 border border-border rounded-full px-4 py-2 md:w-[140px] lg:w-[220px] hover:border-neon-gold/50 focus-within:border-neon-gold focus-within:ring-1 focus-within:ring-neon-gold transition-[border-color,box-shadow] duration-300 group">
                      <button type="submit" aria-label="Search" className="shrink-0 flex items-center justify-center">
                         <Search className="w-5 h-5 text-gray-500 dark:text-gray-400 group-focus-within:text-neon-gold transition-colors" />
                      </button>
@@ -229,7 +229,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                   <button
                     onClick={toggleTheme}
                     aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-                    className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
+                    className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-[color,border-color] duration-300"
                   >
                      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                   </button>
@@ -239,7 +239,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                      <button 
                         onClick={(e) => { e.stopPropagation(); setIsLanguageDropdownOpen(!isLanguageDropdownOpen); }}
                         aria-label="Change language"
-                        className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
+                        className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-[color,border-color] duration-300"
                      >
                         <Globe size={20} />
                      </button>
@@ -256,7 +256,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                      <button
                         onClick={handleAuthClick}
                         aria-label={isAuthenticated ? 'Open user profile' : 'Login'}
-                        className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-all"
+                        className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-secondary hover:text-neon-gold hover:border-neon-gold transition-[color,border-color] duration-300"
                      >
                         <User size={20} />
                      </button>
