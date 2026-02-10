@@ -168,7 +168,7 @@ const ChapterPageAPI = () => {
 
     const timer = setTimeout(() => {
         updateProgress(novelId, Number(chapterId));
-    }, 10000); // 10 seconds delay
+    }, 60000); // 1 minute delay
 
     return () => clearTimeout(timer);
   }, [novelId, chapterId]);
