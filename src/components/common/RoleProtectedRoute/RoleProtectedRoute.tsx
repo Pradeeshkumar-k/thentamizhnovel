@@ -21,10 +21,10 @@ import { useAuth } from '../../../context/AuthContext';
 
 interface RoleProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: Array<'ADMIN' | 'EDITOR' | 'USER'>;
+  allowedRoles?: Array<'ADMIN' | 'EDITOR' | 'USER' | 'SUPER_ADMIN'>;
 }
 
-const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ children, allowedRoles = ['ADMIN', 'EDITOR'] }) => {
+const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ children, allowedRoles = ['ADMIN', 'EDITOR', 'SUPER_ADMIN'] }) => {
   const { user, isAuthenticated, loading } = useAuth();
 
   // Show loading state while auth is being verified
