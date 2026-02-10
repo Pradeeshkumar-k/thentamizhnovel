@@ -42,11 +42,23 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   }, []);
 
   // Sync Library with backend ON DEMAND or when login status changes
+  // Sync Library with backend when login status changes
   useEffect(() => {
-    if (isUserLoggedIn() && !loading) {
-       // We don't fetch on mount anymore to save 20s load time. 
-       // Only fetch if explicitly requested by pages (Rule #4)
-    }
+    const fetchReadingProgress = async () => {
+      if (isUserLoggedIn() && !loading) {
+        try {
+          const progress = await readingProgressService.getReadingProgress();
+          if (progress && progress.ongoing) {
+            setOngoingNovels(progress.ongoing);
+            setCompletedNovels(progress.completed || []);
+          }
+        } catch (error) {
+          console.error("Failed to sync reading progress", error);
+        }
+      }
+    };
+
+    fetchReadingProgress();
   }, [loading]);
 
   // Save to localStorage whenever state changes
