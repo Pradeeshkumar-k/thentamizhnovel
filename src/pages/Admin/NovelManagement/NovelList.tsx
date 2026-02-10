@@ -31,7 +31,10 @@ interface NovelData {
   [key: string]: any;
 }
 
+import { useAuth } from '../../../context/AuthContext';
+
 const NovelList = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [novels, setNovels] = useState<NovelData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -163,7 +166,14 @@ const NovelList = () => {
       {/* Page Header */}
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Novel Management</h1>
+          <div className="flex items-center gap-3">
+            <h1 className={styles.title}>Novel Management</h1>
+            {user?.role === 'SUPER_ADMIN' && (
+                <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded text-xs font-medium">
+                    Global View
+                </span>
+            )}
+          </div>
           <p className={styles.subtitle}>
             Manage all novels in the platform
           </p>

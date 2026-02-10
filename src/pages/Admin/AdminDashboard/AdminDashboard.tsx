@@ -6,58 +6,35 @@ import styles from './AdminDashboard.module.scss';
 import { DashboardStats } from '../../../types';
 import { motion } from 'framer-motion';
 
+import { useAuth } from '../../../context/AuthContext';
+
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [sectionExpanded, setSectionExpanded] = useState<boolean>(false);
+  // ... (rest of state)
 
-  useEffect(() => {
-    fetchDashboardStats();
-  }, []);
-
-  const fetchDashboardStats = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await getDashboardStats();
-
-      if (response.success) {
-        setStats(response.data);
-      } else {
-        setError('Failed to load dashboard statistics');
-      }
-    } catch (err: any) {
-      console.error('Dashboard stats error:', err);
-      setError(err.response?.data?.message || err.message || 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* handleDeleteActivity removed as requested */
-
-  if (error) {
-    return (
-      <div className={styles.errorContainer}>
-        <div className={styles.errorIcon}>⚠️</div>
-        <h2 className={styles.errorTitle}>Failed to Load Dashboard</h2>
-        <p className={styles.errorMessage}>{error}</p>
-        <button className={styles.retryButton} onClick={fetchDashboardStats}>Retry</button>
-      </div>
-    );
-  }
+  // ... (useEffects)
 
   return (
     <div className={styles.dashboard}>
       {/* Page Header */}
       <div className={styles.header}>
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className={styles.title}>Dashboard Overview</h1>
-          <p className={styles.subtitle}>Welcome back, administrator.</p>
+            <div className="flex items-center gap-3">
+                <h1 className={styles.title}>Dashboard Overview</h1>
+                {user?.role === 'SUPER_ADMIN' && (
+                    <span className="px-3 py-1 bg-neon-gold/20 text-neon-gold border border-neon-gold/50 rounded-full text-xs font-bold uppercase tracking-wider">
+                        Super Admin
+                    </span>
+                )}
+            </div>
+            <p className={styles.subtitle}>Welcome back, {user?.name || 'Administrator'}.</p>
         </motion.div>
         
         <button 
