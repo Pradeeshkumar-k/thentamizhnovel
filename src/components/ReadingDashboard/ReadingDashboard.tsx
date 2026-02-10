@@ -15,6 +15,9 @@ interface Stats {
 interface NovelProgress extends OngoingNovel {
   isCompleted?: boolean;
   completedAt?: string;
+  lastChapterOrder?: number; // Add for strict typing locally
+  lastChapterId?: string;
+  totalChapters?: number;
 }
 
 const ReadingDashboard: React.FC = () => {
@@ -39,7 +42,7 @@ const ReadingDashboard: React.FC = () => {
     ongoingNovels.forEach((novel) => {
       const el = progressRefs.current.get(novel.novelId);
       if (el) {
-        el.style.width = `${calculateProgress(novel.lastChapter)}%`;
+        el.style.width = `${calculateProgress(novel.lastChapterOrder || novel.lastChapter)}`;
       }
     });
   }, [ongoingNovels]);
@@ -70,7 +73,7 @@ const ReadingDashboard: React.FC = () => {
   };
 
   const handleContinueReading = (novel: NovelProgress) => {
-    navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapter}`);
+    navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`);
   };
 
   const handleViewNovel = (novelId: string) => {
@@ -105,7 +108,9 @@ const ReadingDashboard: React.FC = () => {
           <h2 className={styles.sectionTitle}>📖 ON-GOING</h2>
           <div className={styles.novelsGrid}>
             {ongoingNovels.map((novel) => {
-              const progress = calculateProgress(novel.lastChapter);
+              const currentChapter = novel.lastChapterOrder || novel.lastChapter;
+              const totalChapters = novel.totalChapters || 27;
+              const progress = calculateProgress(currentChapter, totalChapters);
               return (
                 <div key={novel.novelId} className={styles.novelCard}>
                   <div className={styles.imageContainer}>
@@ -154,8 +159,8 @@ const ReadingDashboard: React.FC = () => {
                           }}
                         ></div>
                       </div>
-                      <span className={styles.progressText}>
-                        Chapter {novel.lastChapter} / 27 ({progress}%)
+                      <span className="progressText">
+                        Chapter {currentChapter} / {totalChapters} ({progress}%)
                       </span>
                     </div>
 

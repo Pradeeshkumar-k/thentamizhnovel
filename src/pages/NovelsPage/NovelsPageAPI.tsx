@@ -8,6 +8,7 @@ import Header from '../../components/layout/Header/Header';
 import Carousel from '../../components/common/Carousel/Carousel';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
+import readingProgressService from '../../services/API/readingProgressService'; // Import Service
 import { motion, AnimatePresence } from 'framer-motion';
 import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 
@@ -24,8 +25,20 @@ const NovelsPageAPI = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [readingProgress, setReadingProgress] = useState<{ ongoing: any[], completed: any[] }>({ ongoing: [], completed: [] }); // Progress State
   
   const t = translations[language as keyof typeof translations];
+
+  // Fetch Reading Progress
+  useEffect(() => {
+    if (user) {
+      readingProgressService.getReadingProgress()
+        .then(data => setReadingProgress(data))
+        .catch(console.error);
+    } else {
+        setReadingProgress({ ongoing: [], completed: [] });
+    }
+  }, [user]);
 
   // ==========================================
   // React Query Implementation
@@ -114,25 +127,25 @@ const NovelsPageAPI = () => {
             </div>
           ) : (
             <>
-              {/* Continue Reading Section (Horizontal Scroll) */}
-              {novels.length > 0 && (
+              {/* Continue Reading Section (Real Progress) */}
+              {readingProgress.ongoing.length > 0 && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                     Continue Reading
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {novels.slice(0, 4).map((novel: any, index: number) => (
+                    {readingProgress.ongoing.map((novel: any, index: number) => (
                       <motion.div 
-                        key={novel.id || novel._id}
+                        key={novel.novelId}
                         whileHover={{ scale: 1.05 }}
                         className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-all duration-300"
-                        onClick={() => handleNovelClick(novel.id || novel._id)}
+                        onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId}`)}
                       >
                          <div className="aspect-[2/3] w-full relative">
                             {novel.coverImage ? (
                               <img
                                 src={(imageMap as any)[novel.coverImage] || novel.coverImage}
-                                alt={novel.title}
+                                alt={novel.novelTitle}
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 width="180"
@@ -150,9 +163,18 @@ const NovelsPageAPI = () => {
                             {/* Compact details for continue reading */}
                             <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <h3 className="text-sm font-bold text-white line-clamp-1 group-hover:text-neon-gold transition-colors">
-                                  {(language === 'english' && novel.titleEn) ? novel.titleEn : novel.title}
+                                  {(language === 'english' && novel.novelTitleEn) ? novel.novelTitleEn : novel.novelTitle}
                                 </h3>
-                                <p className="text-xs text-gray-300">Chapter {novel.totalChapters}</p>
+                                <p className="text-xs text-gray-300">
+                                  Chapter {novel.lastChapterOrder} / {novel.totalChapters}
+                                </p>
+                                {/* Progress Bar */}
+                                <div className="w-full h-1 bg-gray-600 rounded-full mt-2 overflow-hidden">
+                                  <div 
+                                    className="h-full bg-neon-gold" 
+                                    style={{ width: `${Math.min(100, Math.round((novel.lastChapterOrder / novel.totalChapters) * 100))}%` }}
+                                  ></div>
+                                </div>
                             </div>
                          </div>
                       </motion.div>

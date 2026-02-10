@@ -164,14 +164,15 @@ const ChapterPageAPI = () => {
 
   // Effect 4: Progress Write (Buffered 10s to prevent accidental clicks)
   useEffect(() => {
-    if (!novelId || !chapterId) return;
+    if (!novelId || !chapterId || !chapter) return;
 
     const timer = setTimeout(() => {
-        updateProgress(novelId, Number(chapterId));
-    }, 60000); // 1 minute delay
+        const order = chapter.chapterNumber || (chapter as any).order || 1;
+        updateProgress(novelId, chapterId, 0, order);
+    }, 10000); // 10 seconds delay (Wait for engagement)
 
     return () => clearTimeout(timer);
-  }, [novelId, chapterId]);
+  }, [novelId, chapterId, chapter]);
 
   // Handle navigation
   const currentIndex = allChapters.findIndex(c => (c.id || c._id) === chapterId);

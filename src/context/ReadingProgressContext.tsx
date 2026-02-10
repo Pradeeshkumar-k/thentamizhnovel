@@ -109,12 +109,21 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   };
 
   // Update current chapter
-  const updateProgress = async (novelId: string, chapterId: number, progress: number = 0) => {
+  const updateProgress = async (novelId: string, chapterId: number | string, progress: number = 0, chapterOrder?: number) => {
+    // Determine lastChapter (order) for progress bar
+    const lastOrder = chapterOrder || (typeof chapterId === 'number' ? chapterId : 1);
+    
     // Update local state
     setOngoingNovels(prev =>
       prev.map(novel =>
         novel.novelId === novelId
-          ? { ...novel, lastChapter: chapterId, updatedAt: new Date().toISOString() }
+          ? { 
+              ...novel, 
+              lastChapter: lastOrder, // Legacy/Display Order
+              lastChapterId: String(chapterId), // Navigation UUID
+              lastChapterOrder: lastOrder, // Explicit Order
+              updatedAt: new Date().toISOString() 
+            }
           : novel
       )
     );
@@ -122,7 +131,9 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
     // Sync with backend if user is logged in
     if (isUserLoggedIn() && novelId && chapterId) {
       try {
-        await readingProgressService.updateChapter(novelId, chapterId, progress);
+        // If chapterId is a number (legacy), we can't easily convert to UUID here without a map.
+        // Assuming implementation has moved to UUIDs for chapterId.
+        await readingProgressService.updateChapter(novelId, String(chapterId), progress);
       } catch (error) {
         // Silent fail - local state already updated
       }

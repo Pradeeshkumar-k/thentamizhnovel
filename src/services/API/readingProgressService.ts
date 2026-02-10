@@ -24,17 +24,6 @@ const readingProgressService = {
   /**
    * Update reading progress for a novel
    * @param {Object} progressData - Progress data to update
-   * @param {number} progressData.novelId - Novel ID
-   * @param {string} progressData.novelTitle - Novel title
-   * @param {string} progressData.coverImage - Cover image path
-   * @param {string} progressData.author - Author name
-   * @param {number} progressData.lastChapter - Last chapter read
-   * @param {boolean} progressData.isCompleted - Completion status
-   * @returns {Promise} - Updated progress data
-   */
-  /**
-   * Update reading progress for a novel
-   * @param {Object} progressData - Progress data to update
    */
   async updateProgress(progressData: any) {
     const response = await apiClient.post(API_ENDPOINTS.UPDATE_READING_PROGRESS, progressData);
@@ -62,22 +51,6 @@ const readingProgressService = {
   },
 
   /**
-   * Update current chapter for a novel
-   * @param {number} novelId - Novel ID
-   * @param {number} progress - % Progress (optional)
-   * @returns {Promise} - Updated progress data
-   */
-  async updateChapter(novelId: number | string, chapterId: number | string, progress: number = 0) {
-    return this.updateProgress({
-      novelId,
-      chapterId, // Send as chapterId to match backend
-      progress,
-      isCompleted: false,
-      updatedAt: new Date().toISOString()
-    });
-  },
-
-  /**
    * Mark a novel as completed
    * @param {number} novelId - Novel ID
    * @param {string} novelTitle - Novel title
@@ -94,6 +67,22 @@ const readingProgressService = {
       lastChapter: 27,
       isCompleted: true,
       completedAt: new Date().toISOString()
+    });
+  },
+
+  /**
+   * Update current chapter for a novel
+   * @param {number|string} novelId - Novel ID
+   * @param {string} chapterId - Chapter ID (UUID)
+   * @param {number} progress - % Progress (optional)
+   * @returns {Promise} - Updated progress data
+   */
+  async updateChapter(novelId: number | string, chapterId: string, progress: number = 0) {
+    return this.updateProgress({
+      novelId,
+      chapterId, 
+      progress,
+      updatedAt: new Date().toISOString()
     });
   },
 
