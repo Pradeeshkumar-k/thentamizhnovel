@@ -11,6 +11,7 @@ import novelService from '../../services/API/novelService';
 import { useReadingProgress } from '../../context/ReadingProgressContext'; // Import Context
 import { motion, AnimatePresence } from 'framer-motion';
 import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
+import { getLocalizedTitle } from '../../utils/languageUtils';
 
 // Image mapping (Using public assets to avoid Base64)
 const imageMap = {
@@ -154,7 +155,7 @@ const NovelsPageAPI = () => {
                             {/* Compact details for continue reading */}
                             <div className="absolute bottom-0 left-0 right-0 p-3">
                                 <h3 className="text-sm font-bold text-white line-clamp-1 group-hover:text-neon-gold transition-colors">
-                                  {(language === 'english' && novel.novelTitleEn) ? novel.novelTitleEn : novel.novelTitle}
+                                  {getLocalizedTitle(novel, language)}
                                 </h3>
                                 <p className="text-xs text-gray-300">
                                   Chapter {novel.lastChapterOrder} / {novel.totalChapters}
@@ -211,7 +212,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 p-4 flex flex-col justify-end">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
-                                  {(language === 'english' && novel.titleEn) ? novel.titleEn : novel.title}
+                                  {getLocalizedTitle(novel, language)}
                               </h3>
                               <p className="text-sm text-gray-300 font-medium mb-2">
                                   {novel.author}
@@ -270,7 +271,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 p-4 flex flex-col justify-end">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
-                                  {(language === 'english' && novel.titleEn) ? novel.titleEn : novel.title}
+                                  {getLocalizedTitle(novel, language)}
                               </h3>
                               <p className="text-sm text-gray-300 font-medium mb-2">
                                   {novel.author}
@@ -331,7 +332,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 p-4 flex flex-col justify-end">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
-                                  {(language === 'english' && novel.titleEn) ? novel.titleEn : novel.title}
+                                  {getLocalizedTitle(novel, language)}
                               </h3>
                               <p className="text-sm text-gray-300 font-medium mb-2">
                                   {novel.author}

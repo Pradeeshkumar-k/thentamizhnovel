@@ -5,6 +5,7 @@ import readingProgressService from '../../services/API/readingProgressService';
 import { useLanguage } from '../../context/LanguageContext';
 import { useReadingProgress } from '../../context/ReadingProgressContext';
 import styles from './ReadingDashboard.module.scss';
+import { getLocalizedTitle } from '../../utils/languageUtils';
 
 interface Stats {
   totalNovels: number;
@@ -136,15 +137,7 @@ const ReadingDashboard: React.FC = () => {
 
                   <div className={styles.cardContent}>
                     <h3 className={styles.novelTitle}>
-                      {(() => {
-                        // Priority: API English Title -> Context English Title -> API/Context Tamil Title
-                        if (isEnglish) {
-                           if (novel.novelTitleEn) return novel.novelTitleEn;
-                           const ctxNovel = contextOngoing.find(n => n.novelId === novel.novelId);
-                           if (ctxNovel?.novelTitleEn) return ctxNovel.novelTitleEn;
-                        }
-                        return novel.novelTitle;
-                      })()}
+                      {getLocalizedTitle(novel, isEnglish ? 'english' : 'tamil')}
                     </h3>
                     <p className={styles.author}>{novel.author}</p>
 
@@ -209,7 +202,7 @@ const ReadingDashboard: React.FC = () => {
 
                 <div className={styles.cardContent}>
                   <h3 className={styles.novelTitle}>
-                    {isEnglish && novel.novelTitleEn ? novel.novelTitleEn : novel.novelTitle}
+                    {getLocalizedTitle(novel, isEnglish ? 'english' : 'tamil')}
                   </h3>
                   <p className={styles.author}>{novel.author}</p>
 
