@@ -17,8 +17,10 @@ const readingProgressService = {
     }
     
     // If no args, it fetches all progress (dashboard view)
+    // If no args, it fetches all progress (dashboard view)
     const response = await apiClient.get(url);
-    return response.data;
+    // Unwrap response: backend returns { success: true, data: { ... } }
+    return response.data.data || response.data;
   },
 
   /**
