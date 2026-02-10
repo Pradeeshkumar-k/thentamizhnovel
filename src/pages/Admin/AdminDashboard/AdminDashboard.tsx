@@ -14,9 +14,27 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [sectionExpanded, setSectionExpanded] = useState<boolean>(false);
-  // ... (rest of state)
+  useEffect(() => {
+    fetchDashboardStats();
+  }, []);
 
-  // ... (useEffects)
+  const fetchDashboardStats = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await getDashboardStats();
+      if (response.success) {
+        setStats(response.data);
+      } else {
+        setError('Failed to fetch dashboard stats');
+      }
+    } catch (err) {
+      console.error('Error fetching dashboard stats:', err);
+      setError('An error occurred while loading dashboard statistics');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.dashboard}>
