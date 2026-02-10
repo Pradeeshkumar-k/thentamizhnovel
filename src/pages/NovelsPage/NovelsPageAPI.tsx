@@ -121,23 +121,24 @@ const NovelsPageAPI = () => {
             <>
               {/* Continue Reading Section (Real Progress via Context) */}
               {ongoingNovels.length > 0 && (
-                <div className="mb-12">
+                <section className="mb-12" aria-label="Continue reading your novels">
                   <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                     Continue Reading
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {ongoingNovels.map((novel: any, index: number) => (
-                      <motion.div 
+                      <motion.button 
                         key={novel.novelId}
                         whileHover={{ scale: 1.05 }}
                         className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-all duration-300"
                         onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`)}
+                        aria-label={`Continue reading ${getLocalizedTitle(novel, language)}`}
                       >
                          <div className="aspect-[2/3] w-full relative">
                             {novel.coverImage ? (
                               <img
                                 src={(imageMap as any)[novel.coverImage] || novel.coverImage}
-                                alt={novel.novelTitle}
+                                alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 width="180"
@@ -153,7 +154,7 @@ const NovelsPageAPI = () => {
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
                             
                             {/* Compact details for continue reading */}
-                            <div className="absolute bottom-0 left-0 right-0 p-3">
+                            <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
                                 <h3 className="text-sm font-bold text-white line-clamp-1 group-hover:text-neon-gold transition-colors">
                                   {getLocalizedTitle(novel, language)}
                                 </h3>
@@ -169,32 +170,33 @@ const NovelsPageAPI = () => {
                                 </div>
                             </div>
                          </div>
-                      </motion.div>
+                      </motion.button>
                     ))}
                   </div>
-                </div>
+                </section>
               )}
 
               {/* Latest Launch Section */}
               {novels.length > 0 && (
-                <div className="mb-12">
+                <section className="mb-12" aria-label="Latest novel updates">
                   <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                     Latest Update
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.slice(0, 10).map((novel: any) => (
-                      <motion.div 
+                      <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
+                        aria-label={`Read ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
                               src={(imageMap as any)[novel.coverImage] || novel.coverImage}
-                              alt={novel.title}
+                              alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
@@ -209,7 +211,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90 transition-opacity duration-300"></div>
 
                         {/* Content Layer */}
-                        <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                        <div className="absolute inset-0 p-4 flex flex-col justify-end text-left">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
                                   {getLocalizedTitle(novel, language)}
@@ -228,32 +230,33 @@ const NovelsPageAPI = () => {
                               </div>
                           </div>
                         </div>
-                      </motion.div>
+                      </motion.button>
                     ))}
                   </div>
-                </div>
+                </section>
               )}
 
               {/* Ongoing Novels Section */}
-              <div className="mb-12">
+              <section className="mb-12" aria-label="Explore ongoing novels">
                 <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                   Ongoing Novels
                 </h2>
                 {novels.filter((n: any) => n.status !== 'COMPLETED').length > 0 ? (
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
                     {novels.filter((n: any) => n.status !== 'COMPLETED').map((novel: any) => (
-                      <motion.div 
+                      <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
+                        aria-label={`Read ongoing novel ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
                               src={(imageMap as any)[novel.coverImage] || novel.coverImage}
-                              alt={novel.title}
+                              alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
@@ -268,7 +271,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90 transition-opacity duration-300"></div>
 
                         {/* Content Layer */}
-                        <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                        <div className="absolute inset-0 p-4 flex flex-col justify-end text-left">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
                                   {getLocalizedTitle(novel, language)}
@@ -287,34 +290,35 @@ const NovelsPageAPI = () => {
                               </div>
                           </div>
                         </div>
-                      </motion.div>
+                      </motion.button>
                     ))}
                   </div>
                 ) : (
                    <p className="text-gray-500 ml-4">No ongoing novels found.</p>
                 )}
-              </div>
+              </section>
 
               {/* Completed Novels Section */}
-              <div className="mb-12">
+              <section className="mb-12" aria-label="Explore completed novels">
                 <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                   Completed Novels
                 </h2>
                 {novels.filter((n: any) => n.status === 'COMPLETED').length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
                     {novels.filter((n: any) => n.status === 'COMPLETED').map((novel: any) => (
-                      <motion.div 
+                      <motion.button 
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-all duration-300 hover:shadow-neon-gold/20"
                         onClick={() => handleNovelClick(novel.id || novel._id)}
+                        aria-label={`Read completed novel ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
                         {/* Image Layer */}
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
                               src={(imageMap as any)[novel.coverImage] || novel.coverImage}
-                              alt={novel.title}
+                              alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
@@ -329,7 +333,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-90 transition-opacity duration-300"></div>
 
                         {/* Content Layer */}
-                        <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                        <div className="absolute inset-0 p-4 flex flex-col justify-end text-left">
                           <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                               <h3 className="text-lg md:text-xl font-bold text-white leading-normal py-1 mb-1 group-hover:text-neon-gold transition-colors line-clamp-2 font-['Noto_Sans_Tamil',_sans-serif]">
                                   {getLocalizedTitle(novel, language)}
@@ -342,13 +346,13 @@ const NovelsPageAPI = () => {
                               </span>
                           </div>
                         </div>
-                      </motion.div>
+                      </motion.button>
                     ))}
                   </div>
                 ) : (
                    <p className="text-gray-500 ml-4">No completed novels found.</p>
                 )}
-              </div>
+              </section>
 
               {/* Infinite Scroll Trigger */}
               <div id="infinite-scroll-trigger" className="h-20 flex items-center justify-center">

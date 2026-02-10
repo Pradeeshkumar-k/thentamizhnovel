@@ -288,7 +288,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
           {/* MOBILE SEARCH - Always Visible, Slightly Larger */}
           <div className="md:hidden w-full max-w-xs px-2">
                <form onSubmit={handleMobileSearchSubmit} className="relative flex items-center bg-surface/50 border border-border rounded-full px-3 py-2 w-full hover:border-neon-gold/50 focus-within:border-neon-gold transition-all">
-                    <button type="submit" className="w-5 h-5 shrink-0 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-neon-gold transition-colors">
+                    <button type="submit" aria-label="Search" className="w-5 h-5 shrink-0 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-neon-gold transition-colors">
                         <Search size={18} />
                     </button>
                     <input
