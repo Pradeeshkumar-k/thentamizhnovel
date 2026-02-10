@@ -8,7 +8,7 @@ import Header from '../../components/layout/Header/Header';
 import Carousel from '../../components/common/Carousel/Carousel';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
-import readingProgressService from '../../services/API/readingProgressService'; // Import Service
+import { useReadingProgress } from '../../context/ReadingProgressContext'; // Import Context
 import { motion, AnimatePresence } from 'framer-motion';
 import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 
@@ -25,20 +25,11 @@ const NovelsPageAPI = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [readingProgress, setReadingProgress] = useState<{ ongoing: any[], completed: any[] }>({ ongoing: [], completed: [] }); // Progress State
+  const { ongoingNovels } = useReadingProgress(); // Use Context directly
   
   const t = translations[language as keyof typeof translations];
 
-  // Fetch Reading Progress
-  useEffect(() => {
-    if (user) {
-      readingProgressService.getReadingProgress()
-        .then(data => setReadingProgress(data))
-        .catch(console.error);
-    } else {
-        setReadingProgress({ ongoing: [], completed: [] });
-    }
-  }, [user]);
+  // Removed manual fetch - Context handles it now for both Auth & Anon users
 
   // ==========================================
   // React Query Implementation
@@ -127,19 +118,19 @@ const NovelsPageAPI = () => {
             </div>
           ) : (
             <>
-              {/* Continue Reading Section (Real Progress) */}
-              {readingProgress.ongoing.length > 0 && (
+              {/* Continue Reading Section (Real Progress via Context) */}
+              {ongoingNovels.length > 0 && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-bold mb-6 text-primary border-l-4 border-neon-gold pl-4">
                     Continue Reading
                   </h2>
                   <div className="flex space-x-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-neon-gold/30 scrollbar-track-bg-secondary">
-                    {readingProgress.ongoing.map((novel: any, index: number) => (
+                    {ongoingNovels.map((novel: any, index: number) => (
                       <motion.div 
                         key={novel.novelId}
                         whileHover={{ scale: 1.05 }}
                         className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-all duration-300"
-                        onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId}`)}
+                        onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`)}
                       >
                          <div className="aspect-[2/3] w-full relative">
                             {novel.coverImage ? (
