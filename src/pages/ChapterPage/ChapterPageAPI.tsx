@@ -38,7 +38,7 @@ const ChapterPageAPI = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { language } = useLanguage();
-  const { updateProgress } = useReadingProgress();
+  const { updateProgress, startReading, isOngoing } = useReadingProgress();
   const [novel, setNovel] = useState<Novel | null>(null);
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [allChapters, setAllChapters] = useState<Chapter[]>([]);
@@ -164,15 +164,27 @@ const ChapterPageAPI = () => {
 
   // Effect 4: Progress Write (Buffered 25s to prevent accidental clicks)
   useEffect(() => {
-    if (!novelId || !chapterId || !chapter) return;
+    if (!novelId || !chapterId || !chapter || !novel) return;
 
     const timer = setTimeout(() => {
         const order = chapter.chapterNumber || (chapter as any).order || 1;
+        
+        // Ensure novel is in "Ongoing" list (Crucial for Anon/Mobile users)
+        if (!isOngoing(novelId)) {
+             startReading(
+                 novelId, 
+                 getString(novel.title), 
+                 novel.coverImage, 
+                 novel.author,
+                 getString(novel.titleEn || novel.title_en || '') // Pass English title if available
+             );
+        }
+
         updateProgress(novelId, chapterId, 0, order);
     }, 25000); // 25 seconds delay (Wait for engagement)
 
     return () => clearTimeout(timer);
-  }, [novelId, chapterId, chapter]);
+  }, [novelId, chapterId, chapter, novel]);
 
   // Handle navigation
   const currentIndex = allChapters.findIndex(c => (c.id || c._id) === chapterId);
