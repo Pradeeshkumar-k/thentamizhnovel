@@ -356,7 +356,7 @@ const NovelsPageAPI = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-neon-gold"></div>
                 )}
                 {!hasNextPage && novels.length > 0 && (
-                  <p className="text-muted text-sm font-medium">✨ You've reached the end of the collection</p>
+                  <p className="text-muted text-sm font-medium"></p>
                 )}
               </div>
             </>
