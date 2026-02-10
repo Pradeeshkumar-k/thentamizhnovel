@@ -263,7 +263,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                            <button onClick={() => { navigate('/profile'); setIsUserDropdownOpen(false); }} className="w-full text-left px-4 py-2 text-black dark:text-white hover:bg-muted/10 transition-colors">
                               {_t.header.profile}
                            </button>
-                           {user?.role === 'ADMIN' && (
+                           {['ADMIN', 'SUPER_ADMIN', 'EDITOR'].includes(user?.role || '') && (
                               <button onClick={() => { navigate('/admin/dashboard'); setIsUserDropdownOpen(false); }} className="w-full text-left px-4 py-2 text-black dark:text-white hover:bg-muted/10 transition-colors">
                                  {_t.header.adminDashboard}
                               </button>
@@ -351,7 +351,7 @@ const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
                         <span className="font-semibold tracking-tight">{_t.header.profile}</span>
                       </div>
                       
-                      {user?.role === 'ADMIN' && (
+                      {['ADMIN', 'SUPER_ADMIN', 'EDITOR'].includes(user?.role || '') && (
                           <div 
                             onClick={() => { navigate('/admin/dashboard'); setIsMenuOpen(false); }} 
                             className="flex items-center gap-4 p-2.5 rounded-xl text-black dark:text-white hover:bg-muted/10 hover:text-neon-gold cursor-pointer transition-all group"
