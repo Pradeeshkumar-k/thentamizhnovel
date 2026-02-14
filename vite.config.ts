@@ -10,7 +10,7 @@ export default defineConfig({
       jpg: { quality: 80 },
       jpeg: { quality: 80 },
       png: { quality: 80 },
-      webp: { quality: 80, lossless: true },
+      webp: { quality: 80 },
     }),
   ],
   css: {
