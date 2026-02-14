@@ -13,12 +13,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import NovelGridSkeleton from '../../components/skeletons/NovelGridSkeleton';
 import { getLocalizedTitle } from '../../utils/languageUtils';
 
-// Image mapping (Using public assets to avoid Base64)
-const imageMap = {
-  '/assets/images/Novel Card/Thenmozhi Card.jpg': '/assets/covers/Thenmozhi Card.jpg',
-  '/assets/images/Novel Card/swetha card.jpg': '/assets/covers/swetha card.jpg',
-  '/assets/images/Novel Card/Mohana card.jpg': '/assets/covers/Mohana card.jpg'
-};
 
 const NovelsPageAPI = () => {
   const { user } = useAuth();
@@ -137,7 +131,7 @@ const NovelsPageAPI = () => {
                          <div className="aspect-[2/3] w-full relative">
                             {novel.coverImage ? (
                               <img
-                                src={(imageMap as any)[novel.coverImage] || novel.coverImage}
+                                src={novel.coverImage}
                                 alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
@@ -201,7 +195,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
-                              src={(imageMap as any)[novel.coverImage] || novel.coverImage}
+                              src={novel.coverImage}
                               alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -267,7 +261,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
-                              src={(imageMap as any)[novel.coverImage] || novel.coverImage}
+                              src={novel.coverImage}
                               alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -335,7 +329,7 @@ const NovelsPageAPI = () => {
                         <div className="absolute inset-0">
                           {novel.coverImage ? (
                             <img
-                              src={(imageMap as any)[novel.coverImage] || novel.coverImage}
+                              src={novel.coverImage}
                               alt={`Cover of ${getLocalizedTitle(novel, language)}`}
                               loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

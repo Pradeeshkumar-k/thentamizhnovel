@@ -29,37 +29,6 @@ export const CAROUSEL_SETTINGS = {
   TOTAL_STARS: 50
 };
 
-// Novel Data
-export const NOVELS = [
-  {
-    id: 1,
-    title: {
-      tamil: 'ராட்சசனே எனை வதைப்பதேனடா!',
-      english: 'Oh Demon! Why Do You Torment Me!'
-    },
-    author: 'Thenmozhi',
-    image: 'Novel Card/thenmozhi-card.webp'
-  },
-  {
-    id: 2,
-    title: {
-      tamil: 'தாலாட்டும் தாழம்பூவே',
-      english: 'The Lullaby of the Temple Flower'
-    },
-    author: 'Swetha Swe',
-    image: 'Novel Card/swetha-card.webp'
-  },
-  {
-    id: 3,
-    title: {
-      tamil: 'வந்தத்துணையே! என் வாழ்க்கைத் துணையே!',
-      english: 'Welcome! My Life Partner!'
-    },
-    author: 'Mohanaamozhi',
-    image: 'Novel Card/mohana-card.webp'
-  },
-];
-
 // Social Media Links
 export const SOCIAL_LINKS = {
   EMAIL: 'mailto:thentamizhamuzhunovels@gmail.com',
