@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+
 
 const ChapterGridSkeleton = ({ count = 8 }) => {
   return (

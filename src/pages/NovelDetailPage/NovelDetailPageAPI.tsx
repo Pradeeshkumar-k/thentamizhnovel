@@ -230,7 +230,7 @@ const NovelDetailPageAPI = () => {
     );
   }
 
-  const coverImage = novel.coverImageUrl || novel.coverImage || '';
+  const coverImage = novel.coverImageUrl || novel.coverImage || '/assets/logo.webp';
 
   const isLiked = !!novel.isLiked;
   const isBookmarked = !!novel.isBookmarked;
@@ -390,11 +390,9 @@ const NovelDetailPageAPI = () => {
             ) : (
                 <div className="flex flex-col gap-3">
                     {chapters.map((chapter: Chapter) => (
-                        <motion.div
+                        <div
                             key={chapter.id || chapter._id}
-                            initial={false}
-                            whileHover={{ backgroundColor: 'rgba(30, 41, 59, 1)' }}
-                            className="group relative flex items-center p-3 sm:p-4 bg-bg-secondary/80 border border-gray-800 hover:border-neon-gold/30 rounded-xl cursor-pointer transition-all duration-300"
+                            className="group relative flex items-center p-3 sm:p-4 bg-bg-secondary/80 border border-gray-800 hover:bg-slate-800 hover:border-neon-gold/30 rounded-xl cursor-pointer transition-all duration-300"
                             onClick={() => handleChapterClick(chapter.id || chapter._id || '')}
                         >
                             {/* Thumbnail with Badge */}
@@ -438,7 +436,7 @@ const NovelDetailPageAPI = () => {
                             </div>
 
 
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             )}
