@@ -259,7 +259,7 @@ const NovelDetailPageAPI = () => {
         {/* Back Button */}
         <div className="mb-6">
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-primary dark:text-neon-gold hover:text-neon-gold transition-colors group"
           >
             <svg 

@@ -74,7 +74,7 @@ const ReadingDashboard: React.FC = () => {
   };
 
   const handleContinueReading = (novel: NovelProgress) => {
-    navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`);
+    navigate(`/novel/${novel.novelId}`);
   };
 
   const handleViewNovel = (novelId: string) => {

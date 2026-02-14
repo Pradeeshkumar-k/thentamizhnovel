@@ -131,7 +131,7 @@ const NovelsPageAPI = () => {
                         key={novel.novelId}
                         whileHover={{ scale: 1.05 }}
                         className="flex-shrink-0 w-40 md:w-48 cursor-pointer relative group rounded-xl overflow-hidden shadow-lg border border-transparent hover:border-neon-gold/50 transition-[transform,border-color] duration-300 transform-gpu"
-                        onClick={() => navigate(`/novel/${novel.novelId}/chapter/${novel.lastChapterId || novel.lastChapter}`)}
+                        onClick={() => navigate(`/novel/${novel.novelId}`)}
                         aria-label={`Continue reading ${getLocalizedTitle(novel, language)}`}
                       >
                          <div className="aspect-[2/3] w-full relative">
