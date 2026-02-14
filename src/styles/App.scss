@@ -313,7 +313,10 @@ $stars-large: generate-stars(50);
     background: transparent;
     box-shadow: $stars-small;
     animation: animStar 150s linear infinite;
-    opacity: 0.8;
+    will-change: transform;
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   // Medium Stars
@@ -324,6 +327,7 @@ $stars-large: generate-stars(50);
     box-shadow: $stars-medium;
     animation: animStar 100s linear infinite;
     opacity: 1;
+    will-change: transform;
   }
 
   // Large Stars (Closest/Fastest)
@@ -335,6 +339,7 @@ $stars-large: generate-stars(50);
     animation: animStar 50s linear infinite;
     border-radius: 50%; // Make large stars round
     filter: blur(1px); // Soft glow
+    will-change: transform;
   }
 }
 
