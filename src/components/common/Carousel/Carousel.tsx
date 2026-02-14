@@ -57,7 +57,7 @@ const Carousel: React.FC = () => {
                     <img
                       src={author.image}
                       alt={author.name}
-                      loading="lazy"
+                      fetchPriority="high"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>

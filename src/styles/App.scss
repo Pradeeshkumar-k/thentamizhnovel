@@ -264,9 +264,9 @@ button:focus {
 }
 
 // Generate static star maps
-$stars-small: generate-stars(700);
-$stars-medium: generate-stars(200);
-$stars-large: generate-stars(100);
+$stars-small: generate-stars(400);
+$stars-medium: generate-stars(100);
+$stars-large: generate-stars(50);
 
 .galaxy-bg {
   // Richer, deeper background
