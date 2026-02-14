@@ -222,7 +222,13 @@ const NovelsPageAPI = () => {
                               
                               <div className="flex items-center justify-between text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 border-t border-gray-700 pt-2 mt-2">
                                   <span className="flex items-center gap-1">
-                                      {novel.totalChapters} {novel.totalChapters === 1 ? 'Part' : 'Parts'}
+                                      {novel.latestChapter ? (
+                                        <span className="text-neon-gold font-medium">
+                                          {language === 'tamil' ? `அத்தியாயம் ${novel.latestChapter.order}` : `Chapter ${novel.latestChapter.order}`}
+                                        </span>
+                                      ) : (
+                                        `${novel.totalChapters} ${novel.totalChapters === 1 ? 'Part' : 'Parts'}`
+                                      )}
                                   </span>
                                   <span className="flex items-center gap-1">
                                       👁️ {novel.stats?.views || 0}
@@ -282,7 +288,13 @@ const NovelsPageAPI = () => {
                               
                               <div className="flex items-center justify-between text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 border-t border-gray-700 pt-2 mt-2">
                                   <span className="flex items-center gap-1">
-                                      {novel.totalChapters} {novel.totalChapters === 1 ? 'Part' : 'Parts'}
+                                      {novel.latestChapter ? (
+                                        <span className="text-neon-gold font-medium">
+                                          {language === 'tamil' ? `அத்தியாயம் ${novel.latestChapter.order}` : `Chapter ${novel.latestChapter.order}`}
+                                        </span>
+                                      ) : (
+                                        `${novel.totalChapters} ${novel.totalChapters === 1 ? 'Part' : 'Parts'}`
+                                      )}
                                   </span>
                                   <span className="flex items-center gap-1">
                                       👁️ {novel.stats?.views || 0}

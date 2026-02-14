@@ -74,6 +74,12 @@ export interface Novel {
   isBookmarked?: boolean; // Added for API state sync
   createdAt?: string;
   updatedAt?: string;
+  latestChapter?: {
+    id: string;
+    title: string | { [key: string]: string };
+    titleEn?: string;
+    order: number;
+  } | null;
 }
 
 // Chapter Types
