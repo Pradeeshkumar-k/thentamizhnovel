@@ -6,8 +6,6 @@ import './routes.scss';
 const NovelsPage = lazy(() => import('../pages/NovelsPage/NovelsPageAPI'));
 const NovelDetailPage = lazy(() => import('../pages/NovelDetailPage/NovelDetailPageAPI'));
 
-const ThenmozhiNovelPage = lazy(() => import('../pages/ThenmozhiNovelPage/ThenmozhiNovelPage'));
-const MohanaNovelPage = lazy(() => import('../pages/MohanaNovelPage/MohanaNovelPage'));
 const ChapterPage = lazy(() => import('../pages/ChapterPage/ChapterPageAPI'));
 const ChapterCommentsPage = lazy(() => import('../pages/ChapterPage/ChapterCommentsPage'));
 

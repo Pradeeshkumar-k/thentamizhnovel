@@ -14,17 +14,17 @@ const Carousel: React.FC = () => {
   const authors: Author[] = [
     {
       name: 'Swetha swe',
-      image: '/assets/prathilipi/swetha swe.jpg',
+      image: '/assets/prathilipi/swetha-swe.webp',
       link: 'https://tamil.pratilipi.com/user/%F0%9F%92%99swetha%F0%9F%92%99-8cuvz20w13'
     },
     {
       name: 'Thenmozhi',
-      image: '/assets/prathilipi/thenmozhi.jpg',
+      image: '/assets/prathilipi/thenmozhi.webp',
       link: 'https://tamil.pratilipi.com/user/%E2%9C%8D%EF%B8%8F%E0%AE%A4%E0%AF%87%E0%AE%A9%E0%AF%8D%E0%AE%AE%E0%AF%8A%E0%AE%B4%E0%AE%BF-%E2%9C%8D%EF%B8%8F-34-thenmozhi-34-u0958h9i3f?utm_campaign=authorprofile_share&utm_source=ios'
     },
     {
       name: 'Mohanaamozhi',
-      image: '/assets/prathilipi/mohanamozhi.jpg',
+      image: '/assets/prathilipi/mohanamozhi.webp',
       link: 'https://tamil.pratilipi.com/user/%E2%9C%8D%EF%B8%8F-%E0%AE%AE%E0%AF%8B%E0%AE%95%E0%AE%A9%E0%AE%BE-%E2%9C%8D%EF%B8%8F-697n99g2nt'
     }
   ];

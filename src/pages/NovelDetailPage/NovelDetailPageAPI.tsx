@@ -12,19 +12,6 @@ import { Novel, Chapter } from '../../types';
 import { motion } from 'framer-motion';
 import ChapterGridSkeleton from '../../components/common/ChapterGridSkeleton/ChapterGridSkeleton';
 
-// Image mappings (Using public assets to avoid Base64)
-const coverImageMap = {
-  '/assets/images/Novel Card/Thenmozhi Card.jpg': '/assets/covers/Thenmozhi Card.jpg',
-  '/assets/images/Novel Card/swetha card.jpg': '/assets/covers/swetha card.jpg',
-  '/assets/images/Novel Card/Mohana card.jpg': '/assets/covers/Mohana card.jpg'
-};
-
-const chapterImageMap = {
-  'Thenmozhi': '/assets/episodes/Thenmozhi_episodes.jpg',
-  'Swetha Swe': '/assets/episodes/swetha swe episodes.jpg',
-  'Mohanaamozhi': '/assets/episodes/Mohanamozhi episodes.jpg'
-};
-
 const NovelDetailPageAPI = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -243,9 +230,7 @@ const NovelDetailPageAPI = () => {
     );
   }
 
-  const chapterImage = chapterImageMap[novel.author as keyof typeof chapterImageMap] || '/assets/episodes/Thenmozhi_episodes.jpg';
-  const rawCover = novel.coverImageUrl || novel.coverImage || '';
-  const coverImage = (coverImageMap as any)[rawCover] || rawCover || '/assets/covers/Thenmozhi Card.jpg';
+  const coverImage = novel.coverImageUrl || novel.coverImage || '';
 
   const isLiked = !!novel.isLiked;
   const isBookmarked = !!novel.isBookmarked;

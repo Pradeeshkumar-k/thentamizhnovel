@@ -14,7 +14,6 @@ export interface NovelConfig {
   languages: ('tamil' | 'english')[];
   totalChapters: number;
   coverImage: string;
-  chapterImage: string;
 }
 
 export const NOVEL_CONFIG: Record<number, NovelConfig> = {
@@ -28,8 +27,7 @@ export const NOVEL_CONFIG: Record<number, NovelConfig> = {
     defaultLanguage: 'tamil',
     languages: ['tamil', 'english'],
     totalChapters: 14,
-    coverImage: 'Novel Card/Thenmozhi Card.jpg',
-    chapterImage: 'episodes_card/Thenmozhi_episodes.jpg'
+    coverImage: ''
   },
   3: {
     id: 3,
@@ -41,8 +39,7 @@ export const NOVEL_CONFIG: Record<number, NovelConfig> = {
     defaultLanguage: 'tamil',
     languages: ['tamil', 'english'],
     totalChapters: 27, // Corrected from 40 to match actual content
-    coverImage: 'Novel Card/Mohana card.jpg',
-    chapterImage: 'episodes_card/Mohanamozhi episodes.jpg'
+    coverImage: ''
   }
 };
 
