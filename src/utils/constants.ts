@@ -38,7 +38,7 @@ export const NOVELS = [
       english: 'Oh Demon! Why Do You Torment Me!'
     },
     author: 'Thenmozhi',
-    image: 'Novel Card/Thenmozhi Card.jpg'
+    image: 'Novel Card/thenmozhi-card.webp'
   },
   {
     id: 2,
@@ -47,7 +47,7 @@ export const NOVELS = [
       english: 'The Lullaby of the Temple Flower'
     },
     author: 'Swetha Swe',
-    image: 'Novel Card/swetha card.jpg'
+    image: 'Novel Card/swetha-card.webp'
   },
   {
     id: 3,
@@ -56,7 +56,7 @@ export const NOVELS = [
       english: 'Welcome! My Life Partner!'
     },
     author: 'Mohanaamozhi',
-    image: 'Novel Card/Mohana card.jpg'
+    image: 'Novel Card/mohana-card.webp'
   },
 ];
 
