@@ -9,8 +9,8 @@ import { translations } from '../../translations';
 import novelService from '../../services/API/novelService';
 import readingProgressService from '../../services/API/readingProgressService';
 import { Chapter, Novel } from '../../types';
-import { motion } from 'framer-motion';
 import CommentsModal from '../../components/comments/CommentsModal';
+import { Helmet } from 'react-helmet-async';
 import API_BASE_URL from '../../services/API/config';
 import ChapterContentSkeleton from '../../components/common/ChapterContentSkeleton/ChapterContentSkeleton';
 
@@ -64,32 +64,11 @@ const ChapterPageAPI = () => {
     navigate(`/novel/${novelId}`);
   }, [novelId, navigate]);
 
-  // Helper to calculate read time
-  const calculateReadTime = (content?: string) => {
-    if (!content) return '5 min';
-    const wordsPerMinute = 200;
-    const words = content.trim().split(/\s+/).length;
-    const minutes = Math.ceil(words / wordsPerMinute);
-    return `${minutes} min read`;
-  };
 
-  // Helper to format date
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Unknown Date';
-    return new Date(dateString).toLocaleDateString(language === 'tamil' ? 'ta-IN' : 'en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
 
-  // Safe string getter - Simplified as service now normalizes English fields
-  const getString = (val: string | { [key: string]: string } | undefined, fieldEn?: string) => {
-    if (!val) return fieldEn || '';
-    if (language === 'english' && fieldEn) return fieldEn;
-    if (typeof val === 'string') return val;
-    return val[language] || val['english'] || '';
-  };
+
+
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -173,10 +152,10 @@ const ChapterPageAPI = () => {
         if (!isOngoing(novelId)) {
              startReading(
                  novelId, 
-                 getString(novel.title), 
+                 getString(novel.title, undefined, language), 
                  novel.coverImage, 
                  novel.author,
-                 getString(novel.titleEn || novel.title_en || '') // Pass English title if available
+                 getString(novel.titleEn || novel.title_en || '', undefined, language) // Pass English title if available
              );
         }
 
@@ -266,6 +245,11 @@ const ChapterPageAPI = () => {
 
   return (
     <div className="min-h-screen bg-bg-primary text-secondary transition-colors duration-300">
+      <Helmet>
+        <title>{getString(chapter.title, undefined, language)} | {getString(novel?.title, undefined, language)}</title>
+        <meta name="description" content={getString(chapter.content, undefined, language).slice(0, 160)} />
+        <link rel="canonical" href={`https://thentamizhamuthunovels.com/novel/${novelId}/chapter/${chapterId}`} />
+      </Helmet>
       <Header onLoginClick={handleLoginClick} />
 
       <main className="container mx-auto px-4 pt-40 md:pt-36 pb-20 max-w-4xl">
@@ -277,7 +261,7 @@ const ChapterPageAPI = () => {
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          {getString(novel?.title, novel?.titleEn)}
+          {getString(novel?.title, novel?.titleEn, language)}
         </button>
 
         {/* Title Section */}
@@ -285,7 +269,7 @@ const ChapterPageAPI = () => {
           <h1 className="text-3xl md:text-5xl font-serif font-bold text-primary mb-4 leading-tight">
             {language === 'english' 
               ? (chapter.titleEn || `Chapter ${chapter.chapterNumber}`)
-              : (getString(chapter.title) || `Chapter ${chapter.chapterNumber}`)
+              : (getString(chapter.title, undefined, language) || `Chapter ${chapter.chapterNumber}`)
             }
           </h1>
           
@@ -294,7 +278,7 @@ const ChapterPageAPI = () => {
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              {formatDate(chapter.publishedAt || chapter.createdAt)}
+              {formatDate(chapter.publishedAt || chapter.createdAt, language)}
             </span>
             <span className="flex items-center gap-1.5 px-3 py-1.5 bg-neon-gold/5 border border-neon-gold/20 rounded-lg text-neon-gold">
                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -363,8 +347,8 @@ const ChapterPageAPI = () => {
                 <button 
                     onClick={async () => {
                         const shareData = {
-                            title: getString(novel?.title) || 'Read this Novel',
-                            text: `Check out this chapter: ${getString(chapter?.title)}`,
+                            title: getString(novel?.title, undefined, language) || 'Read this Novel',
+                            text: `Check out this chapter: ${getString(chapter?.title, undefined, language)}`,
                             url: window.location.href
                         };
                         try {
@@ -457,10 +441,9 @@ const ChapterPageAPI = () => {
                     .filter(c => (c.id || c._id) !== chapterId)
                     .slice(0, 6)
                     .map(c => (
-                    <motion.div
+                    <div
                         key={c.id || c._id}
-                        whileHover={{ y: -5 }}
-                        className="bg-bg-primary p-4 rounded-lg border border-border hover:border-neon-gold/30 cursor-pointer group"
+                        className="bg-bg-primary p-4 rounded-lg border border-border hover:border-neon-gold/30 cursor-pointer group transition-transform duration-300 hover:-translate-y-1"
                         onClick={() => navigateToChapter(c.id || c._id || '')}
                     >
                         <div className="flex justify-between items-start mb-2">
@@ -471,11 +454,11 @@ const ChapterPageAPI = () => {
                         </div>
                         <h4 className="text-primary font-medium group-hover:text-neon-gold transition-colors line-clamp-2">
                             {language === 'english' 
-                                ? (c.titleEn || c.title_en || c.titleEnglish || getString(c.title)) 
-                                : getString(c.title)
+                                ? (c.titleEn || c.title_en || c.titleEnglish || getString(c.title, undefined, language)) 
+                                : getString(c.title, undefined, language)
                             }
                         </h4>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </section>
