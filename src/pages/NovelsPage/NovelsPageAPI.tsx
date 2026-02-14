@@ -188,7 +188,13 @@ const NovelsPageAPI = () => {
                         key={novel.id || novel._id}
                         whileHover={{ y: -5 }}
                         className="flex-shrink-0 w-40 md:w-48 relative group cursor-pointer aspect-[2/3] rounded-xl overflow-hidden shadow-lg bg-surface ring-1 ring-white/10 hover:ring-neon-gold transition-[transform,box-shadow,ring] duration-300 transform-gpu hover:shadow-neon-gold/20"
-                        onClick={() => handleNovelClick(novel.id || novel._id)}
+                        onClick={() => {
+                          if (novel.latestChapter) {
+                            navigate(`/novel/${novel.id || novel._id}/chapter/${novel.latestChapter.id}`);
+                          } else {
+                            handleNovelClick(novel.id || novel._id);
+                          }
+                        }}
                         aria-label={`Read ${getLocalizedTitle(novel, language)} by ${novel.author}`}
                       >
                         {/* Image Layer */}
