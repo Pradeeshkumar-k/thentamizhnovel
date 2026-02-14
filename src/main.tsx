@@ -5,6 +5,7 @@ import ScrollToTop from './components/common/ScrollToTop'
 import { ThemeProvider } from './context/ThemeContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { HelmetProvider } from 'react-helmet-async'
 import './styles/index.scss'
 import App from './App'
 
@@ -69,12 +70,14 @@ createRoot(rootElement).render(
   // <StrictMode>
     <LanguageProvider>
       <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <ScrollToTop />
-            <App />
-          </BrowserRouter>
-        </QueryClientProvider>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <ScrollToTop />
+              <App />
+            </BrowserRouter>
+          </QueryClientProvider>
+        </HelmetProvider>
       </ThemeProvider>
     </LanguageProvider>
   // </StrictMode>,

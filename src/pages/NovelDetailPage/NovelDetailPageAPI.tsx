@@ -9,7 +9,7 @@ import Header from '../../components/layout/Header/Header';
 import UserLogin from '../../components/common/UserLogin/UserLogin';
 import novelService from '../../services/API/novelService';
 import { Novel, Chapter } from '../../types';
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import ChapterGridSkeleton from '../../components/common/ChapterGridSkeleton/ChapterGridSkeleton';
 
 const NovelDetailPageAPI = () => {
@@ -237,6 +237,15 @@ const NovelDetailPageAPI = () => {
 
   return (
     <div className="min-h-screen bg-bg-primary text-primary pb-20">
+      <Helmet>
+        <title>{getNovelTitle(novel)} | Thentamizh Novels</title>
+        <meta name="description" content={getNovelDescription(novel).slice(0, 160)} />
+        <meta property="og:title" content={getNovelTitle(novel)} />
+        <meta property="og:description" content={getNovelDescription(novel).slice(0, 160)} />
+        <meta property="og:image" content={coverImage} />
+        <meta property="og:type" content="book" />
+        <link rel="canonical" href={`https://thentamizhamuthunovels.com/novel/${id}`} />
+      </Helmet>
       <Header onLoginClick={handleLoginClick} />
 
       <div className="container mx-auto px-4 pt-40 md:pt-36">
@@ -400,7 +409,7 @@ const NovelDetailPageAPI = () => {
                                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden ring-1 ring-white/10">
                                     <img 
                                         src={coverImage} 
-                                        alt="Chapter" 
+                                        alt={`${getChapterTitle(chapter)} Thumbnail`} 
                                         width="80"
                                         height="80"
                                         loading="lazy"
