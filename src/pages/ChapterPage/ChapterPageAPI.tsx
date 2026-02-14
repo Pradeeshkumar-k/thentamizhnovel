@@ -29,6 +29,33 @@ export function useChapterView(chapterId: string | undefined) {
   }, [chapterId]);
 }
 
+// Helper to calculate read time
+const calculateReadTime = (content?: string) => {
+  if (!content) return '5 min';
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
+};
+
+// Helper to format date
+const formatDate = (dateString?: string, language: string = 'english') => {
+  if (!dateString) return 'Unknown Date';
+  return new Date(dateString).toLocaleDateString(language === 'tamil' ? 'ta-IN' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+// Safe string getter - Simplified
+const getString = (val: string | { [key: string]: string } | undefined, fieldEn?: string, language: string = 'english') => {
+  if (!val) return fieldEn || '';
+  if (language === 'english' && fieldEn) return fieldEn;
+  if (typeof val === 'string') return val;
+  return val[language] || val['english'] || '';
+};
+
 const ChapterPageAPI = () => {
   const { novelId, chapterId } = useParams();
   
