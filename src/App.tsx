@@ -5,6 +5,7 @@ import { ReadingProgressProvider } from './context/ReadingProgressContext';
 import Footer from './components/layout/Footer/Footer';
 import AppRoutes from './routes/routes';
 import { consoleHelper } from './utils/consoleHelper';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import './styles/App.scss';
 
 
@@ -25,6 +26,7 @@ function App() {
 
           <Footer />
         </div>
+        <SpeedInsights />
       </ReadingProgressProvider>
     </AuthProvider>
   );
