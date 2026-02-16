@@ -16,7 +16,10 @@ const readingProgressService = {
       url += `?novelId=${novelId}`;
     }
     
-    // If no args, it fetches all progress (dashboard view)
+    // Add timestamp to prevent caching
+    const separator = url.includes('?') ? '&' : '?';
+    url += `${separator}_t=${new Date().getTime()}`;
+    
     // If no args, it fetches all progress (dashboard view)
     const response = await apiClient.get(url);
     // Unwrap response: backend returns { success: true, data: { ... } }
