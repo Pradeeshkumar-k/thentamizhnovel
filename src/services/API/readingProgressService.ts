@@ -100,7 +100,9 @@ const readingProgressService = {
     const endpoint = API_ENDPOINTS.DELETE_READING_PROGRESS.replace(':novelId', novelId.toString());
     const response = await apiClient.delete(endpoint);
     return response.data;
-  }
+  },
+
+
 };
 
 export default readingProgressService;

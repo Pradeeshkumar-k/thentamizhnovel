@@ -30,9 +30,9 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
 
   // Load basic state from localStorage ONLY on init
   useEffect(() => {
-    const savedOngoing = localStorage.getItem('ongoingNovels');
-    const savedCompleted = localStorage.getItem('completedNovels');
-    const savedBookmarks = localStorage.getItem('libraryBookmarks');
+    const savedOngoing = localStorage.getItem('ongoingNovels_v2');
+    const savedCompleted = localStorage.getItem('completedNovels_v2');
+    const savedBookmarks = localStorage.getItem('libraryBookmarks_v2');
 
     if (savedOngoing) setOngoingNovels(JSON.parse(savedOngoing));
     if (savedCompleted) setCompletedNovels(JSON.parse(savedCompleted));
@@ -41,8 +41,7 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
     setLoading(false);
   }, []);
 
-  // Sync Library with backend ON DEMAND or when login status changes
-  // Sync Library with backend when login status changes
+  // Sync Library with backend
   useEffect(() => {
     const fetchReadingProgress = async () => {
       if (isUserLoggedIn() && !loading) {
@@ -51,9 +50,15 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
           if (progress && progress.ongoing) {
             setOngoingNovels(progress.ongoing);
             setCompletedNovels(progress.completed || []);
+          } else {
+             // If empty or null, clear state!
+             setOngoingNovels([]);
+             setCompletedNovels([]);
           }
         } catch (error) {
           console.error("Failed to sync reading progress", error);
+          // Optional: clear on error if we really don't trust cache? 
+          // No, keep cache on error for offline support.
         }
       }
     };
@@ -64,19 +69,19 @@ export const ReadingProgressProvider = ({ children }: ReadingProgressProviderPro
   // Save to localStorage whenever state changes
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('ongoingNovels', JSON.stringify(ongoingNovels));
+      localStorage.setItem('ongoingNovels_v2', JSON.stringify(ongoingNovels));
     }
   }, [ongoingNovels, loading]);
 
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('completedNovels', JSON.stringify(completedNovels));
+      localStorage.setItem('completedNovels_v2', JSON.stringify(completedNovels));
     }
   }, [completedNovels, loading]);
 
   useEffect(() => {
     if (!loading) {
-      localStorage.setItem('libraryBookmarks', JSON.stringify(bookmarks));
+      localStorage.setItem('libraryBookmarks_v2', JSON.stringify(bookmarks));
     }
   }, [bookmarks, loading]);
 

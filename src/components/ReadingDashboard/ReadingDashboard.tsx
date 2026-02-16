@@ -81,6 +81,23 @@ const ReadingDashboard: React.FC = () => {
     navigate(`/novel/${novelId}`);
   };
 
+  const handleRemove = async (novelId: string) => {
+    if (!window.confirm("Remove this novel from Continue Reading?")) return;
+    try {
+      await readingProgressService.deleteProgress(novelId);
+      // Optimistic update
+      setOngoingNovels(prev => prev.filter(n => n.novelId !== novelId));
+      setStats(prev => ({
+        ...prev,
+        startedNovels: prev.startedNovels - 1,
+        totalNovels: prev.totalNovels - 1
+      }));
+    } catch (error) {
+      console.error("Failed to remove progress", error);
+      alert("Failed to remove. Please try again.");
+    }
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading your reading progress...</div>;
   }
@@ -124,15 +141,26 @@ const ReadingDashboard: React.FC = () => {
                         target.src = '/assets/images/placeholder.jpg';
                       }}
                     />
-                    <div className={styles.overlay}>
-                      <button
-                        type="button"
-                        className={styles.continueBtn}
-                        onClick={() => handleContinueReading(novel)}
-                      >
-                        Continue Reading
-                      </button>
-                    </div>
+                  <div className={styles.overlay}>
+                    <button
+                      type="button"
+                      className={styles.deleteBtn}
+                      onClick={(e) => {
+                         e.stopPropagation();
+                         handleRemove(novel.novelId);
+                      }}
+                      title="Remove from Continue Reading"
+                    >
+                      ×
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.continueBtn}
+                      onClick={() => handleContinueReading(novel)}
+                    >
+                      Continue Reading
+                    </button>
+                  </div>
                   </div>
 
                   <div className={styles.cardContent}>
