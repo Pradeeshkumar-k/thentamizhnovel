@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useReadingProgress } from '../../context/ReadingProgressContext';
 import { translations } from '../../translations';
-import { getChapterContent } from '../../utils/chapterContentLoader';
+import novelService from '../../services/API/novelService';
 import { getNovelConfig, isValidChapter } from '../../config/novelConfig';
 import styles from './ChapterPage.module.scss';
 
@@ -59,21 +59,34 @@ const ChapterPage = () => {
     setDisplayChapterId(Number(chapterId));
   }, [chapterId]);
 
-  // Load chapter content dynamically with proper language fallback
+  // Load chapter content dynamically from API
   useEffect(() => {
     const loadChapter = async () => {
       try {
         setLoading(true);
-        const data = await getChapterContent(Number(novelId), Number(chapterId), userLanguage);
-        setChapterData(data);
+        // Direct API call - no local fallback
+        const data = await novelService.getChapter(Number(novelId), Number(chapterId), userLanguage);
+        
+        if (data && (data.content || data.title)) {
+          setChapterData({
+            title: data.title || `Chapter ${chapterId}`,
+            content: data.content || '',
+            subtitle: '' // API doesn't return subtitle usually
+          });
+        } else {
+           setChapterData(null);
+        }
       } catch (error) {
+        console.error("Failed to load chapter:", error);
         setChapterData(null);
       } finally {
         setLoading(false);
       }
     };
 
-    loadChapter();
+    if (novelId && chapterId) {
+      loadChapter();
+    }
   }, [novelId, chapterId, userLanguage]);
 
   // Scroll to top when chapter changes
