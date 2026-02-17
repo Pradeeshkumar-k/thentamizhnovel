@@ -89,6 +89,13 @@ const ChapterPage = () => {
     }
   }, [novelId, chapterId, userLanguage]);
 
+  // Increment view count
+  useEffect(() => {
+    if (novelId && chapterId) {
+       novelService.incrementChapterView(chapterId);
+    }
+  }, [novelId, chapterId]);
+
   // Scroll to top when chapter changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
