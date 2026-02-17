@@ -64,8 +64,8 @@ const ChapterPage = () => {
     const loadChapter = async () => {
       try {
         setLoading(true);
-        // Direct API call - no local fallback
-        const data = await novelService.getChapter(Number(novelId), Number(chapterId), userLanguage);
+        // Direct API call - pass string IDs
+        const data = await novelService.getChapter(novelId!, chapterId!, userLanguage);
         
         if (data && (data.content || data.title)) {
           setChapterData({
